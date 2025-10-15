@@ -130,84 +130,52 @@ app.post('/api/contact', express.json(), async (req, res) => {
   }
 });
 
-app.get("/api/latest-videos", async (req, res) => {
-  const CACHE_FILE = "data/latestVideos.json";
-  const CACHE_TTL = 48 * 60 * 60; // 48 hours in seconds
+app.get("/api/creators", async (req, res) => {
+  console.log("API endpoint /api/creators called");
   try {
-    let useCache = false;
-    let cacheExists = fs.existsSync(CACHE_FILE);
-    if (cacheExists) {
-      const stats = fs.statSync(CACHE_FILE);
-      const age = Date.now() - stats.mtimeMs;
-      if (age < CACHE_TTL * 1000) {
-        useCache = true;
-      }
-    }
-
-    // Fallback: use static cache if present and no cache file exists
-    if (!cacheExists && fs.existsSync('data/static-latestVideos.json')) {
-      const fallback = JSON.parse(fs.readFileSync('data/static-latestVideos.json'));
-      const shuffled = fallback.slice().sort(() => Math.random() - 0.5);
-      return res.json(shuffled);
-    }
-
-    if (useCache) {
-      const cached = JSON.parse(fs.readFileSync(CACHE_FILE));
-      // Shuffle cached results before sending
-      const shuffled = cached.slice().sort(() => Math.random() - 0.5);
-      return res.json(shuffled);
-    }
-
-    const channels = JSON.parse(fs.readFileSync("data/channels.json"));
+    // Load creators and ads directly from JSON files
+    const creators = JSON.parse(fs.readFileSync("data/creators.json"));
+    const ads = JSON.parse(fs.readFileSync("data/ads.json"));
+    console.log(`Loaded ${creators.length} creators and ${ads.length} ads`);
     const results = [];
-    const seenChannels = new Set();
 
-    // Shuffle channels array for random order
-    const shuffledChannels = channels.slice().sort(() => Math.random() - 0.5);
-    for (const channel of shuffledChannels) {
-      // Use channelId if available, else fallback to name for deduplication
-      const uniqueKey = channel.channelId || channel.name;
-      if (seenChannels.has(uniqueKey)) continue;
-      seenChannels.add(uniqueKey);
-
-      if (channel.ad) {
-        results.push({
-          channel: channel.name,
-          ad: true,
-          title: null,
-          videoId: null,
-          thumbnail: channel.image,
-          website: channel.website
-        });
-        continue;
-      }
-      const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${YT_API_KEY}&channelId=${channel.channelId}&order=date&part=snippet&type=video&maxResults=1`;
-      console.log('Fetching:', apiUrl);
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      if (data.error) {
-        console.error('YouTube API error:', data.error);
-      }
-
-      const video = data.items?.[0];
-      if (video) {
-        results.push({
-          channel: channel.name,
-          FullyForked: channel.FullyForked === true,
-          title: video.snippet.title,
-          videoId: video.id.videoId,
-          thumbnail: video.snippet.thumbnails.high.url,
-          socials: channel.socials || {},
-          website: channel.socials && channel.socials.website && channel.socials.website.url ? channel.socials.website.url : undefined
-        });
-      }
+    // Add ads to results
+    for (const ad of ads) {
+      console.log(`Adding ad: ${ad.name}`);
+      results.push({
+        channel: ad.name,
+        ad: true,
+        title: null,
+        videoId: null,
+        thumbnail: ad.image,
+        website: ad.website
+      });
     }
 
-    fs.writeFileSync(CACHE_FILE, JSON.stringify(results, null, 2));
-    res.json(results);
+    // Add creators to results
+    for (const creator of creators) {
+      console.log(`Adding creator: ${creator.name}, FullyForked: ${creator.FullyForked}`);
+      results.push({
+        channel: creator.name,
+        FullyForked: creator.FullyForked === true,
+        title: null, // No video title since we're not using YouTube API
+        videoId: null, // No video ID since we're not using YouTube API
+        thumbnail: creator.image || null, // Use creator's image if available
+        socials: creator.socials || {},
+        website: creator.socials?.website?.[0]?.url || undefined,
+        image: creator.image || undefined
+      });
+    }
+
+    console.log(`Total results: ${results.length}`);
+    
+    // Shuffle final results to mix ads and creators randomly
+    const shuffledResults = results.slice().sort(() => Math.random() - 0.5);
+    
+    res.json(shuffledResults);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to fetch videos" });
+    res.status(500).json({ error: "Failed to load creators" });
   }
 });
 

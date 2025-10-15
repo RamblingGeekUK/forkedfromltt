@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220">
+  <rect width="220" height="220" fill="#2c3e50"/>
+  <g transform="translate(110,110)">
+    <!-- Head -->
+    <ellipse cx="0" cy="-40" rx="32" ry="38" fill="#34495e"/>
+    <!-- Neck -->
+    <rect x="-8" y="-10" width="16" height="20" fill="#34495e"/>
+    <!-- Shoulders -->
+    <ellipse cx="0" cy="25" rx="65" ry="35" fill="#34495e"/>
+    <!-- Shoulder cutout to create realistic shape -->
+    <ellipse cx="0" cy="10" rx="45" ry="25" fill="#2c3e50"/>
+    <!-- Shirt/clothing neckline -->
+    <ellipse cx="0" cy="15" rx="20" ry="15" fill="#2c3e50"/>
+  </g>
+  <text x="110" y="200" font-family="Arial, sans-serif" font-size="12" fill="#7f8c8d" text-anchor="middle">Creator</text>
+</svg>

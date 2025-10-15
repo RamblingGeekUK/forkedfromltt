@@ -1,0 +1,14 @@
+[
+  {
+    "ad": true,
+    "name": "LTT Store",
+    "image": "images/LTT_Logo.webp",
+    "website": "https://LTTStore.com"
+  },
+  {
+    "ad": true,
+    "name": "Floatplane",
+    "image": "images/fp.png",
+    "website": "https://www.floatplane.com/"
+  }
+]
