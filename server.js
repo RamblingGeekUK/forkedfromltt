@@ -80,9 +80,6 @@ app.get('/api/cache-info', (req, res) => {
   }
 });
 
-app.use(express.static("public"));
-app.use('/data', express.static('data'));
-
 app.post('/api/contact', express.json(), async (req, res) => {
   const { name, email, message, turnstileToken } = req.body;
   if (!name || !email || !message) return res.status(400).json({ error: 'Missing required fields' });
