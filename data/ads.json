@@ -10,5 +10,11 @@
     "name": "Floatplane",
     "image": "images/fp.png",
     "website": "https://www.floatplane.com/"
+  },
+   {
+    "ad": true,
+    "name": "LTT Labs",
+    "image": "images/ltt-labs.png",
+    "website": "https://www.lttlabs.com/"
   }
 ]
