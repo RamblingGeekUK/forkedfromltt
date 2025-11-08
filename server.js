@@ -144,7 +144,8 @@ app.get("/api/creators", async (req, res) => {
       console.log(`Adding ad: ${ad.name}`);
       results.push({
         channel: ad.name,
-        ad: true,
+        ad: ad.ad,
+        isAd: true,
         title: null,
         videoId: null,
         thumbnail: ad.image,

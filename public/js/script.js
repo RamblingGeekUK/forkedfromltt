@@ -11,13 +11,14 @@ function createCreatorCard(channel) {
   const col = document.createElement("div");
   col.className = "col-lg-4 col-md-6 col-12 d-flex";
   
-  if (channel.ad) {
+  if (channel.isAd) {
     // Render AD card
+    const notAdLabel = channel.ad === false ? `<span style="font-size:0.8em;" class="badge bg-warning text-dark ms-2">NOT AN AD</span>` : '';
     col.innerHTML = `
       <div class="card h-100 shadow-lg border-0 border-warning" style="border-width: 2px !important;">
         <img src="${channel.thumbnail || channel.image || ''}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;">
         <div class="card-body d-flex flex-column justify-content-between">
-          <h5 class="card-title fw-semibold text-warning">${channel.channel} <span style="font-size:0.8em;" class="badge bg-warning text-dark ms-2">NOT AN AD</span></h5>
+          <h5 class="card-title fw-semibold text-warning">${channel.channel} ${notAdLabel}</h5>
           <a href="${channel.website}" target="_blank" class="btn btn-warning w-100 mt-auto">Visit Website</a>
         </div>
       </div>
@@ -132,11 +133,11 @@ fetch("/api/creators")
   })
   .then(allCreators => {
     // Filter for Fully Forked creators and ads
-    const fullyForkedCreators = allCreators.filter(c => c.FullyForked === true || c.ad);
+    const fullyForkedCreators = allCreators.filter(c => c.FullyForked === true || c.isAd);
     fullyForkedCreators.sort(() => Math.random() - 0.5); // Shuffle
     
     // Filter for Branching Out creators (not fully forked, excluding ads)
-    const branchingOutCreators = allCreators.filter(c => c.FullyForked === false && !c.ad);
+    const branchingOutCreators = allCreators.filter(c => c.FullyForked === false && !c.isAd);
     branchingOutCreators.sort(() => Math.random() - 0.5); // Shuffle
     
     // Populate both grids
