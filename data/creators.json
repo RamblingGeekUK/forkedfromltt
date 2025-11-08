@@ -1,12 +1,17 @@
 [
   {
-    "name": "Zip Tie Tuning",
+    "name": "Zip Tie Tuning/Zip Tie Tech",
     "image": "",
     "FullyForked": true,
     "socials": {
       "youtube": [
         {
           "channelId": "UCWqW23Ko6dbscptZYyQE-8A",
+          "url": "https://www.youtube.com/@ZipTieTuning",
+          "visible": true
+        },
+        {
+          "channelId": "",
           "url": "https://www.youtube.com/@ZipTieTuning",
           "visible": true
         }
