@@ -2,7 +2,21 @@
   <div class="container px-4">
     <div class="d-flex flex-column flex-lg-row align-items-center w-100">
       <a class="navbar-brand mx-lg-4 mb-2 mb-lg-0" href="index.html" style="text-shadow: 0 0 12px #8f94fb, 0 0 20px #8f94fb; font-size: 1.7rem;">Forked From LTT</a>
-      <ul class="navbar-nav flex-row gap-3 ms-lg-4">
+      
+      <!-- Search Box -->
+      <div class="flex-grow-1 mx-lg-4 mb-2 mb-lg-0">
+        <div class="search-container position-relative">
+          <input type="text" id="creatorSearch" class="form-control search-input" placeholder="Search creators by name or nickname..." autocomplete="off">
+          <div class="search-icon">
+            <svg width="18" height="18" fill="#8f94fb" viewBox="0 0 24 24">
+              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+          </div>
+          <div id="searchResults" class="search-results"></div>
+        </div>
+      </div>
+      
+      <ul class="navbar-nav flex-row gap-3">
         <li class="nav-item">
         </li>
         <li class="nav-item">

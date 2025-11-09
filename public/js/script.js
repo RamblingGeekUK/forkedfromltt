@@ -235,6 +235,11 @@ function populateGrid(gridElement, creators, showNoResultsMessage = true) {
   gridElement.style.display = "";
 }
 
+// Global variables for search functionality
+let allCreatorsData = [];
+let originalFullyForkedCreators = [];
+let originalBranchingOutCreators = [];
+
 // Fetch creators and populate both tabs
 fetch("/api/creators")
   .then(res => {
@@ -244,13 +249,25 @@ fetch("/api/creators")
     return res.json();
   })
   .then(allCreators => {
+    // Store all creators data globally for search
+    allCreatorsData = allCreators;
+    
+    // Debug: Log a few creators to check data structure
+    console.log('Sample creator data:', allCreators.slice(0, 3));
+    const jessica = allCreators.find(c => c.channel && c.channel.toLowerCase().includes('jessica'));
+    if (jessica) {
+      console.log('Jessica data:', jessica);
+    }
+    
     // Filter for Fully Forked creators and ads
     const fullyForkedCreators = allCreators.filter(c => c.FullyForked === true || c.isAd);
     fullyForkedCreators.sort(() => Math.random() - 0.5); // Shuffle
+    originalFullyForkedCreators = [...fullyForkedCreators];
     
     // Filter for Branching Out creators (not fully forked, excluding ads)
     const branchingOutCreators = allCreators.filter(c => c.FullyForked === false && !c.isAd);
     branchingOutCreators.sort(() => Math.random() - 0.5); // Shuffle
+    originalBranchingOutCreators = [...branchingOutCreators];
     
     // Populate both grids
     if (fullyForkedGrid) {
@@ -259,6 +276,9 @@ fetch("/api/creators")
     if (branchingOutGrid) {
       populateGrid(branchingOutGrid, branchingOutCreators);
     }
+    
+    // Initialize search functionality after data is loaded
+    initializeSearch();
   })
   .catch(err => {
     console.error("Failed to load creators", err);
@@ -271,3 +291,172 @@ fetch("/api/creators")
       branchingOutGrid.innerHTML = '<div class="text-center text-danger w-100 py-5">Failed to load creators.</div>';
     }
   });
+
+// Search functionality
+function initializeSearch() {
+  const searchInput = document.getElementById('creatorSearch');
+  const searchResults = document.getElementById('searchResults');
+  
+  if (!searchInput || !searchResults) {
+    // Search elements not loaded yet, try again after a short delay
+    setTimeout(initializeSearch, 100);
+    return;
+  }
+  
+  let searchTimeout;
+  
+  // Handle search input
+  searchInput.addEventListener('input', function(e) {
+    clearTimeout(searchTimeout);
+    const query = e.target.value.trim();
+    
+    if (query.length === 0) {
+      hideSearchResults();
+      resetToOriginalResults();
+      return;
+    }
+    
+    if (query.length < 2) {
+      hideSearchResults();
+      return;
+    }
+    
+    // Debounce search
+    searchTimeout = setTimeout(() => {
+      performSearch(query);
+    }, 200);
+  });
+  
+  // Hide search results when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.search-container')) {
+      hideSearchResults();
+    }
+  });
+  
+  // Handle escape key
+  searchInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      searchInput.value = '';
+      hideSearchResults();
+      resetToOriginalResults();
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const firstResult = searchResults.querySelector('.search-result-item');
+      if (firstResult) {
+        firstResult.click();
+      }
+    }
+  });
+}
+
+function performSearch(query) {
+  const searchResults = document.getElementById('searchResults');
+  const searchQuery = query.toLowerCase().trim();
+  
+  // Search through all creators
+  const matchingCreators = allCreatorsData.filter(creator => {
+    if (!creator) return false;
+    
+    // Search in channel name (the server sends 'channel' field, not 'name')
+    let nameMatch = false;
+    if (creator.channel && typeof creator.channel === 'string') {
+      nameMatch = creator.channel.toLowerCase().includes(searchQuery);
+    }
+    
+    // Search in nicknames with better null checking
+    let nicknameMatch = false;
+    if (creator.nicknames && Array.isArray(creator.nicknames)) {
+      nicknameMatch = creator.nicknames.some(nickname => {
+        if (nickname && typeof nickname === 'string') {
+          return nickname.toLowerCase().includes(searchQuery);
+        }
+        return false;
+      });
+    }
+    
+    return nameMatch || nicknameMatch;
+  });
+  
+  // Show search results dropdown
+  displaySearchResults(matchingCreators, query);
+  
+  // Filter the main grids
+  filterMainGrids(matchingCreators);
+}
+
+function displaySearchResults(creators, query) {
+  const searchResults = document.getElementById('searchResults');
+  
+  if (creators.length === 0) {
+    searchResults.innerHTML = '<div class="search-no-results">No creators found</div>';
+  } else {
+    const resultsHTML = creators.slice(0, 8).map((creator, index) => {
+      const defaultImage = 'images/default-creator.png';
+      const imageSrc = (creator.image && creator.image.trim() !== '') ? creator.image : defaultImage;
+      const nickname = (creator.nicknames && creator.nicknames.length > 0) ? creator.nicknames[0] : '';
+      const creatorName = creator.channel || creator.name || 'Unknown Creator';
+      
+      return `
+        <div class="search-result-item" onclick="selectCreator(${index})">
+          <img src="${imageSrc}" alt="${creatorName}" class="search-result-avatar" onerror="this.src='images/default-creator.png'">
+          <div class="search-result-info">
+            <p class="search-result-name">${creatorName}</p>
+            ${nickname ? `<p class="search-result-nickname">"${nickname}"</p>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    searchResults.innerHTML = resultsHTML;
+    
+    // Store current search results for selection
+    window.currentSearchResults = creators.slice(0, 8);
+  }
+  
+  searchResults.style.display = 'block';
+}
+
+function hideSearchResults() {
+  const searchResults = document.getElementById('searchResults');
+  if (searchResults) {
+    searchResults.style.display = 'none';
+  }
+}
+
+function selectCreator(index) {
+  const searchInput = document.getElementById('creatorSearch');
+  
+  if (window.currentSearchResults && window.currentSearchResults[index]) {
+    const selectedCreator = window.currentSearchResults[index];
+    searchInput.value = selectedCreator.channel || selectedCreator.name || '';
+    hideSearchResults();
+    
+    // Filter to show only this creator
+    filterMainGrids([selectedCreator]);
+  }
+}
+
+function filterMainGrids(filteredCreators) {
+  // Split filtered creators by type
+  const filteredFullyForked = filteredCreators.filter(c => c.FullyForked === true || c.isAd);
+  const filteredBranchingOut = filteredCreators.filter(c => c.FullyForked === false && !c.isAd);
+  
+  // Update grids
+  if (fullyForkedGrid) {
+    populateGrid(fullyForkedGrid, filteredFullyForked, false);
+  }
+  if (branchingOutGrid) {
+    populateGrid(branchingOutGrid, filteredBranchingOut, false);
+  }
+}
+
+function resetToOriginalResults() {
+  // Reset to original shuffled results
+  if (fullyForkedGrid) {
+    populateGrid(fullyForkedGrid, originalFullyForkedCreators);
+  }
+  if (branchingOutGrid) {
+    populateGrid(branchingOutGrid, originalBranchingOutCreators);
+  }
+}
