@@ -596,6 +596,27 @@ h1, h3 {
   box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
+/* Navbar Logo Styling */
+.navbar-logo {
+  height: 40px;
+  width: auto;
+  transition: transform 0.2s ease;
+}
+
+.navbar-logo:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 576px) {
+  .navbar-logo {
+    height: 32px;
+  }
+  
+  .navbar-brand {
+    font-size: 1.4rem !important;
+  }
+}
+
 /* Search Box Styling */
 .search-container {
   max-width: 400px;
