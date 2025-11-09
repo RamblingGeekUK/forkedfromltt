@@ -211,6 +211,45 @@
   width: 100%;
 }
 
+/* Status Label Styling */
+.status-label {
+  position: absolute;
+  top: 12px;
+  left: -8px;
+  padding: 6px 16px 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transform: rotate(-5deg);
+  z-index: 5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 0 8px 8px 0;
+}
+
+.status-label.fully-forked {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.status-label.branching-out {
+  background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.status-label::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: inherit;
+  border-radius: 4px 0 0 4px;
+}
+
 /* Consistent card body layout */
 .card-body {
   display: flex;

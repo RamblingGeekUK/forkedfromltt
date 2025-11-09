@@ -1,10 +1,8 @@
-// Get grid elements for both tabs
-const fullyForkedGrid = document.getElementById("fullyForkedGrid");
-const branchingOutGrid = document.getElementById("branchingOutGrid");
+// Get grid element
+const allCreatorsGrid = document.getElementById("allCreatorsGrid");
 
-// Hide grids initially
-if (fullyForkedGrid) fullyForkedGrid.style.display = "none";
-if (branchingOutGrid) branchingOutGrid.style.display = "none";
+// Hide grid initially
+if (allCreatorsGrid) allCreatorsGrid.style.display = "none";
 
 // Function to create creator card HTML
 function createCreatorCard(channel) {
@@ -110,12 +108,18 @@ function createCreatorCard(channel) {
           <!-- Front of card -->
           <div class="flip-card-front">
             <div class="card h-100 shadow-lg border-0 position-relative">
-              ${hasVideoData ? 
-                `<a href="https://youtube.com/watch?v=${channel.videoId}" target="_blank" onclick="event.stopPropagation();">
-                  <img src="${channel.thumbnail}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;">
-                </a>` :
-                `<img src="${finalImageSrc}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;">`
-              }
+              <div class="position-relative">
+                ${hasVideoData ? 
+                  `<a href="https://youtube.com/watch?v=${channel.videoId}" target="_blank" onclick="event.stopPropagation();">
+                    <img src="${channel.thumbnail}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;">
+                  </a>` :
+                  `<img src="${finalImageSrc}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;">`
+                }
+                <!-- Status Label -->
+                <div class="status-label ${channel.FullyForked ? 'fully-forked' : 'branching-out'}">
+                  ${channel.FullyForked ? 'Fully Forked' : 'Branching Out'}
+                </div>
+              </div>
               <div class="card-body d-flex flex-column justify-content-between">
                 <div class="d-flex flex-column align-items-center mb-2 mt-2">
                   <span style="color: #b0b3b8; font-size: 1.05em;">${channel.channel}</span>
@@ -237,8 +241,7 @@ function populateGrid(gridElement, creators, showNoResultsMessage = true) {
 
 // Global variables for search functionality
 let allCreatorsData = [];
-let originalFullyForkedCreators = [];
-let originalBranchingOutCreators = [];
+let originalAllCreators = [];
 
 // Fetch creators and populate both tabs
 fetch("/api/creators")
@@ -252,29 +255,13 @@ fetch("/api/creators")
     // Store all creators data globally for search
     allCreatorsData = allCreators;
     
-    // Debug: Log a few creators to check data structure
-    console.log('Sample creator data:', allCreators.slice(0, 3));
-    const jessica = allCreators.find(c => c.channel && c.channel.toLowerCase().includes('jessica'));
-    if (jessica) {
-      console.log('Jessica data:', jessica);
-    }
+    // Combine all creators and shuffle
+    const allCreatorsShuffled = [...allCreators].sort(() => Math.random() - 0.5);
+    originalAllCreators = [...allCreatorsShuffled];
     
-    // Filter for Fully Forked creators and ads
-    const fullyForkedCreators = allCreators.filter(c => c.FullyForked === true || c.isAd);
-    fullyForkedCreators.sort(() => Math.random() - 0.5); // Shuffle
-    originalFullyForkedCreators = [...fullyForkedCreators];
-    
-    // Filter for Branching Out creators (not fully forked, excluding ads)
-    const branchingOutCreators = allCreators.filter(c => c.FullyForked === false && !c.isAd);
-    branchingOutCreators.sort(() => Math.random() - 0.5); // Shuffle
-    originalBranchingOutCreators = [...branchingOutCreators];
-    
-    // Populate both grids
-    if (fullyForkedGrid) {
-      populateGrid(fullyForkedGrid, fullyForkedCreators);
-    }
-    if (branchingOutGrid) {
-      populateGrid(branchingOutGrid, branchingOutCreators);
+    // Populate single grid with all creators
+    if (allCreatorsGrid) {
+      populateGrid(allCreatorsGrid, allCreatorsShuffled);
     }
     
     // Initialize search functionality after data is loaded
@@ -282,13 +269,9 @@ fetch("/api/creators")
   })
   .catch(err => {
     console.error("Failed to load creators", err);
-    if (fullyForkedGrid) {
-      fullyForkedGrid.style.display = "";
-      fullyForkedGrid.innerHTML = '<div class="text-center text-danger w-100 py-5">Failed to load creators.</div>';
-    }
-    if (branchingOutGrid) {
-      branchingOutGrid.style.display = "";
-      branchingOutGrid.innerHTML = '<div class="text-center text-danger w-100 py-5">Failed to load creators.</div>';
+    if (allCreatorsGrid) {
+      allCreatorsGrid.style.display = "";
+      allCreatorsGrid.innerHTML = '<div class="text-center text-danger w-100 py-5">Failed to load creators.</div>';
     }
   });
 
@@ -438,25 +421,15 @@ function selectCreator(index) {
 }
 
 function filterMainGrids(filteredCreators) {
-  // Split filtered creators by type
-  const filteredFullyForked = filteredCreators.filter(c => c.FullyForked === true || c.isAd);
-  const filteredBranchingOut = filteredCreators.filter(c => c.FullyForked === false && !c.isAd);
-  
-  // Update grids
-  if (fullyForkedGrid) {
-    populateGrid(fullyForkedGrid, filteredFullyForked, false);
-  }
-  if (branchingOutGrid) {
-    populateGrid(branchingOutGrid, filteredBranchingOut, false);
+  // Update single grid with filtered creators
+  if (allCreatorsGrid) {
+    populateGrid(allCreatorsGrid, filteredCreators, false);
   }
 }
 
 function resetToOriginalResults() {
   // Reset to original shuffled results
-  if (fullyForkedGrid) {
-    populateGrid(fullyForkedGrid, originalFullyForkedCreators);
-  }
-  if (branchingOutGrid) {
-    populateGrid(branchingOutGrid, originalBranchingOutCreators);
+  if (allCreatorsGrid) {
+    populateGrid(allCreatorsGrid, originalAllCreators);
   }
 }
