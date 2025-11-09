@@ -1,7 +1,10 @@
 [
   {
-    "name": "Zip Tie Tuning/Zip Tie Tech",
-    "image": "",
+    "name": "Alex Clark",
+    "image": "images/creators/alexclark.jpg",
+    "CreatedDate": "2025-07-18T09:00:00",
+    "ExitDate": "2025-06-18T09:00:00",
+    "nicknames": ["AlexTheGreatish"],
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -12,7 +15,7 @@
         },
         {
           "channelId": "",
-          "url": "https://www.youtube.com/@ZipTieTuning",
+          "url": "https://www.youtube.com/@ZipTieTech",
           "visible": true
         }
       ],
@@ -29,12 +32,50 @@
         }
       ],
       "website": [],
-      "bluesky": []
+      "bluesky": [],
+      "linkedin": []
+    }
+  },
+    {
+    "name": "Andy Zhang",
+    "image": "images/creators/andyzhang.jpg",
+    "CreatedDate": "2025-07-18T09:00:00",
+    "ExitDate": "2025-06-18T09:00:00",
+    "nicknames": [],
+    "FullyForked": true,
+    "socials": {
+      "youtube": [
+        {
+          "channelId": "UCWqW23Ko6dbscptZYyQE-8A",
+          "url": "https://www.youtube.com/@ZipTieTuning",
+          "visible": true
+        },
+        {
+          "channelId": "",
+          "url": "https://www.youtube.com/@ZipTieTech",
+          "visible": true
+        }
+      ],
+      "twitter": [
+        {
+          "url": "https://x.com/_andyzhang",
+          "visible": true
+        }
+      ],
+      "instagram": [
+        {
+          "url": "https://www.instagram.com/_andyzhang_",
+          "visible": true
+        }
+      ],
+      "website": [],
+      "bluesky": [],
+      "linkedin": []
     }
   },
   {
     "name": "Taran Van Hemert",
-    "image": "",
+    "image": "images/creators/taranvanhemert.jpg",
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -57,12 +98,13 @@
       ],
       "instagram": [],
       "website": [],
-      "bluesky": []
+      "bluesky": [],
+      "linkedin": []
     }
   },
   {
     "name": "Brandon Y Lee",
-    "image": "",
+    "image": "images/creators/brandonylee.jpg",
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -85,12 +127,13 @@
         }
       ],
       "website": [],
-      "bluesky": []
+      "bluesky": [],
+      "linkedin": []
     }
   },
   {
     "name": "Emily Young",
-    "image": "",
+    "image": "images/creators/emilyyoung.jpg",
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -114,12 +157,13 @@
           "url": "https://tech.lgbt/@emilyyoung",
           "visible": true
         }
-      ]
+      ],
+      "linkedin": []
     }
   },
   {
     "name": "Nick Van Berkel",
-    "image": "",
+    "image": "images/creators/nickvanberkel.jpg",
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -142,12 +186,15 @@
         }
       ],
       "website": [],
-      "bluesky": []
+      "bluesky": [],
+      "linkedin": []
     }
   },
   {
-    "name": "Dub MFG",
-    "image": "",
+    "name": "Colin Worobetz",
+    "image": "images/creators/colinworobetz.jpeg",
+    "nicknames": ["DubMFG"],
+    "Notes": "Leaving annocument : https://x.com/DubMFG/status/1509279727218880517?t=PL7LcbR3sR4pZtTtz5BFkg&s=19",
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -176,12 +223,13 @@
           "url": "https://www.etsy.com/ca/shop/DubMFG",
           "visible": true
         }
-      ]
+      ],
+      "linkedin": []
     }
   },
   {
     "name": "Tanner McCoolman",
-    "image": "",
+    "image": "images/creators/tannermccoolman.jpg",
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -198,8 +246,9 @@
     }
   },
   {
-    "name": "Sexy Little Fat Boy aka Jessica Pigeau",
-    "image": "",
+    "name": "Jessica Pigeau",
+    "nicknames":["SexyLittleFatBoy"],
+    "image": "images/creators/jessicapigeau.jpg",
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -217,15 +266,22 @@
       "twitter": [],
       "instagram": [],
       "website": [],
-      "bluesky": []
+      "bluesky": [],
+      "linkedin": []
     }
   },
   {
-    "name": "Kacboy (Marcus Blackstock)",
-    "image": "",
+    "name": "Marcus Blackstock",
+    "image": "images/creators/marcusblackstock.jpg",
+    "nicknames": ["Kacboy"],
     "FullyForked": true,
     "socials": {
       "youtube": [
+        {
+          "channelId": "UCKXq_PkhZfWKE91seN7-X5A",
+          "url": "https://www.youtube.com/@MarcusBlackstock",
+          "visible": true
+        },
         {
           "channelId": "UCNRTNlalcpFEfEXaJa8GMUA",
           "url": "https://www.youtube.com/@kacboy",
@@ -246,6 +302,7 @@
           "visible": true
         }
       ],
+      "linkedin": [],
       "ko-fi": [
         {
           "url": "https://ko-fi.com/kacboy",
@@ -255,31 +312,8 @@
     }
   },
   {
-    "name": "Marcus Blackstock",
-    "image": "",
-    "FullyForked": true,
-    "socials": {
-      "youtube": [
-        {
-          "channelId": "UCKXq_PkhZfWKE91seN7-X5A",
-          "url": "https://www.youtube.com/@MarcusBlackstock",
-          "visible": true
-        }
-      ],
-      "twitter": [],
-      "instagram": [],
-      "website": [],
-      "bluesky": [
-        {
-          "url": "https://bsky.app/profile/kacboy.com",
-          "visible": true
-        }
-      ]
-    }
-  },
-  {
     "name": "Hanna Luu",
-    "image": "",
+    "image": "images/creators/hannaluu.webp",
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -291,13 +325,20 @@
       ],
       "twitter": [],
       "instagram": [],
-      "website": [],
-      "bluesky": []
+      "website": [
+        {
+          "url":"https://www.hannaluu.com",
+          "visible":true
+        }
+      ],
+      "bluesky": [],
+      "linkedin": []
     }
   },
   {
-    "name": "'Silent' Colin",
-    "image": "",
+    "name": "Colin DeGraaf",
+    "nicknames":["Silent Colin"],
+    "image": "images/creators/colindegraff.jpg",
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -310,12 +351,19 @@
       "twitter": [],
       "instagram": [],
       "website": [],
-      "bluesky": []
+      "bluesky": [],
+      "linkedin": [
+        {
+          "url": "https://www.linkedin.com/in/colin-degraaf-48424a20b/?originalSubdomain=ca",
+          "visible": true
+        }
+      ]
     }
   },
   {
-    "name": "BocaBola (Elijah)",
-    "image": "",
+    "name": "Elijah Horner",
+    "nicknames":["BocaBola"],
+    "image": "images/creators/elijahhorner.jpg",
     "FullyForked": false,
     "socials": {
       "youtube": [
@@ -325,7 +373,12 @@
           "visible": true
         }
       ],
-      "twitter": [],
+      "twitter": [
+        {
+          "url":"https://x.com/BocaBola_",
+          "visible":true
+        }
+      ],
       "instagram": [],
       "bluesky": [],
       "twitch": [
@@ -333,12 +386,14 @@
           "url": "https://www.twitch.tv/bocabola",
           "visible": true
         }
-      ]
+      ],
+      "linkedin": []
     }
   },
   {
-    "name": "BuhDan (Dan)",
-    "image": "",
+    "name": "Dan Besser",
+    "nicknames":["BuhDan"],
+    "image": "images/creators/danbesser.webp",
     "FullyForked": false,
     "socials": {
       "youtube": [
@@ -348,7 +403,18 @@
           "visible": true
         }
       ],
-      "twitter": [],
+      "twitter": [
+        {
+          "url":"https://x.com/BuhDan",
+          "visible":true
+        }
+      ],
+      "twitch":[
+        {
+          "url":"https://www.twitch.tv/buhdan",
+          "visible":true
+        }
+      ],
       "instagram": [],
       "bluesky": [],
       "soundcloud": [
@@ -356,12 +422,13 @@
           "url": "https://soundcloud.com/buhdan",
           "visible": true
         }
-      ]
+      ],
+      "linkedin": []
     }
   },
   {
     "name": "CatTips",
-    "image": "",
+    "image": "images/creators/cattips.jpg",
     "FullyForked": false,
     "socials": {
       "youtube": [
@@ -379,14 +446,15 @@
   },
   {
     "name": "Luke Lafreniere",
-    "image": "",
+    "nicknames":["DukeNukem"],
+    "image": "images/creators/lukelafreniere.jpg",
     "FullyForked": false,
     "socials": {
       "youtube": [
         {
           "channelId": "UCC43rlliFy4vFFTVJWao0Hw",
           "url": "https://www.youtube.com/@LukeLafreniere",
-          "visible": true  
+          "visible": true
         }
       ],
       "twitter": [
@@ -403,12 +471,14 @@
           "url": "https://www.twitch.tv/luke_lafr",
           "visible": true
         }
-      ]
+      ],
+      "linkedin": []
     }
   },
   {
-    "name": "SuopOnYoutube",
-    "image": "",
+    "name": "Madison Reeve",
+    "nicknames": [" SuopOnYoutube"],
+    "image": "images/creators/madisonreeve.jpg",
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -438,13 +508,18 @@
           "url": "https://www.twitch.tv/suopontwitch",
           "visible": true
         }
-      ]
+      ],
+      "linkedin": []
     }
   },
   {
-    "name": "jakkuh",
-    "image": "",
+    "name": "Jake Tivy",
+    "nicknames":["jakkuh"],
+    "image": "images/creators/jaketivy.jpg",
+    "CreatedDate": "2025-09-22T09:00:00",
+    "ExitDate": "2025-09-22T09:00:00",
     "FullyForked": true,
+    "Notes": "Leaving annocument : https://x.com/jakkuh_t/status/1970159380864835779?s=20",
     "socials": {
       "youtube": [
         {
@@ -471,7 +546,138 @@
         }
       ],
       "website": [],
-      "bluesky": []
+      "bluesky": [],
+      "linkedin": []
+    }
+  },
+   {
+    "name": "Nick Light",
+    "nicknames":[],
+    "image": "images/creators/nicklight.jpg",
+    "CreatedDate": "2025-09-22T09:00:00",
+    "ExitDate": "2025-09-22T09:00:00",
+    "FullyForked": true,
+    "Notes": "https://x.com/nicklmg/status/1949141160213287294?s=20",
+    "socials": {
+      "youtube": [
+        
+      ],
+      "twitter": [
+        {
+          "url": "https://x.com/nicklmg",
+          "visible": true
+        }
+      ],
+      "instagram": [
+        {
+          "url": "https://www.instagram.com/nicklmg",
+          "visible": true
+        }
+      ],
+      "website": [],
+      "bluesky": [],
+      "linkedin": []
+    }
+  },
+   {
+    "name": "Arthur Rafael",
+    "nicknames":["Arty"],
+    "image": "images/creators/arthurrafael.jpg",
+    "CreatedDate": "2025-09-22T09:00:00",
+    "ExitDate": "2025-09-22T09:00:00",
+    "FullyForked": false,
+    "Notes": "",
+    "socials": {
+      "youtube": [
+        {
+        "url":"https://www.youtube.com/@itsARTYTIME",
+        "visible":true
+        }
+      ],
+      "twitter": [
+        {
+          "url": "https://x.com/arty_raf",
+          "visible": true
+        }
+      ],
+      "instagram": [
+        {
+          "url": "https://www.instagram.com/artytime247",
+          "visible": true
+        }
+      ],
+      "website": [],
+      "bluesky": [],
+      "linkedin": []
+    }
+  },
+   {
+    "name": "Dennis Liao",
+    "nicknames":[],
+    "image": "images/creators/dennisliao.jpg",
+    "CreatedDate": "2025-09-22T09:00:00",
+    "ExitDate": "2025-09-22T09:00:00",
+    "FullyForked": true,
+    "Notes": "",
+    "socials": {
+      "youtube": [
+        {
+        "url":"https://www.youtube.com/jeremyethier",
+        "visible":true
+        }
+      ],
+      "twitter": [
+        {
+          "url": "https://x.com/dennyishung",
+          "visible": true
+        }
+      ],
+      "instagram": [
+        {
+          "url": "https://www.instagram.com/dennyishung",
+          "visible": true
+        }
+      ],
+      "website": [],
+      "bluesky": [],
+      "linkedin": []
+    }
+  },
+   {
+    "name": "Oliver Cao",
+    "nicknames":[],
+    "image": "images/creators/olivercao.jpg",
+    "CreatedDate": "2025-09-22T09:00:00",
+    "ExitDate": "2025-09-22T09:00:00",
+    "FullyForked": true,
+    "Notes": "",
+    "socials": {
+      "youtube": [
+        {
+        "url":"https://www.youtube.com/@OliverCaoVlogs",
+        "visible":true
+        },
+        {
+          "url":"https://www.youtube.com/@OliverCao",
+          "visible":true
+        }
+
+      ],
+      "twitter": [],
+      "instagram": [
+        {
+          "url": "https://www.instagram.com/_olivercao_/",
+          "visible": true
+        }
+      ],
+      "website": [
+        {
+          "url":"https://olivercao.ca",
+          "visible": true
+        }
+      ],
+      "bluesky": [],
+      "linkedin": []
     }
   }
 ]

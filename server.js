@@ -164,7 +164,9 @@ app.get("/api/creators", async (req, res) => {
         thumbnail: creator.image || null, // Use creator's image if available
         socials: creator.socials || {},
         website: creator.socials?.website?.[0]?.url || undefined,
-        image: creator.image || undefined
+        image: creator.image || undefined,
+        notes: creator.Notes || null,
+        nicknames: creator.nicknames || []
       });
     }
 
