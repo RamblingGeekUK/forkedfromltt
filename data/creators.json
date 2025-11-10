@@ -679,5 +679,108 @@
       "bluesky": [],
       "linkedin": []
     }
+  },
+   {
+    "name": "Gary Key",
+    "nicknames":[],
+    "image": "images/creators/garykey.jpg",
+    "CreatedDate": "2025-09-22T09:00:00",
+    "ExitDate": "2025-09-22T09:00:00",
+    "FullyForked": true,
+    "Notes": "",
+    "socials": {
+      "youtube": [],
+      "twitter": [
+        {
+          "url":"https://x.com/GaryKey67597140",
+          "visible":true
+        }
+      ],
+      "instagram": [],
+      "website": [],
+      "bluesky": [],
+      "linkedin": [
+        {
+          "url":"https://www.linkedin.com/in/gary-key-951a474b/",
+          "visible":true
+        }
+      ]
+    }
+  },
+   {
+    "name": "Edzel Yago",
+    "nicknames":[],
+    "image": "images/creators/edzelyago.jpg",
+    "CreatedDate": "2025-09-22T09:00:00",
+    "ExitDate": "2025-09-22T09:00:00",
+    "FullyForked": true,
+    "Notes": "",
+    "socials": {
+      "youtube": [
+        {
+          "url":"https://www.youtube.com/EdzelYago",
+          "visible":true
+        }
+      ],
+      "twitter": [
+        {
+          "url":"https://x.com/edzelyago",
+          "visible":true
+        }
+      ],
+      "instagram": [
+        {
+          "url":"https://www.instagram.com/edzelyago",
+          "visible":true
+        }
+      ],
+      "website": [],
+      "bluesky": [],
+      "linkedin": [
+        {
+          "url":"https://www.linkedin.com/in/edzelyago",
+          "visible":true
+        }
+      ],
+      "twitch": [
+        {
+          "url":"https://www.twitch.tv/edyago",
+          "visible":true
+        }
+      ]
+    }
+  },
+   {
+    "name": "Tim Holowachuk",
+    "nicknames":[],
+    "image": "images/creators/timholowachuk.jpg",
+    "CreatedDate": "2025-09-22T09:00:00",
+    "ExitDate": "2025-09-22T09:00:00",
+    "FullyForked": true,
+    "Notes": "",
+    "socials": {
+      "youtube": [],
+      "twitter": [
+        {
+          "url":"https://x.com/TimHolowachuk",
+          "visible":true
+        }
+      ],
+      "instagram": [],
+      "website": [
+        {
+          "url":"https://www.timholowachuk.com",
+          "visible":true
+        }
+      ],
+      "bluesky": [],
+      "linkedin": [],
+      "twitch": [
+        {
+          "url":"https://www.twitch.tv/rexynexus",
+          "visible":true
+        }
+      ]
+    }
   }
 ]
