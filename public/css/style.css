@@ -794,3 +794,288 @@ h1, h3 {
   color: #adb5bd;
   font-style: italic;
 }
+
+/* Enhanced Suggestion Modal Styling */
+.suggestion-modal {
+  background: linear-gradient(135deg, #1a1d23 0%, #23272a 100%);
+  border: 1px solid #404448;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(143, 148, 251, 0.1);
+  overflow: hidden;
+}
+
+.suggestion-header {
+  background: linear-gradient(135deg, #8f94fb 0%, #6c7ae0 100%);
+  border-bottom: none;
+  padding: 1.5rem 2rem;
+  border-radius: 16px 16px 0 0;
+}
+
+.suggestion-header .modal-title {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.suggestion-icon {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.suggestion-close {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.suggestion-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.suggestion-body {
+  padding: 2rem;
+  background: linear-gradient(135deg, #1a1d23 0%, #23272a 100%);
+}
+
+.suggestion-intro {
+  background: rgba(143, 148, 251, 0.1);
+  border: 1px solid rgba(143, 148, 251, 0.2);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  text-align: center;
+}
+
+.suggestion-form .form-section {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.suggestion-form .form-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8f94fb, #6c7ae0, #8f94fb);
+}
+
+.section-title {
+  color: #8f94fb;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+.form-label {
+  color: #e9ecef;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.form-label.required::after {
+  content: '*';
+  color: #ff6b6b;
+  margin-left: 4px;
+  font-weight: bold;
+}
+
+.suggestion-input {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.suggestion-input:focus {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: #8f94fb !important;
+  box-shadow: 0 0 0 0.2rem rgba(143, 148, 251, 0.25) !important;
+  transform: translateY(-1px);
+}
+
+.suggestion-input::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.form-select.suggestion-input {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m1 6 7 7 7-7'/%3e%3c/svg%3e") !important;
+}
+
+.form-select.suggestion-input:focus {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: #8f94fb !important;
+  box-shadow: 0 0 0 0.2rem rgba(143, 148, 251, 0.25) !important;
+  transform: translateY(-1px);
+}
+
+.form-select.suggestion-input option {
+  background: #23272a !important;
+  color: #fff !important;
+  padding: 0.5rem;
+}
+
+.suggestion-input-icon {
+  background: rgba(143, 148, 251, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-right: none !important;
+  color: #8f94fb;
+}
+
+.input-group .suggestion-input {
+  border-left: none !important;
+}
+
+.suggestion-textarea {
+  min-height: 100px !important;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.form-text {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.suggestion-footer {
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.5rem 2rem;
+  gap: 1rem;
+}
+
+.suggestion-btn-primary {
+  background: linear-gradient(135deg, #8f94fb 0%, #6c7ae0 100%) !important;
+  border: none !important;
+  color: #fff !important;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+}
+
+.suggestion-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(143, 148, 251, 0.4);
+  background: linear-gradient(135deg, #a5a9ff 0%, #7c87e8 100%) !important;
+}
+
+.suggestion-btn-primary:active {
+  transform: translateY(0);
+}
+
+.suggestion-btn-secondary {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #e9ecef !important;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.suggestion-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.suggestion-alert {
+  border-radius: 8px !important;
+  border: none !important;
+  font-weight: 500;
+  padding: 1rem 1.5rem;
+}
+
+.suggestion-alert.alert-success {
+  background: rgba(46, 160, 67, 0.2) !important;
+  color: #51cf66 !important;
+  border: 1px solid rgba(46, 160, 67, 0.3) !important;
+}
+
+.suggestion-alert.alert-danger {
+  background: rgba(250, 82, 82, 0.2) !important;
+  color: #ff6b6b !important;
+  border: 1px solid rgba(250, 82, 82, 0.3) !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .suggestion-modal {
+    margin: 1rem;
+  }
+  
+  .suggestion-header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .suggestion-body {
+    padding: 1.5rem;
+  }
+  
+  .suggestion-form .form-section {
+    padding: 1rem;
+  }
+  
+  .suggestion-footer {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+  }
+  
+  .suggestion-btn-primary,
+  .suggestion-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Animation for modal appearance */
+.suggestion-modal {
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

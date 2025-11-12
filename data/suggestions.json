@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Test Creator",
+    "image": "",
+    "CreatedDate": "2025-11-12T22:31:40.952Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": false,
+    "socials": {
+      "youtube": [
+        {
+          "channelId": "",
+          "url": "https://youtube.com/@testcreator",
+          "visible": true
+        }
+      ],
+      "twitter": [],
+      "instagram": [],
+      "website": [],
+      "bluesky": [],
+      "linkedin": []
+    },
+    "Notes": "Testing the suggestions system",
+    "submissionDate": "2025-11-12T22:31:40.953Z",
+    "status": "pending"
+  },
+  {
+    "name": "bob",
+    "image": "",
+    "CreatedDate": "2025-11-12T22:42:19.533Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": false,
+    "socials": {
+      "youtube": [
+        {
+          "channelId": "",
+          "url": "https://youtube.com/@bob",
+          "visible": true
+        }
+      ],
+      "twitter": [],
+      "instagram": [],
+      "website": [],
+      "bluesky": [],
+      "linkedin": []
+    },
+    "Notes": "fdsfsdfdsfsdfsdfds",
+    "submissionDate": "2025-11-12T22:42:19.533Z",
+    "status": "pending"
+  },
+  {
+    "name": "Test Creator 2",
+    "image": "",
+    "CreatedDate": "2025-11-12T22:56:03.348Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": true,
+    "socials": {
+      "youtube": [
+        {
+          "channelId": "",
+          "url": "https://youtube.com/@testcreator2",
+          "visible": true
+        }
+      ],
+      "twitter": [],
+      "instagram": [],
+      "website": [],
+      "bluesky": [],
+      "linkedin": []
+    },
+    "Notes": "Testing the enhanced suggestions system with fully forked status",
+    "submissionDate": "2025-11-12T22:56:03.348Z",
+    "status": "pending"
+  }
+]

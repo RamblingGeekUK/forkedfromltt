@@ -8,6 +8,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.static("public"));
 app.use('/data', express.static('data'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/api/faq", async (req, res) => {
   console.log("API endpoint /api/faq called");
@@ -68,6 +70,70 @@ app.get("/api/creators", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to load creators" });
+  }
+});
+
+// Handle creator suggestions submission
+app.post("/api/suggestions", async (req, res) => {
+  console.log("API endpoint /api/suggestions called with data:", req.body);
+  try {
+    const { name, image, fullyForked, youtube, twitter, instagram, website, bluesky, linkedin, notes } = req.body;
+    
+    // Validate required fields
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: "Creator name is required" });
+    }
+
+    // Parse fullyForked value (comes as string from form)
+    const isFullyForked = fullyForked === 'true' || fullyForked === true;
+
+    // Create suggestion object in creators.json format
+    const suggestion = {
+      name: name.trim(),
+      image: image?.trim() || "",
+      CreatedDate: new Date().toISOString(),
+      ExitDate: "",
+      nicknames: [],
+      FullyForked: isFullyForked,
+      socials: {
+        youtube: youtube?.trim() ? [{ channelId: "", url: youtube.trim(), visible: true }] : [],
+        twitter: twitter?.trim() ? [{ url: twitter.trim(), visible: true }] : [],
+        instagram: instagram?.trim() ? [{ url: instagram.trim(), visible: true }] : [],
+        website: website?.trim() ? [{ url: website.trim(), visible: true }] : [],
+        bluesky: bluesky?.trim() ? [{ url: bluesky.trim(), visible: true }] : [],
+        linkedin: linkedin?.trim() ? [{ url: linkedin.trim(), visible: true }] : []
+      },
+      Notes: notes?.trim() || "",
+      submissionDate: new Date().toISOString(),
+      status: "pending"
+    };
+
+    // Read existing suggestions file or create empty array
+    let suggestions = [];
+    const suggestionsPath = "data/suggestions.json";
+    
+    if (fs.existsSync(suggestionsPath)) {
+      try {
+        const data = fs.readFileSync(suggestionsPath, 'utf8');
+        suggestions = JSON.parse(data);
+      } catch (parseErr) {
+        console.error("Error parsing existing suggestions file:", parseErr);
+        suggestions = [];
+      }
+    }
+
+    // Add new suggestion
+    suggestions.push(suggestion);
+
+    // Write back to file
+    fs.writeFileSync(suggestionsPath, JSON.stringify(suggestions, null, 2));
+    
+    console.log(`New suggestion added for creator: ${name}`);
+    res.json({ success: true, message: "Suggestion submitted successfully!" });
+    
+  } catch (err) {
+    console.error("Error handling suggestion submission:", err);
+    res.status(500).json({ error: "Failed to submit suggestion" });
   }
 });
 

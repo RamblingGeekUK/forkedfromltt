@@ -21,29 +21,214 @@
   </div>
 </div>
 
-<!-- Feedback Modal (GitHub Issues) -->
-<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content bg-dark text-light">
-      <div class="modal-header">
-        <h5 class="modal-title" id="feedbackModalLabel">Feedback & Suggestions</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Creator Suggestions Modal -->
+<div class="modal fade" id="suggestionsModal" tabindex="-1" aria-labelledby="suggestionsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content suggestion-modal">
+      <div class="modal-header suggestion-header">
+        <div class="d-flex align-items-center">
+          
+          <h4 class="modal-title mb-0" id="suggestionsModalLabel">Suggest a Creator</h4>
+        </div>
+        <button type="button" class="btn-close btn-close-white suggestion-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <p>We welcome your feedback, suggestions, and creator submissions!</p>
-        <p>
-          Please <a href="https://github.com/RamblingGeekUK/forkedfromltt/issues/new?labels=feedback" target="_blank" rel="noopener">open a GitHub issue</a> to submit feedback, report bugs, or suggest new creators.<br>
-          <small class="text-secondary">(A GitHub account is required. This helps us keep track of all requests and suggestions in one place.)</small>
-        </p>
-        <ul>
-          <li>For new creator suggestions, please include their YouTube channel link and any relevant info.</li>
-          <li>For bugs or site issues, describe the problem and steps to reproduce.</li>
-        </ul>
-        <p class="mt-3">Thank you for helping improve the project!</p>
+      
+      <div class="modal-body suggestion-body">
+        <div class="suggestion-intro mb-4">
+          <p class="text emphasis mb-0">Please suggestion a creator that is working or has worked at LTT.  Once verified, they will be</p>
+        </div>
+        
+        <form id="suggestionsForm" class="suggestion-form">
+          <!-- Creator Info Section -->
+          <div class="form-section mb-4">
+            <h6 class="section-title">
+              <svg width="16" height="16" fill="#8f94fb" viewBox="0 0 24 24" class="me-2">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+              </svg>
+              Creator Information
+            </h6>
+            
+            <div class="row g-3">
+              <div class="col-lg-7">
+                <label for="creatorName" class="form-label required">Creator Name</label>
+                <div class="input-group">
+                  <span class="input-group-text suggestion-input-icon">
+                    <svg width="16" height="16" fill="#8f94fb" viewBox="0 0 24 24">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
+                    </svg>
+                  </span>
+                  <input type="text" class="form-control suggestion-input" id="creatorName" name="name" required placeholder="Enter creator or channel name">
+                </div>
+              </div>
+              <div class="col-lg-5">
+                <label for="fullyForked" class="form-label">Creator Status</label>
+                <div class="input-group">
+                  <span class="input-group-text suggestion-input-icon">
+                    <svg width="16" height="16" fill="#8f94fb" viewBox="0 0 24 24">
+                      <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+                    </svg>
+                  </span>
+                  <select class="form-select suggestion-input" id="fullyForked" name="fullyForked">
+                    <option value="false">Branching Out</option>
+                    <option value="true">Fully Forked</option>
+                  </select>
+                </div>
+                <div class="form-text">Select current relationship status with LTT</div>
+              </div>
+            </div>
+            
+            <div class="row g-3">
+              <div class="col-12">
+                <label for="creatorImage" class="form-label">Profile Image URL</label>
+                <div class="input-group">
+                  <span class="input-group-text suggestion-input-icon">
+                    <svg width="16" height="16" fill="#8f94fb" viewBox="0 0 24 24">
+                      <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                    </svg>
+                  </span>
+                  <input type="url" class="form-control suggestion-input" id="creatorImage" name="image" placeholder="https://example.com/image.jpg">
+                </div>
+                <div class="form-text">Optional: Link to creator's profile image or avatar</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Media Section -->
+          <div class="form-section mb-4">
+            <h6 class="section-title">
+              <svg width="16" height="16" fill="#8f94fb" viewBox="0 0 24 24" class="me-2">
+                <path d="M16 4l4 4-4 4m-4-4h8M8 20l-4-4 4-4m4 4H4"/>
+              </svg>
+              Social Media & Links
+            </h6>
+            
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="youtubeUrl" class="form-label">YouTube</label>
+                <div class="input-group">
+                  <span class="input-group-text suggestion-input-icon">
+                    <svg width="16" height="16" fill="#FF0000" viewBox="0 0 24 24">
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                  </span>
+                  <input type="url" class="form-control suggestion-input" id="youtubeUrl" name="youtube" placeholder="https://youtube.com/@channelname">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="twitterUrl" class="form-label">Twitter/X</label>
+                <div class="input-group">
+                  <span class="input-group-text suggestion-input-icon">
+                    <svg width="16" height="16" fill="#1DA1F2" viewBox="0 0 24 24">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                  </span>
+                  <input type="url" class="form-control suggestion-input" id="twitterUrl" name="twitter" placeholder="https://x.com/username">
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="instagramUrl" class="form-label">Instagram</label>
+                <div class="input-group">
+                  <span class="input-group-text suggestion-input-icon">
+                    <svg width="16" height="16" fill="#E4405F" viewBox="0 0 24 24">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                  </span>
+                  <input type="url" class="form-control suggestion-input" id="instagramUrl" name="instagram" placeholder="https://instagram.com/username">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="websiteUrl" class="form-label">Website</label>
+                <div class="input-group">
+                  <span class="input-group-text suggestion-input-icon">
+                    <svg width="16" height="16" fill="#8f94fb" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                  </span>
+                  <input type="url" class="form-control suggestion-input" id="websiteUrl" name="website" placeholder="https://example.com">
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="blueskyUrl" class="form-label">Bluesky</label>
+                <div class="input-group">
+                  <span class="input-group-text suggestion-input-icon">
+                    <svg width="16" height="16" fill="#00A8E8" viewBox="0 0 24 24">
+                      <path d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM8.547 8.062c1.91-.953 4.503-.953 6.906 0 .469.188.938.469 1.313.844.375.375.656.844.844 1.313.094.234.141.469.141.719s-.047.484-.141.719c-.188.469-.469.938-.844 1.313-.375.375-.844.656-1.313.844-2.403.953-4.997.953-6.906 0-.469-.188-.938-.469-1.313-.844-.375-.375-.656-.844-.844-1.313-.094-.234-.141-.469-.141-.719s.047-.484.141-.719c.188-.469.469-.938.844-1.313.375-.375.844-.656 1.313-.844z"/>
+                    </svg>
+                  </span>
+                  <input type="url" class="form-control suggestion-input" id="blueskyUrl" name="bluesky" placeholder="https://bsky.app/profile/username">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="linkedinUrl" class="form-label">LinkedIn</label>
+                <div class="input-group">
+                  <span class="input-group-text suggestion-input-icon">
+                    <svg width="16" height="16" fill="#0A66C2" viewBox="0 0 24 24">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                  </span>
+                  <input type="url" class="form-control suggestion-input" id="linkedinUrl" name="linkedin" placeholder="https://linkedin.com/in/username">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Info Section -->
+          <div class="form-section mb-4">
+            <h6 class="section-title">
+              <svg width="16" height="16" fill="#8f94fb" viewBox="0 0 24 24" class="me-2">
+                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h8c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+              </svg>
+              Additional Information
+            </h6>
+            
+            <div class="mb-3">
+              <label for="creatorNotes" class="form-label">Why should we feature this creator?</label>
+              <textarea class="form-control suggestion-input suggestion-textarea" id="creatorNotes" name="notes" rows="4" placeholder="Tell us about this creator's content, their connection to LTT, or why they'd be a great addition..."></textarea>
+              <div class="form-text">Share any background info, content style, or reasons for the suggestion</div>
+            </div>
+          </div>
+
+          <!-- Alert Messages -->
+          <div class="alert alert-success suggestion-alert d-none" id="suggestionSuccess">
+            <div class="d-flex align-items-center">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="me-2">
+                <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+              </svg>
+              <span id="suggestionSuccessMessage">Suggestion submitted successfully!</span>
+            </div>
+          </div>
+
+          <div class="alert alert-danger suggestion-alert d-none" id="suggestionError">
+            <div class="d-flex align-items-center">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="me-2">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+              </svg>
+              <span id="suggestionErrorMessage">Error submitting suggestion.</span>
+            </div>
+          </div>
+        </form>
       </div>
-      <div class="modal-footer">
-        <a href="https://github.com/RamblingGeekUK/forkedfromltt/issues/new?labels=feedback" target="_blank" rel="noopener" class="btn btn-primary">Open GitHub Issue</a>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      
+      <div class="modal-footer suggestion-footer">
+        <button type="button" class="btn suggestion-btn-secondary" data-bs-dismiss="modal">
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" class="me-2">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+          Cancel
+        </button>
+        <button type="submit" form="suggestionsForm" class="btn suggestion-btn-primary" id="submitSuggestion">
+          <span class="spinner-border spinner-border-sm d-none me-2" id="submitSpinner"></span>
+          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" class="me-2" id="submitIcon">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
+          Submit Suggestion
+        </button>
       </div>
     </div>
   </div>
