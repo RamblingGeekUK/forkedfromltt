@@ -1,0 +1,38 @@
+[
+  {
+    "id": "faq1",
+    "question": "What is this site?",
+    "answer": "This site helps you find creators creators who previously worked at Linus Tech Tips (LTT).",
+    "expanded": true
+  },
+  {
+    "id": "faq3",
+    "question": "How often is the data updated?",
+    "answer": "People don't leave that often, thankfully! When I get to it and I will only add if I can figure out the person has left and did work there.",
+    "expanded": false
+  },
+  {
+    "id": "faq4",
+    "question": "Can I suggest a new channel?",
+    "answer": "Yes! Click feedback, to erm, provide feedback.",
+    "expanded": false
+  },
+  {
+    "id": "faq6",
+    "question": "Why are people missing?",
+    "answer": "I haven't been able to verify them or I haven't got around it. If you think someone is missing send feedback.",
+    "expanded": false
+  },
+  {
+    "id": "faq7",
+    "question": "Wait you have Ad's, are you making money from this?",
+    "answer": "The AD \"card\" was added partly as a joke—think LTTStore.com—and partly to help fill out the page. The site doesn't make any money; it cost's me money, it's just a fun project… unless, of course, you do want to buy an AD card fire me a message via Feedback. Ad's may appear.",
+    "expanded": false
+  },
+  {
+    "id": "faq8",
+    "question": "Why are they displayed in a random order?",
+    "answer": "To try and make sure all creators are seen and no one creator is singled out.",
+    "expanded": false
+  }
+]

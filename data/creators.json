@@ -240,9 +240,20 @@
         }
       ],
       "twitter": [],
-      "instagram": [],
+      "instagram": [
+        {
+          "url":"https://www.instagram.com/tannermccoolman/",
+          "visible":true
+        }
+      ],
       "website": [],
-      "bluesky": []
+      "bluesky": [],
+      "soundcloud":[
+        {
+          "url":"https://soundcloud.com/tanner-mccoolman",
+          "visible":true
+        }
+      ]
     }
   },
   {

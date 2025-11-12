@@ -8,55 +8,13 @@
       </div>
       <div class="modal-body">
         <div class="accordion accordion-dark" id="faqAccordion">
-          <div class="accordion-item bg-dark text-light border-secondary">
-            <h2 class="accordion-header" id="faq1-heading">
-              <button class="accordion-button bg-dark text-info fw-bold shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1" style="border-bottom:1px solid #444; font-size:1.15rem; letter-spacing:0.5px;">What is this site?</button>
-            </h2>
-            <div id="faq1" class="accordion-collapse collapse show" aria-labelledby="faq1-heading" data-bs-parent="#faqAccordion">
-              <div class="accordion-body bg-dark text-white" style="border-top:1px solid #444; font-size:1rem;">This site helps you find creators creators who previously worked at Linus Tech Tips (LTT).</div>
+          <!-- FAQ items will be loaded dynamically -->
+          <div id="faqLoading" class="text-center py-4">
+            <div class="spinner-border text-info" role="status">
+              <span class="visually-hidden">Loading FAQ...</span>
             </div>
+            <p class="mt-2 text-info">Loading FAQ...</p>
           </div>
-          <div class="accordion-item bg-dark text-light border-secondary">
-            <h2 class="accordion-header" id="faq3-heading">
-              <button class="accordion-button collapsed bg-dark text-info fw-bold shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3" style="border-bottom:1px solid #444; font-size:1.15rem; letter-spacing:0.5px;">How often is the data updated?</button>
-            </h2>
-            <div id="faq3" class="accordion-collapse collapse" aria-labelledby="faq3-heading" data-bs-parent="#faqAccordion">
-              <div class="accordion-body bg-dark text-white" style="border-top:1px solid #444; font-size:1rem;">People don't leave that often, thankfully! When I get to it and I will only add if I can figure out the person has left and did work there.</div>
-            </div>
-          </div>
-          <div class="accordion-item bg-dark text-light border-secondary">
-            <h2 class="accordion-header" id="faq4-heading">
-              <button class="accordion-button collapsed bg-dark text-info fw-bold shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4" style="border-bottom:1px solid #444; font-size:1.15rem; letter-spacing:0.5px;">Can I suggest a new channel?</button>
-            </h2>
-            <div id="faq4" class="accordion-collapse collapse" aria-labelledby="faq4-heading" data-bs-parent="#faqAccordion">
-              <div class="accordion-body bg-dark text-white" style="border-top:1px solid #444; font-size:1rem;">Yes! Click feedback, to erm, provide feedback.</div>
-            </div>
-          </div>
-          
-          <div class="accordion-item bg-dark text-light border-secondary">
-            <h2 class="accordion-header" id="faq6-heading">
-              <button class="accordion-button collapsed bg-dark text-info fw-bold shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" aria-expanded="false" aria-controls="faq6" style="border-bottom:1px solid #444; font-size:1.15rem; letter-spacing:0.5px;">Why are people missing?</button>
-            </h2>
-            <div id="faq6" class="accordion-collapse collapse" aria-labelledby="faq6-heading" data-bs-parent="#faqAccordion">
-              <div class="accordion-body bg-dark text-white" style="border-top:1px solid #444; font-size:1rem;">I haven't been able to verify them or I haven't got around it. If you think someone is missing send feedback.</div>
-            </div>
-          </div>
-          <div class="accordion-item bg-dark text-light border-secondary">
-            <h2 class="accordion-header" id="faq7-heading">
-              <button class="accordion-button collapsed bg-dark text-info fw-bold shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#faq7" aria-expanded="false" aria-controls="faq7" style="border-bottom:1px solid #444; font-size:1.15rem; letter-spacing:0.5px;">Wait you have Ad's, are you making money from this?</button>
-            </h2>
-            <div id="faq7" class="accordion-collapse collapse" aria-labelledby="faq7-heading" data-bs-parent="#faqAccordion">
-              <div class="accordion-body bg-dark text-white" style="border-top:1px solid #444; font-size:1rem;">The AD "card" was added partly as a joke—think LTTStore.com—and partly to help fill out the page. The site doesn’t make any money; it cost's me money, it’s just a fun project… unless, of course, you do want to buy an AD card fire me a message via Feedback. Ad's may appear.</div>
-            </div>
-          </div>
-          <div class="accordion-item bg-dark text-light border-secondary">
-          <h2 class="accordion-header" id="faq8-heading">
-            <button class="accordion-button collapsed bg-dark text-info fw-bold shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#faq8" aria-expanded="false" aria-controls="faq8" style="border-bottom:1px solid #444; font-size:1.15rem; letter-spacing:0.5px;">Why are they displayed in a random order?</button>
-          </h2>
-          <div id="faq8" class="accordion-collapse collapse" aria-labelledby="faq8-heading" data-bs-parent="#faqAccordion">
-            <div class="accordion-body bg-dark text-white" style="border-top:1px solid #444; font-size:1rem;">To try and make sure all creators are seen and no one creator is singled out.</div>
-          </div>
-        </div>
         </div>
       </div>
     </div>
@@ -90,3 +48,4 @@
     </div>
   </div>
 </div>
+

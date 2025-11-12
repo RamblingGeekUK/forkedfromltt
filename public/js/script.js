@@ -242,6 +242,7 @@ function populateGrid(gridElement, creators, showNoResultsMessage = true) {
 // Global variables for search functionality
 let allCreatorsData = [];
 let originalAllCreators = [];
+let currentFilter = 'all';
 
 // Fetch creators and populate both tabs
 fetch("/api/creators")
@@ -279,8 +280,9 @@ fetch("/api/creators")
 function initializeSearch() {
   const searchInput = document.getElementById('creatorSearch');
   const searchResults = document.getElementById('searchResults');
+  const statusFilter = document.getElementById('statusFilter');
   
-  if (!searchInput || !searchResults) {
+  if (!searchInput || !searchResults || !statusFilter) {
     // Search elements not loaded yet, try again after a short delay
     setTimeout(initializeSearch, 100);
     return;
@@ -295,7 +297,7 @@ function initializeSearch() {
     
     if (query.length === 0) {
       hideSearchResults();
-      resetToOriginalResults();
+      applyFilters();
       return;
     }
     
@@ -322,13 +324,27 @@ function initializeSearch() {
     if (e.key === 'Escape') {
       searchInput.value = '';
       hideSearchResults();
-      resetToOriginalResults();
+      applyFilters();
     } else if (e.key === 'Enter') {
       e.preventDefault();
       const firstResult = searchResults.querySelector('.search-result-item');
       if (firstResult) {
         firstResult.click();
       }
+    }
+  });
+  
+  // Handle filter change
+  statusFilter.addEventListener('change', function(e) {
+    currentFilter = e.target.value;
+    const query = searchInput.value.trim();
+    
+    if (query.length >= 2) {
+      // Re-perform search with new filter
+      performSearch(query);
+    } else {
+      // Just apply filter without search
+      applyFilters();
     }
   });
 }
@@ -338,7 +354,7 @@ function performSearch(query) {
   const searchQuery = query.toLowerCase().trim();
   
   // Search through all creators
-  const matchingCreators = allCreatorsData.filter(creator => {
+  let matchingCreators = allCreatorsData.filter(creator => {
     if (!creator) return false;
     
     // Search in channel name (the server sends 'channel' field, not 'name')
@@ -360,6 +376,9 @@ function performSearch(query) {
     
     return nameMatch || nicknameMatch;
   });
+  
+  // Apply status filter to search results
+  matchingCreators = applyStatusFilter(matchingCreators);
   
   // Show search results dropdown
   displaySearchResults(matchingCreators, query);
@@ -427,9 +446,32 @@ function filterMainGrids(filteredCreators) {
   }
 }
 
-function resetToOriginalResults() {
-  // Reset to original shuffled results
-  if (allCreatorsGrid) {
-    populateGrid(allCreatorsGrid, originalAllCreators);
+function applyStatusFilter(creators) {
+  if (currentFilter === 'all') {
+    return creators;
+  } else if (currentFilter === 'fully-forked') {
+    return creators.filter(c => c.FullyForked === true || c.isAd);
+  } else if (currentFilter === 'branching-out') {
+    return creators.filter(c => c.FullyForked === false && !c.isAd);
   }
+  return creators;
+}
+
+function applyFilters() {
+  // Apply current filter to original data
+  const filteredCreators = applyStatusFilter(originalAllCreators);
+  
+  if (allCreatorsGrid) {
+    populateGrid(allCreatorsGrid, filteredCreators);
+  }
+}
+
+function resetToOriginalResults() {
+  // Reset to original shuffled results with current filter applied
+  currentFilter = 'all';
+  const statusFilter = document.getElementById('statusFilter');
+  if (statusFilter) {
+    statusFilter.value = 'all';
+  }
+  applyFilters();
 }
