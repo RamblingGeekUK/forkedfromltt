@@ -11,6 +11,11 @@ app.use('/data', express.static('data'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve index.html at root without showing filename in URL
+app.get('/', (req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
+
 app.get("/api/faq", async (req, res) => {
   console.log("API endpoint /api/faq called");
   try {
