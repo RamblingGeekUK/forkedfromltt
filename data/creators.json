@@ -793,5 +793,232 @@
         }
       ]
     }
+  },
+  {
+    "name": "Nick Callanan",
+    "image": "https://pbs.twimg.com/profile_images/1200881338481434624/ixqBQORO_400x400.jpg",
+    "CreatedDate": "2025-11-14T21:15:36.440Z",
+    "ExitDate": "",
+    "nicknames": ["Nick Heavy"],
+    "FullyForked": true,
+    "socials": {
+      "youtube": [
+        {
+          "channelId": "",
+          "url": "https://www.youtube.com/@NickHeavy",
+          "visible": true
+        }
+      ],
+      "twitter": [
+        {
+          "url": "https://x.com/NickCallanan",
+          "visible": true
+        }
+      ],
+      "instagram": [],
+      "website": [],
+      "bluesky": [],
+      "linkedin": [
+        {
+          "url": "https://www.linkedin.com/in/ncallanan",
+          "visible": true
+        }
+      ]
+    },
+    "Notes": "",
+    "submissionDate": "2025-11-14T21:15:36.441Z" 
+  },
+ {
+    "name": "Jake Daynes",
+    "image": "https://pbs.twimg.com/profile_images/1891686729964453892/4mqR4JQ9_400x400.jpg",
+    "CreatedDate": "2025-11-14T21:18:37.920Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": true,
+    "socials": {
+      "youtube": [],
+      "twitter": [
+        {
+          "url": "https://x.com/JakeDaynes",
+          "visible": true
+        }
+      ],
+      "instagram": [],
+      "website": [],
+      "bluesky": [],
+      "linkedin": []
+    },
+    "Notes": "https://twitch.tv/TTVXarus",
+    "submissionDate": "2025-11-14T21:18:37.920Z"
+  },
+  {
+    "name": "Jonathan Horst",
+    "image": "https://cdn.bsky.app/img/avatar/plain/did:plc:uliqrxxdjrjvhdx3ffnqqilc/bafkreibhssapstzvrrtzi55zx5vpkub2ogt7rv75easlqlicht4mbvqzje@jpeg",
+    "CreatedDate": "2025-11-14T21:21:19.287Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": true,
+    "socials": {
+      "youtube": [],
+      "twitter": [
+        {
+          "url": "https://x.com/horstpwr",
+          "visible": true
+        }
+      ],
+      "instagram": [],
+      "website": [
+        {
+          "url": "https://www.horstpower.ca/",
+          "visible": true
+        }
+      ],
+      "bluesky": [
+        {
+          "url": "https://bsky.app/profile/horstpower.bsky.social",
+          "visible": true
+        }
+      ],
+      "linkedin": [
+        {
+          "url": "https://www.linkedin.com/in/jonathan-horst-30b989140",
+          "visible": true
+        }
+      ]
+    },
+    "Notes": "horstpwr",
+    "submissionDate": "2025-11-14T21:21:19.287Z"   
+  },
+  {
+    "name": "Jono Tan",
+    "image": "images/creators/jonotan.jpg",
+    "CreatedDate": "2025-11-14T21:22:45.767Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": true,
+    "socials": {
+      "youtube": [],
+      "twitter": [],
+      "instagram": [
+        {
+          "url": "https://www.instagram.com/burntbanana",
+          "visible": true
+        }
+      ],
+      "website": [],
+      "bluesky": [],
+      "linkedin": []
+    },
+    "Notes": "https://www.reddit.com/r/LinusTechTips/comments/zejkuv/jono_is_now_working_for_mkbhd/",
+    "submissionDate": "2025-11-14T21:22:45.767Z",
+    "status": "pending"
+  },
+  {
+    "name": "Sean Weatherly",
+    "image": "https://pbs.twimg.com/profile_images/1453023260459765760/OlzEBs3e_400x400.jpg",
+    "CreatedDate": "2025-11-14T21:24:01.483Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": true,
+    "socials": {
+      "youtube": [],
+      "twitter": [
+        {
+          "url": "https://x.com/SeanWeatherly_",
+          "visible": true
+        }
+      ],
+      "instagram": [],
+      "website": [],
+      "bluesky": [],
+      "linkedin": []
+    },
+    "Notes": "“Seanold”",
+    "submissionDate": "2025-11-14T21:24:01.483Z"
+  },
+  {
+    "name": "Alex Potvin",
+    "image": "https://pbs.twimg.com/profile_images/1876210623882670080/Q9-f1rdy_400x400.jpg",
+    "CreatedDate": "2025-11-14T21:26:14.446Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": true,
+    "socials": {
+      "youtube": [],
+      "twitter": [
+        {
+          "url": "https://x.com/_AlexPotvin",
+          "visible": true
+        }
+      ],
+      "instagram": [],
+      "website": [
+        {
+          "url": "https://alexpotvin.com/",
+          "visible": true
+        }
+      ],
+      "bluesky": [],
+      "linkedin": []
+    },
+    "Notes": "Aprime",
+    "submissionDate": "2025-11-14T21:26:14.446Z"
+  },
+  {
+    "name": "Maxine Lucille",
+    "image": "images/creators/maxinelucille.jpg",
+    "CreatedDate": "2025-11-14T21:28:36.878Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": true,
+    "socials": {
+      "youtube": [
+        {
+          "channelId": "",
+          "url": "https://www.youtube.com/@mmaxinelucille",
+          "visible": true
+        }
+      ],
+      "twitter": [
+        {
+          "url": "https://www.instagram.com/mmaxinelucille/",
+          "visible": true
+        }
+      ],
+      "instagram": [
+        {
+          "url": "https://instagram.com/mmaxinelucille",
+          "visible": true
+        }
+      ],
+      "website": [],
+      "bluesky": [],
+      "linkedin": []
+    },
+    "Notes": "",
+    "submissionDate": "2025-11-14T21:28:36.878Z"
+  },
+  {
+    "name": "Ivan",
+    "image": "images/creators/ivan.jpg",
+    "CreatedDate": "2025-11-14T21:34:22.757Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": true,
+    "socials": {
+      "youtube": [],
+      "twitter": [
+        {
+          "url": "https://x.com/shtoi_daaaaawg",
+          "visible": true
+        }
+      ],
+      "instagram": [],
+      "website": [],
+      "bluesky": [],
+      "linkedin": []
+    },
+    "Notes": "",
+    "submissionDate": "2025-11-14T21:34:22.757Z"
   }
 ]

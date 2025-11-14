@@ -1130,3 +1130,70 @@ h1, h3 {
     transform: translateY(0) scale(1);
   }
 }
+
+/* Login page styles */
+.min-vh-100 {
+  min-height: 100vh;
+}
+
+.login-card {
+  background: rgba(40, 42, 54, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.login-form .form-control {
+  background: rgba(25, 27, 38, 0.8);
+  border: 1px solid rgba(143, 148, 251, 0.2);
+  color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.login-form .form-control:focus {
+  background: rgba(25, 27, 38, 0.9);
+  border-color: #8f94fb;
+  box-shadow: 0 0 0 0.2rem rgba(143, 148, 251, 0.25);
+  color: #fff;
+}
+
+.login-form .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.login-form .form-check-input {
+  background-color: rgba(25, 27, 38, 0.8);
+  border: 1px solid rgba(143, 148, 251, 0.2);
+}
+
+.login-form .form-check-input:checked {
+  background-color: #8f94fb;
+  border-color: #8f94fb;
+}
+
+.login-form .form-check-input:focus {
+  border-color: #8f94fb;
+  box-shadow: 0 0 0 0.2rem rgba(143, 148, 251, 0.25);
+}
+
+.login-header {
+  background: linear-gradient(135deg, rgba(143, 148, 251, 0.1), rgba(143, 148, 251, 0.05));
+  border-radius: 1rem 1rem 0 0;
+  padding: 2rem;
+}
+
+.login-body {
+  padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .login-body {
+    padding: 1.5rem;
+  }
+  
+  .login-header {
+    padding: 1.5rem;
+  }
+}

@@ -137,4 +137,107 @@ app.post("/api/suggestions", async (req, res) => {
   }
 });
 
+// Authentication routes
+app.post("/api/login", async (req, res) => {
+  console.log("API endpoint /api/login called");
+  try {
+    const { username, password, rememberMe } = req.body;
+    
+    // For demo purposes, using simple hardcoded credentials
+    // In production, this should use proper password hashing and database lookup
+    const validCredentials = [
+      { username: 'admin', password: 'admin123', email: 'admin@ltt.com' },
+      { username: 'user', password: 'user123', email: 'user@ltt.com' }
+    ];
+    
+    const user = validCredentials.find(u => 
+      (u.username === username || u.email === username) && u.password === password
+    );
+    
+    if (user) {
+      // Generate simple token (in production, use JWT or similar)
+      const token = Buffer.from(`${user.username}:${Date.now()}`).toString('base64');
+      
+      console.log(`User ${user.username} logged in successfully`);
+      res.json({ 
+        success: true, 
+        message: "Login successful", 
+        token: token,
+        user: { username: user.username, email: user.email },
+        redirect: 'index.html'
+      });
+    } else {
+      console.log(`Failed login attempt for username: ${username}`);
+      res.status(401).json({ 
+        success: false, 
+        message: "Invalid username or password" 
+      });
+    }
+    
+  } catch (err) {
+    console.error("Error handling login:", err);
+    res.status(500).json({ error: "Login failed" });
+  }
+});
+
+app.post("/api/forgot-password", async (req, res) => {
+  console.log("API endpoint /api/forgot-password called");
+  try {
+    const { email } = req.body;
+    
+    // In production, this would:
+    // 1. Check if email exists in database
+    // 2. Generate secure reset token
+    // 3. Send email with reset link
+    // 4. Store token with expiration
+    
+    console.log(`Password reset requested for email: ${email}`);
+    
+    // Simulate successful email send
+    res.json({ 
+      success: true, 
+      message: "Password reset link sent to your email" 
+    });
+    
+  } catch (err) {
+    console.error("Error handling forgot password:", err);
+    res.status(500).json({ error: "Failed to process password reset request" });
+  }
+});
+
+app.post("/api/verify-token", async (req, res) => {
+  console.log("API endpoint /api/verify-token called");
+  try {
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ valid: false, message: "No token provided" });
+    }
+    
+    const token = authHeader.substring(7);
+    
+    // Simple token validation (in production, use proper JWT verification)
+    try {
+      const decoded = Buffer.from(token, 'base64').toString();
+      const [username, timestamp] = decoded.split(':');
+      
+      // Check if token is less than 24 hours old
+      const tokenAge = Date.now() - parseInt(timestamp);
+      const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+      
+      if (tokenAge < maxAge && username) {
+        res.json({ valid: true, username: username });
+      } else {
+        res.status(401).json({ valid: false, message: "Token expired" });
+      }
+    } catch (decodeError) {
+      res.status(401).json({ valid: false, message: "Invalid token format" });
+    }
+    
+  } catch (err) {
+    console.error("Error verifying token:", err);
+    res.status(500).json({ error: "Token verification failed" });
+  }
+});
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
