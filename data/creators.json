@@ -4,7 +4,9 @@
     "image": "images/creators/alexclark.jpg",
     "CreatedDate": "2025-07-18T09:00:00",
     "ExitDate": "2025-06-18T09:00:00",
-    "nicknames": ["AlexTheGreatish"],
+    "nicknames": [
+      "AlexTheGreatish"
+    ],
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -36,7 +38,7 @@
       "linkedin": []
     }
   },
-    {
+  {
     "name": "Andy Zhang",
     "image": "images/creators/andyzhang.jpg",
     "CreatedDate": "2025-07-18T09:00:00",
@@ -193,7 +195,9 @@
   {
     "name": "Colin Worobetz",
     "image": "images/creators/colinworobetz.jpeg",
-    "nicknames": ["DubMFG"],
+    "nicknames": [
+      "DubMFG"
+    ],
     "Notes": "Leaving annocument : https://x.com/DubMFG/status/1509279727218880517?t=PL7LcbR3sR4pZtTtz5BFkg&s=19",
     "FullyForked": true,
     "socials": {
@@ -242,23 +246,25 @@
       "twitter": [],
       "instagram": [
         {
-          "url":"https://www.instagram.com/tannermccoolman/",
-          "visible":true
+          "url": "https://www.instagram.com/tannermccoolman/",
+          "visible": true
         }
       ],
       "website": [],
       "bluesky": [],
-      "soundcloud":[
+      "soundcloud": [
         {
-          "url":"https://soundcloud.com/tanner-mccoolman",
-          "visible":true
+          "url": "https://soundcloud.com/tanner-mccoolman",
+          "visible": true
         }
       ]
     }
   },
   {
     "name": "Jessica Pigeau",
-    "nicknames":["SexyLittleFatBoy"],
+    "nicknames": [
+      "SexyLittleFatBoy"
+    ],
     "image": "images/creators/jessicapigeau.jpg",
     "FullyForked": true,
     "socials": {
@@ -284,7 +290,9 @@
   {
     "name": "Marcus Blackstock",
     "image": "images/creators/marcusblackstock.jpg",
-    "nicknames": ["Kacboy"],
+    "nicknames": [
+      "Kacboy"
+    ],
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -338,8 +346,8 @@
       "instagram": [],
       "website": [
         {
-          "url":"https://www.hannaluu.com",
-          "visible":true
+          "url": "https://www.hannaluu.com",
+          "visible": true
         }
       ],
       "bluesky": [],
@@ -348,7 +356,9 @@
   },
   {
     "name": "Colin DeGraaf",
-    "nicknames":["Silent Colin"],
+    "nicknames": [
+      "Silent Colin"
+    ],
     "image": "images/creators/colindegraff.jpg",
     "FullyForked": true,
     "socials": {
@@ -373,7 +383,9 @@
   },
   {
     "name": "Elijah Horner",
-    "nicknames":["BocaBola"],
+    "nicknames": [
+      "BocaBola"
+    ],
     "image": "images/creators/elijahhorner.jpg",
     "FullyForked": false,
     "socials": {
@@ -386,8 +398,8 @@
       ],
       "twitter": [
         {
-          "url":"https://x.com/BocaBola_",
-          "visible":true
+          "url": "https://x.com/BocaBola_",
+          "visible": true
         }
       ],
       "instagram": [],
@@ -403,7 +415,9 @@
   },
   {
     "name": "Dan Besser",
-    "nicknames":["BuhDan"],
+    "nicknames": [
+      "BuhDan"
+    ],
     "image": "images/creators/danbesser.webp",
     "FullyForked": false,
     "socials": {
@@ -416,14 +430,14 @@
       ],
       "twitter": [
         {
-          "url":"https://x.com/BuhDan",
-          "visible":true
+          "url": "https://x.com/BuhDan",
+          "visible": true
         }
       ],
-      "twitch":[
+      "twitch": [
         {
-          "url":"https://www.twitch.tv/buhdan",
-          "visible":true
+          "url": "https://www.twitch.tv/buhdan",
+          "visible": true
         }
       ],
       "instagram": [],
@@ -457,7 +471,9 @@
   },
   {
     "name": "Luke Lafreniere",
-    "nicknames":["DukeNukem"],
+    "nicknames": [
+      "DukeNukem"
+    ],
     "image": "images/creators/lukelafreniere.jpg",
     "FullyForked": false,
     "socials": {
@@ -488,7 +504,9 @@
   },
   {
     "name": "Madison Reeve",
-    "nicknames": [" SuopOnYoutube"],
+    "nicknames": [
+      " SuopOnYoutube"
+    ],
     "image": "images/creators/madisonreeve.jpg",
     "FullyForked": true,
     "socials": {
@@ -525,7 +543,9 @@
   },
   {
     "name": "Jake Tivy",
-    "nicknames":["jakkuh"],
+    "nicknames": [
+      "jakkuh"
+    ],
     "image": "images/creators/jaketivy.jpg",
     "CreatedDate": "2025-09-22T09:00:00",
     "ExitDate": "2025-09-22T09:00:00",
@@ -561,18 +581,16 @@
       "linkedin": []
     }
   },
-   {
+  {
     "name": "Nick Light",
-    "nicknames":[],
+    "nicknames": [],
     "image": "images/creators/nicklight.jpg",
     "CreatedDate": "2025-09-22T09:00:00",
     "ExitDate": "2025-09-22T09:00:00",
     "FullyForked": true,
     "Notes": "https://x.com/nicklmg/status/1949141160213287294?s=20",
     "socials": {
-      "youtube": [
-        
-      ],
+      "youtube": [],
       "twitter": [
         {
           "url": "https://x.com/nicklmg",
@@ -590,9 +608,11 @@
       "linkedin": []
     }
   },
-   {
+  {
     "name": "Arthur Rafael",
-    "nicknames":["Arty"],
+    "nicknames": [
+      "Arty"
+    ],
     "image": "images/creators/arthurrafael.jpg",
     "CreatedDate": "2025-09-22T09:00:00",
     "ExitDate": "2025-09-22T09:00:00",
@@ -601,8 +621,8 @@
     "socials": {
       "youtube": [
         {
-        "url":"https://www.youtube.com/@itsARTYTIME",
-        "visible":true
+          "url": "https://www.youtube.com/@itsARTYTIME",
+          "visible": true
         }
       ],
       "twitter": [
@@ -622,9 +642,9 @@
       "linkedin": []
     }
   },
-   {
+  {
     "name": "Dennis Liao",
-    "nicknames":[],
+    "nicknames": [],
     "image": "images/creators/dennisliao.jpg",
     "CreatedDate": "2025-09-22T09:00:00",
     "ExitDate": "2025-09-22T09:00:00",
@@ -633,8 +653,8 @@
     "socials": {
       "youtube": [
         {
-        "url":"https://www.youtube.com/jeremyethier",
-        "visible":true
+          "url": "https://www.youtube.com/jeremyethier",
+          "visible": true
         }
       ],
       "twitter": [
@@ -654,9 +674,9 @@
       "linkedin": []
     }
   },
-   {
+  {
     "name": "Oliver Cao",
-    "nicknames":[],
+    "nicknames": [],
     "image": "images/creators/olivercao.jpg",
     "CreatedDate": "2025-09-22T09:00:00",
     "ExitDate": "2025-09-22T09:00:00",
@@ -665,14 +685,13 @@
     "socials": {
       "youtube": [
         {
-        "url":"https://www.youtube.com/@OliverCaoVlogs",
-        "visible":true
+          "url": "https://www.youtube.com/@OliverCaoVlogs",
+          "visible": true
         },
         {
-          "url":"https://www.youtube.com/@OliverCao",
-          "visible":true
+          "url": "https://www.youtube.com/@OliverCao",
+          "visible": true
         }
-
       ],
       "twitter": [],
       "instagram": [
@@ -683,7 +702,7 @@
       ],
       "website": [
         {
-          "url":"https://olivercao.ca",
+          "url": "https://olivercao.ca",
           "visible": true
         }
       ],
@@ -691,9 +710,9 @@
       "linkedin": []
     }
   },
-   {
+  {
     "name": "Gary Key",
-    "nicknames":[],
+    "nicknames": [],
     "image": "images/creators/garykey.jpg",
     "CreatedDate": "2025-09-22T09:00:00",
     "ExitDate": "2025-09-22T09:00:00",
@@ -703,8 +722,8 @@
       "youtube": [],
       "twitter": [
         {
-          "url":"https://x.com/GaryKey67597140",
-          "visible":true
+          "url": "https://x.com/GaryKey67597140",
+          "visible": true
         }
       ],
       "instagram": [],
@@ -712,15 +731,15 @@
       "bluesky": [],
       "linkedin": [
         {
-          "url":"https://www.linkedin.com/in/gary-key-951a474b/",
-          "visible":true
+          "url": "https://www.linkedin.com/in/gary-key-951a474b/",
+          "visible": true
         }
       ]
     }
   },
-   {
+  {
     "name": "Edzel Yago",
-    "nicknames":[],
+    "nicknames": [],
     "image": "images/creators/edzelyago.jpg",
     "CreatedDate": "2025-09-22T09:00:00",
     "ExitDate": "2025-09-22T09:00:00",
@@ -729,41 +748,41 @@
     "socials": {
       "youtube": [
         {
-          "url":"https://www.youtube.com/EdzelYago",
-          "visible":true
+          "url": "https://www.youtube.com/EdzelYago",
+          "visible": true
         }
       ],
       "twitter": [
         {
-          "url":"https://x.com/edzelyago",
-          "visible":true
+          "url": "https://x.com/edzelyago",
+          "visible": true
         }
       ],
       "instagram": [
         {
-          "url":"https://www.instagram.com/edzelyago",
-          "visible":true
+          "url": "https://www.instagram.com/edzelyago",
+          "visible": true
         }
       ],
       "website": [],
       "bluesky": [],
       "linkedin": [
         {
-          "url":"https://www.linkedin.com/in/edzelyago",
-          "visible":true
+          "url": "https://www.linkedin.com/in/edzelyago",
+          "visible": true
         }
       ],
       "twitch": [
         {
-          "url":"https://www.twitch.tv/edyago",
-          "visible":true
+          "url": "https://www.twitch.tv/edyago",
+          "visible": true
         }
       ]
     }
   },
-   {
+  {
     "name": "Tim Holowachuk",
-    "nicknames":[],
+    "nicknames": [],
     "image": "images/creators/timholowachuk.jpg",
     "CreatedDate": "2025-09-22T09:00:00",
     "ExitDate": "2025-09-22T09:00:00",
@@ -773,23 +792,23 @@
       "youtube": [],
       "twitter": [
         {
-          "url":"https://x.com/TimHolowachuk",
-          "visible":true
+          "url": "https://x.com/TimHolowachuk",
+          "visible": true
         }
       ],
       "instagram": [],
       "website": [
         {
-          "url":"https://www.timholowachuk.com",
-          "visible":true
+          "url": "https://www.timholowachuk.com",
+          "visible": true
         }
       ],
       "bluesky": [],
       "linkedin": [],
       "twitch": [
         {
-          "url":"https://www.twitch.tv/rexynexus",
-          "visible":true
+          "url": "https://www.twitch.tv/rexynexus",
+          "visible": true
         }
       ]
     }
@@ -799,7 +818,9 @@
     "image": "https://pbs.twimg.com/profile_images/1200881338481434624/ixqBQORO_400x400.jpg",
     "CreatedDate": "2025-11-14T21:15:36.440Z",
     "ExitDate": "",
-    "nicknames": ["Nick Heavy"],
+    "nicknames": [
+      "Nick Heavy"
+    ],
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -826,9 +847,9 @@
       ]
     },
     "Notes": "",
-    "submissionDate": "2025-11-14T21:15:36.441Z" 
+    "submissionDate": "2025-11-14T21:15:36.441Z"
   },
- {
+  {
     "name": "Jake Daynes",
     "image": "https://pbs.twimg.com/profile_images/1891686729964453892/4mqR4JQ9_400x400.jpg",
     "CreatedDate": "2025-11-14T21:18:37.920Z",
@@ -887,7 +908,7 @@
       ]
     },
     "Notes": "horstpwr",
-    "submissionDate": "2025-11-14T21:21:19.287Z"   
+    "submissionDate": "2025-11-14T21:21:19.287Z"
   },
   {
     "name": "Jono Tan",
@@ -1020,5 +1041,33 @@
     },
     "Notes": "",
     "submissionDate": "2025-11-14T21:34:22.757Z"
+  },
+  {
+    "name": "Jon Martin",
+    "image": "images/creators/jonmartin.jpg",
+    "CreatedDate": "2025-11-15T15:12:01.709Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": true,
+    "socials": {
+      "youtube": [],
+      "twitter": [
+        {
+          "url":"https://x.com/jm061015",
+          "visible": true
+        }
+      ],
+      "instagram": [],
+      "website": [],
+      "bluesky": [],
+      "linkedin": [
+        {
+          "url":"",
+          "visible":false
+        }
+      ]
+    },
+    "Notes": "",
+    "submissionDate": "2025-11-15T15:12:01.710Z"
   }
 ]

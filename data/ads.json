@@ -22,5 +22,11 @@
     "name": "Dodgin Bullets!",
     "image": "images/DBOHTee.jpg",
     "website": "https://merch.ramblinggeek.dev/en-gbp/products/dboh"
+  },
+  {
+    "ad": false,
+    "name": "LTT Forum",
+    "image": "images/LTT_Logo.webp",
+    "website": "https://linustechtips.com/"
   }  
 ]
