@@ -112,7 +112,7 @@ function createCreatorCard(channel) {
       if (channel.socials.lttforum && Array.isArray(channel.socials.lttforum)) {
         channel.socials.lttforum.forEach(bs => {
           if (bs.visible && bs.url) {
-            socialIcons += `<a href="${bs.url}" target="_blank" title="LTT Forum" class="me-3"><img src="images/LTT_logo.webp" alt="LTT Forum" width="28" height="28" style="border-radius: 4px;"></a>`;
+            socialIcons += `<a href="${bs.url}" target="_blank" title="LTT Forum" class="me-3"><img src="images/LTT_Logo.webp" alt="LTT Forum" width="28" height="28" style="border-radius: 4px;"></a>`;
           }
         });
       }
