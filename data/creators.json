@@ -394,6 +394,11 @@
           "channelId": "UCBur6ZOAqhjRs9PadDArozQ",
           "url": "https://www.youtube.com/@BocaBola_",
           "visible": true
+        },
+        {
+          "channelId": "",
+          "url": "https://www.youtube.com/channel/UCyRSS98sdtT1yG3wk0PAj0A",
+          "visible": true
         }
       ],
       "twitter": [
@@ -410,7 +415,12 @@
           "visible": true
         }
       ],
-      "linkedin": []
+      "linkedin": [
+        {
+          "url": "https://www.linkedin.com/in/elijah-horner-8912ab180",
+          "visible": true
+        }
+      ]
     }
   },
   {
@@ -880,7 +890,13 @@
     "nicknames": [],
     "FullyForked": true,
     "socials": {
-      "youtube": [],
+      "youtube": [
+         {
+          "channelId": "",
+          "url": "https://www.youtube.com/channel/UC78n-WEkOWho0_Mu3zqxggA",
+          "visible": true
+        }
+      ],
       "twitter": [
         {
           "url": "https://x.com/horstpwr",
@@ -891,6 +907,12 @@
       "website": [
         {
           "url": "https://www.horstpower.ca/",
+          "visible": true
+        }
+      ],
+      "reddit": [
+        {
+          "url": "https://www.reddit.com/user/horstpwr",
           "visible": true
         }
       ],
@@ -1069,5 +1091,200 @@
     },
     "Notes": "",
     "submissionDate": "2025-11-15T15:12:01.710Z"
+  },
+  {
+    "name": "Reece Murray",
+    "image": "https://images.squarespace-cdn.com/content/v1/5213f93be4b08fcef374a832/c94e6f62-0c47-48e9-88a4-2ae3995329dc/DSC02574.jpg",
+    "CreatedDate": "2025-11-24T09:41:04.302Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": false,
+    "socials": {
+      "youtube": [],
+      "twitter": [],
+      "instagram": [
+        {
+          "url": "https://instagram.com/reecemur",
+          "visible": true
+        }
+      ],
+      "twicth": [
+        {
+          "url": "https://twitch.tv/dirt_wiz",
+          "visible": true
+        }
+      ],
+      "bluesky": [],
+      "linkedin": [
+        {
+          "url": "https://ca.linkedin.com/in/reece-murray-29b374143",
+          "visible": true
+        }
+      ]
+    },
+    "Notes": "From https://www.twitch.tv/dirt_wiz/about:\n\n\"Hey yo! My name is Reece, I'm the Production Assistant at Linus Tech Tips. Stop in and have a chat, while I play some games or tuft a fun rug!\"",
+    "submissionDate": "2025-11-24T09:41:04.302Z"
+  },
+  {
+    "name": "Andrew Moore",
+    "image": "images/creators/andrewmoore.jpg",
+    "CreatedDate": "2025-11-24T09:47:56.393Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": false,
+    "socials": {
+      "youtube": [],
+      "twitter": [],
+      "instagram": [
+        {
+          "url": "https://www.instagram.com/andrewmoorevid/",
+          "visible": true
+        }
+      ],
+      "website": [
+        {
+          "url": "https://andrewmoorevid.com/",
+          "visible": true
+        }
+      ],
+      "bluesky": [],
+      "linkedin": [
+        {
+          "url": "https://www.linkedin.com/in/andrewmoorevid",
+          "visible": true
+        }
+      ]
+    },
+    "Notes": "cameraman at Linus Media Group, he got a AMD Tech Upgrade last yr",
+    "submissionDate": "2025-11-24T09:47:56.393Z",
+    "status": "pending"
+  },
+  {
+    "name": "Mark Rathgeber",
+    "image": "",
+    "CreatedDate": "2025-11-24T10:01:35.567Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": false,
+    "socials": {
+      "youtube": [],
+      "twitter": [
+        {
+          "url": "https://x.com/Mark_Rathgeber",
+          "visible": true
+        }
+      ],
+      "instagram": [
+        {
+          "url": "https://www.instagram.com/markrathgeber/",
+          "visible": true
+        }
+      ],
+      "website": [],
+      "bluesky": [],
+      "linkedin": [
+        {
+          "url": "https://www.linkedin.com/in/mrathgeber",
+          "visible": true
+        }
+      ]
+    },
+    "Notes": "Oh hi Mark\n\nHe got an upgrade when it was still Intel Extreme Tech Upgrade",
+    "submissionDate": "2025-11-24T10:01:35.567Z"
+  },
+  {
+    "name": "David Pankratz",
+    "image": "",
+    "CreatedDate": "2025-11-24T10:22:19.280Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": false,
+    "socials": {
+      "youtube": [],
+      "twitter": [
+        {
+          "url": "https://x.com/Livin_LiG",
+          "visible": true
+        }
+      ],
+      "instagram": [],
+      "lttforum": [
+        {
+          "url": "https://linustechtips.com/profile/444952-livin/",
+          "visible": true
+        }
+      ],
+      "bluesky": [],
+      "linkedin": []
+    },
+    "Notes": "Technical Production Assistant at Linus Media Group\n\nHe was on Linus' team in Scrapyard Wars season 10\n\nDan confirmed Livin is Pankratz here: https://www.youtube.com/watch?v=eVP_Zj2Iaw0&t=2h36m56s",
+    "submissionDate": "2025-11-24T10:22:19.280Z"
+  },
+  {
+    "name": "Dylan Hurley",
+    "image": "https://pbs.twimg.com/profile_images/1806393764447141888/aPfVaEgl_400x400.jpg",
+    "CreatedDate": "2025-11-24T10:28:35.675Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": false,
+    "socials": {
+      "youtube": [],
+      "twitter": [
+        {
+          "url": "https://x.com/measuredtech",
+          "visible": true
+        }
+      ],
+      "instagram": [],
+      "reddit": [
+        {
+          "url": "https://www.reddit.com/user/Dylan_LMG",
+          "visible": true
+        }
+      ],
+      "bluesky": [],
+      "linkedin": [
+        {
+          "url": "https://www.linkedin.com/in/dylan-hurley-60461b180",
+          "visible": true
+        }
+      ]
+    },
+    "Notes": "",
+    "submissionDate": "2025-11-24T10:28:35.675Z"
+  },
+  {
+    "name": "Sarah Butt",
+    "image": "https://pbs.twimg.com/profile_images/1515119627436638209/5_DP6Iyb_400x400.jpg",
+    "CreatedDate": "2025-11-24T11:15:33.794Z",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": false,
+    "socials": {
+      "youtube": [],
+      "twitter": [
+        {
+          "url": "https://x.com/sarahbbutt",
+          "visible": true
+        }
+      ],
+      "instagram": [],
+      "twitch": [
+        {
+          "url": "https://twitch.com/jurassicss",
+          "visible": true
+        }
+      ],
+      "bluesky": [],
+      "linkedin": [
+        {
+          "url": "https://www.linkedin.com/in/sarah-butt-8549b1180",
+          "visible": true
+        }
+      ]
+    },
+    "Notes": "",
+    "submissionDate": "2025-11-24T11:15:33.795Z",
+    "status": "pending"
   }
 ]
