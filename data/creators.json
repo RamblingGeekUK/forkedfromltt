@@ -198,7 +198,7 @@
     "nicknames": [
       "DubMFG"
     ],
-    "Notes": "Leaving annocument : https://x.com/DubMFG/status/1509279727218880517?t=PL7LcbR3sR4pZtTtz5BFkg&s=19",
+    "Notes": "Leaving announcement : https://x.com/DubMFG/status/1509279727218880517?t=PL7LcbR3sR4pZtTtz5BFkg&s=19",
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -523,7 +523,7 @@
       "youtube": [
         {
           "channelId": "UCx_HOMKJL72cRUjlBtLZfYw",
-          "url": "https://www.youtube.com/channel/@suop",
+          "url": "https://www.youtube.com/@suop",
           "visible": true
         }
       ],
@@ -560,7 +560,7 @@
     "CreatedDate": "2025-09-22T09:00:00",
     "ExitDate": "2025-09-22T09:00:00",
     "FullyForked": true,
-    "Notes": "Leaving annocument : https://x.com/jakkuh_t/status/1970159380864835779?s=20",
+    "Notes": "Leaving announcement : https://x.com/jakkuh_t/status/1970159380864835779?s=20",
     "socials": {
       "youtube": [
         {
@@ -877,9 +877,15 @@
       "instagram": [],
       "website": [],
       "bluesky": [],
-      "linkedin": []
+      "linkedin": [],
+      "twitch":[
+        {
+          "url":"https://twitch.tv/TTVXarus",
+          "visible": true
+        }
+      ]
     },
-    "Notes": "https://twitch.tv/TTVXarus",
+    "Notes": "",
     "submissionDate": "2025-11-14T21:18:37.920Z"
   },
   {
@@ -887,7 +893,7 @@
     "image": "https://cdn.bsky.app/img/avatar/plain/did:plc:uliqrxxdjrjvhdx3ffnqqilc/bafkreibhssapstzvrrtzi55zx5vpkub2ogt7rv75easlqlicht4mbvqzje@jpeg",
     "CreatedDate": "2025-11-14T21:21:19.287Z",
     "ExitDate": "",
-    "nicknames": [],
+    "nicknames": ["horstpwr"],
     "FullyForked": true,
     "socials": {
       "youtube": [
@@ -929,7 +935,7 @@
         }
       ]
     },
-    "Notes": "horstpwr",
+    "Notes": "",
     "submissionDate": "2025-11-14T21:21:19.287Z"
   },
   {
@@ -961,7 +967,7 @@
     "image": "https://pbs.twimg.com/profile_images/1453023260459765760/OlzEBs3e_400x400.jpg",
     "CreatedDate": "2025-11-14T21:24:01.483Z",
     "ExitDate": "",
-    "nicknames": [],
+    "nicknames": ["Seanold"],
     "FullyForked": true,
     "socials": {
       "youtube": [],
@@ -976,7 +982,7 @@
       "bluesky": [],
       "linkedin": []
     },
-    "Notes": "“Seanold”",
+    "Notes": "",
     "submissionDate": "2025-11-14T21:24:01.483Z"
   },
   {
@@ -984,7 +990,7 @@
     "image": "https://pbs.twimg.com/profile_images/1876210623882670080/Q9-f1rdy_400x400.jpg",
     "CreatedDate": "2025-11-14T21:26:14.446Z",
     "ExitDate": "",
-    "nicknames": [],
+    "nicknames": ["Aprime"],
     "FullyForked": true,
     "socials": {
       "youtube": [],
@@ -1004,7 +1010,7 @@
       "bluesky": [],
       "linkedin": []
     },
-    "Notes": "Aprime",
+    "Notes": "",
     "submissionDate": "2025-11-14T21:26:14.446Z"
   },
   {
@@ -1108,7 +1114,7 @@
           "visible": true
         }
       ],
-      "twicth": [
+      "twitch": [
         {
           "url": "https://twitch.tv/dirt_wiz",
           "visible": true
@@ -1122,7 +1128,7 @@
         }
       ]
     },
-    "Notes": "From https://www.twitch.tv/dirt_wiz/about:\n\n\"Hey yo! My name is Reece, I'm the Production Assistant at Linus Tech Tips. Stop in and have a chat, while I play some games or tuft a fun rug!\"",
+    "Notes": "",
     "submissionDate": "2025-11-24T09:41:04.302Z"
   },
   {
@@ -1155,7 +1161,7 @@
         }
       ]
     },
-    "Notes": "cameraman at Linus Media Group, he got a AMD Tech Upgrade last yr",
+    "Notes": "",
     "submissionDate": "2025-11-24T09:47:56.393Z",
     "status": "pending"
   },
@@ -1189,7 +1195,7 @@
         }
       ]
     },
-    "Notes": "Oh hi Mark\n\nHe got an upgrade when it was still Intel Extreme Tech Upgrade",
+    "Notes": "",
     "submissionDate": "2025-11-24T10:01:35.567Z"
   },
   {
