@@ -145,10 +145,11 @@ function createCreatorCard(channel) {
                 </div>
               </div>
               <div class="card-body d-flex flex-column justify-content-between">
-                <div class="d-flex flex-column align-items-center mb-2 mt-2">
+                <div class="d-flex flex-column align-items-center mb-2 mt-2" style="min-height: 48px;">
                   <span style="color: #b0b3b8; font-size: 1.05em;">${channel.channel}</span>
                   ${channel.nicknames && channel.nicknames.length > 0 ? 
-                    `<small style="color: #888; font-size: 0.8em; margin-top: 2px;">"${channel.nicknames[0]}"</small>` : ''
+                    `<small style="color: #888; font-size: 0.8em; margin-top: 2px;">"${channel.nicknames[0]}"</small>` : 
+                    `<small style="color: transparent; font-size: 0.8em; margin-top: 2px; user-select: none;">&nbsp;</small>`
                   }
                 </div>
                 ${hasVideoData ? 
