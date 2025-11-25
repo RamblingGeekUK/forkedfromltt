@@ -166,10 +166,16 @@ function createCreatorCard(channel) {
                   `<div class="mt-auto"></div>`
                 }
               </div>
-              <!-- Flip Icon -->
-              <div class="flip-icon" onclick="event.stopPropagation(); this.closest('.flip-card').classList.toggle('flipped');" title="View more info">
+              <!-- Flip Icon (hidden but functionality preserved) -->
+              <div class="flip-icon" onclick="event.stopPropagation(); this.closest('.flip-card').classList.toggle('flipped');" title="View more info" style="display: none;">
                 <svg width="18" height="18" fill="#8f94fb" viewBox="0 0 24 24">
                   <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                </svg>
+              </div>
+              <!-- Edit Icon -->
+              <div class="edit-icon-bottom" onclick="event.stopPropagation(); openSuggestEdit(${JSON.stringify(channel).replace(/"/g, '&quot;')})" title="Suggest Edit">
+                <svg width="20" height="20" fill="#8f94fb" viewBox="0 0 24 24">
+                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
                 </svg>
               </div>
             </div>
@@ -499,4 +505,71 @@ function resetToOriginalResults() {
     statusFilter.value = 'all';
   }
   applyFilters();
+}
+
+// Function to open suggest edit modal with pre-filled data
+function openSuggestEdit(creatorData) {
+  const modal = new bootstrap.Modal(document.getElementById('suggestionsModal'));
+  const modalTitle = document.getElementById('suggestionsModalLabel');
+  const submitButton = document.getElementById('submitSuggestion');
+  
+  // Change modal title
+  modalTitle.textContent = 'Suggest Edit for ' + creatorData.channel;
+  submitButton.textContent = 'Submit Edit';
+  
+  // Set edit mode
+  document.getElementById('editMode').value = 'true';
+  document.getElementById('originalCreatorName').value = creatorData.channel;
+  
+  // Pre-fill form with existing data
+  document.getElementById('creatorName').value = creatorData.channel || '';
+  document.getElementById('fullyForked').value = creatorData.FullyForked ? 'true' : 'false';
+  document.getElementById('creatorImage').value = creatorData.image || '';
+  document.getElementById('creatorNotes').value = creatorData.notes || '';
+  
+  // Pre-fill social media fields
+  if (creatorData.socials) {
+    // YouTube
+    if (creatorData.socials.youtube && creatorData.socials.youtube.length > 0) {
+      document.getElementById('youtubeUrl').value = creatorData.socials.youtube[0].url || '';
+    }
+    // Twitter
+    if (creatorData.socials.twitter && creatorData.socials.twitter.length > 0) {
+      document.getElementById('twitterUrl').value = creatorData.socials.twitter[0].url || '';
+    }
+    // Instagram
+    if (creatorData.socials.instagram && creatorData.socials.instagram.length > 0) {
+      document.getElementById('instagramUrl').value = creatorData.socials.instagram[0].url || '';
+    }
+    // Twitch
+    if (creatorData.socials.twitch && creatorData.socials.twitch.length > 0) {
+      document.getElementById('twitchUrl').value = creatorData.socials.twitch[0].url || '';
+    }
+    // Bluesky
+    if (creatorData.socials.bluesky && creatorData.socials.bluesky.length > 0) {
+      document.getElementById('blueskyUrl').value = creatorData.socials.bluesky[0].url || '';
+    }
+    // LinkedIn
+    if (creatorData.socials.linkedin && creatorData.socials.linkedin.length > 0) {
+      document.getElementById('linkedinUrl').value = creatorData.socials.linkedin[0].url || '';
+    }
+    // Reddit
+    if (creatorData.socials.reddit && creatorData.socials.reddit.length > 0) {
+      document.getElementById('redditUrl').value = creatorData.socials.reddit[0].url || '';
+    }
+    // SoundCloud
+    if (creatorData.socials.soundcloud && creatorData.socials.soundcloud.length > 0) {
+      document.getElementById('soundcloudUrl').value = creatorData.socials.soundcloud[0].url || '';
+    }
+    // LTT Forum
+    if (creatorData.socials.lttforum && creatorData.socials.lttforum.length > 0) {
+      document.getElementById('lttforumUrl').value = creatorData.socials.lttforum[0].url || '';
+    }
+    // Website
+    if (creatorData.socials.website && creatorData.socials.website.length > 0) {
+      document.getElementById('websiteUrl').value = creatorData.socials.website[0].url || '';
+    }
+  }
+  
+  modal.show();
 }

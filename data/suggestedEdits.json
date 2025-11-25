@@ -1,0 +1,40 @@
+[
+  {
+    "originalCreatorName": "Reece Murray",
+    "name": "Reece Murray",
+    "image": "https://images.squarespace-cdn.com/content/v1/5213f93be4b08fcef374a832/c94e6f62-0c47-48e9-88a4-2ae3995329dc/DSC02574.jpg",
+    "ExitDate": "",
+    "nicknames": [],
+    "FullyForked": false,
+    "socials": {
+      "youtube": [],
+      "twitter": [],
+      "instagram": [
+        {
+          "url": "https://instagram.com/reecemur",
+          "visible": true
+        }
+      ],
+      "twitch": [
+        {
+          "url": "https://www.twitch.tv/dirt_wiz",
+          "visible": true
+        }
+      ],
+      "bluesky": [],
+      "linkedin": [
+        {
+          "url": "https://ca.linkedin.com/in/reece-murray-29b374143",
+          "visible": true
+        }
+      ],
+      "reddit": [],
+      "soundcloud": [],
+      "lttforum": [],
+      "website": []
+    },
+    "Notes": "From https://www.twitch.tv/dirt_wiz/about:\n\n\"Hey yo! My name is Reece, I'm the Production Assistant at Linus Tech Tips. Stop in and have a chat, while I play some games or tuft a fun rug!\"",
+    "submissionDate": "2025-11-25T18:24:45.792Z",
+    "status": "pending"
+  }
+]

@@ -1161,7 +1161,7 @@
   },
   {
     "name": "Mark Rathgeber",
-    "image": "",
+    "image": "images/creators/markrathgeber.jpg",
     "CreatedDate": "2025-11-24T10:01:35.567Z",
     "ExitDate": "",
     "nicknames": [],
@@ -1194,7 +1194,7 @@
   },
   {
     "name": "David Pankratz",
-    "image": "",
+    "image": "images/creators/davidpankratz.jpg",
     "CreatedDate": "2025-11-24T10:22:19.280Z",
     "ExitDate": "",
     "nicknames": [],
@@ -1215,7 +1215,12 @@
         }
       ],
       "bluesky": [],
-      "linkedin": []
+      "linkedin": [
+        {
+          "url":"https://www.linkedin.com/in/david-pankratz-123205a0/",
+          "visible":true
+        }
+      ]
     },
     "Notes": "Technical Production Assistant at Linus Media Group\n\nHe was on Linus' team in Scrapyard Wars season 10\n\nDan confirmed Livin is Pankratz here: https://www.youtube.com/watch?v=eVP_Zj2Iaw0&t=2h36m56s",
     "submissionDate": "2025-11-24T10:22:19.280Z"

@@ -28,5 +28,11 @@
     "name": "LTT Forum",
     "image": "images/LTT_Logo.webp",
     "website": "https://linustechtips.com/"
-  }  
+  },
+  {
+    "ad": false,
+    "name": "Whenplane",
+    "image": "images/whenplane.png",
+    "website": "https://whenplane.com/"
+  }
 ]

@@ -39,6 +39,10 @@ document.addEventListener('modalsLoaded', function() {
         // Get form data
         const formData = new FormData(suggestionsForm);
         const data = Object.fromEntries(formData.entries());
+        
+        // Check if this is an edit
+        const isEdit = data.editMode === 'true';
+        const endpoint = isEdit ? '/api/suggested-edits' : '/api/suggestions';
 
         // Validate required fields
         if (!data.name?.trim()) {
@@ -46,7 +50,7 @@ document.addEventListener('modalsLoaded', function() {
         }
 
         // Submit to API
-        const response = await fetch('/api/suggestions', {
+        const response = await fetch(endpoint, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -54,11 +58,20 @@ document.addEventListener('modalsLoaded', function() {
           body: JSON.stringify(data)
         });
 
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await response.text();
+          console.error('Non-JSON response received:', text);
+          throw new Error('Server returned an invalid response. Please check the console.');
+        }
+
         const result = await response.json();
 
         if (response.ok) {
           // Success with enhanced animation
-          successMessage.textContent = result.message || 'Suggestion submitted successfully!';
+          const message = isEdit ? 'Edit suggestion submitted successfully!' : 'Suggestion submitted successfully!';
+          successMessage.textContent = result.message || message;
           successAlert.classList.remove('d-none');
           
           // Add success animation
@@ -117,6 +130,12 @@ document.addEventListener('modalsLoaded', function() {
         suggestionsForm.reset();
         successAlert.classList.add('d-none');
         errorAlert.classList.add('d-none');
+        
+        // Reset modal to new suggestion mode
+        document.getElementById('editMode').value = 'false';
+        document.getElementById('originalCreatorName').value = '';
+        document.getElementById('suggestionsModalLabel').textContent = 'Suggest a Creator';
+        submitButton.textContent = 'Submit Suggestion';
       });
     }
   }

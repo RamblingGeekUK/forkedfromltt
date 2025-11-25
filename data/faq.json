@@ -25,12 +25,18 @@
   },
   {
     "id": "faq5",
+    "question": "Can I edit a existing creator?",
+    "answer": "Yes!  Click the edit button, bottom right of each card, this is saved and once verified it will be updated.",
+    "expanded": false
+  },
+  {
+    "id": "faq6",
     "question": "Wait you have Ad's, are you making money from this?",
     "answer": "The AD \"card\" was added partly as a joke—think \"LTTStore.com\" and partly to fill out the page. it's just a fun project! Ad's may appear to help me pay for the site hosting.",
     "expanded": false
   },
   {
-    "id": "faq6",
+    "id": "faq7",
     "question": "Why are they displayed in a random order?",
     "answer": "To try and make sure all creators are seen and no one creator is singled out.",
     "expanded": false

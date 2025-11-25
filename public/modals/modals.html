@@ -34,6 +34,10 @@
       
       <div class="modal-body suggestion-body p-4">
         <form id="suggestionsForm" class="compact-form">
+          <!-- Hidden field to track edit mode -->
+          <input type="hidden" id="editMode" name="editMode" value="false">
+          <input type="hidden" id="originalCreatorName" name="originalCreatorName" value="">
+          
           <!-- Essential Details -->
           <div class="row g-3 mb-3">
             <div class="col-8">

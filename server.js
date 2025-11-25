@@ -6,10 +6,15 @@ const fs = require("fs");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static("public"));
-app.use('/data', express.static('data'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// API routes must be defined before static file serving
+// (API routes will be added below)
+
+// Static file serving
+app.use(express.static("public"));
+app.use('/data', express.static('data'));
 
 // Serve index.html at root without showing filename in URL
 app.get('/', (req, res) => {
@@ -82,7 +87,22 @@ app.get("/api/creators", async (req, res) => {
 app.post("/api/suggestions", async (req, res) => {
   console.log("API endpoint /api/suggestions called with data:", req.body);
   try {
-    const { name, image, fullyForked, youtube, twitter, instagram, website, bluesky, linkedin, notes } = req.body;
+    const { 
+      name, 
+      image, 
+      fullyForked, 
+      youtube, 
+      twitter, 
+      instagram, 
+      twitch,
+      bluesky, 
+      linkedin,
+      reddit,
+      soundcloud,
+      lttforum,
+      website, 
+      notes 
+    } = req.body;
     
     // Validate required fields
     if (!name || !name.trim()) {
@@ -104,9 +124,13 @@ app.post("/api/suggestions", async (req, res) => {
         youtube: youtube?.trim() ? [{ channelId: "", url: youtube.trim(), visible: true }] : [],
         twitter: twitter?.trim() ? [{ url: twitter.trim(), visible: true }] : [],
         instagram: instagram?.trim() ? [{ url: instagram.trim(), visible: true }] : [],
-        website: website?.trim() ? [{ url: website.trim(), visible: true }] : [],
+        twitch: twitch?.trim() ? [{ url: twitch.trim(), visible: true }] : [],
         bluesky: bluesky?.trim() ? [{ url: bluesky.trim(), visible: true }] : [],
-        linkedin: linkedin?.trim() ? [{ url: linkedin.trim(), visible: true }] : []
+        linkedin: linkedin?.trim() ? [{ url: linkedin.trim(), visible: true }] : [],
+        reddit: reddit?.trim() ? [{ url: reddit.trim(), visible: true }] : [],
+        soundcloud: soundcloud?.trim() ? [{ url: soundcloud.trim(), visible: true }] : [],
+        lttforum: lttforum?.trim() ? [{ url: lttforum.trim(), visible: true }] : [],
+        website: website?.trim() ? [{ url: website.trim(), visible: true }] : []
       },
       Notes: notes?.trim() || "",
       submissionDate: new Date().toISOString(),
@@ -139,6 +163,90 @@ app.post("/api/suggestions", async (req, res) => {
   } catch (err) {
     console.error("Error handling suggestion submission:", err);
     res.status(500).json({ error: "Failed to submit suggestion" });
+  }
+});
+
+// Handle suggested edits submissions
+app.post("/api/suggested-edits", async (req, res) => {
+  console.log("API endpoint /api/suggested-edits called");
+  try {
+    const { 
+      name, 
+      originalCreatorName,
+      fullyForked, 
+      image, 
+      youtube, 
+      twitter, 
+      instagram, 
+      twitch,
+      bluesky, 
+      linkedin,
+      reddit,
+      soundcloud,
+      lttforum,
+      website, 
+      notes 
+    } = req.body;
+
+    // Validate required fields
+    if (!name?.trim()) {
+      return res.status(400).json({ error: "Creator name is required" });
+    }
+
+    // Parse fullyForked status
+    const isFullyForked = fullyForked === "true" || fullyForked === true;
+
+    // Create edit suggestion object
+    const editSuggestion = {
+      originalCreatorName: originalCreatorName || name,
+      name: name.trim(),
+      image: image?.trim() || "",
+      ExitDate: "",
+      nicknames: [],
+      FullyForked: isFullyForked,
+      socials: {
+        youtube: youtube?.trim() ? [{ channelId: "", url: youtube.trim(), visible: true }] : [],
+        twitter: twitter?.trim() ? [{ url: twitter.trim(), visible: true }] : [],
+        instagram: instagram?.trim() ? [{ url: instagram.trim(), visible: true }] : [],
+        twitch: twitch?.trim() ? [{ url: twitch.trim(), visible: true }] : [],
+        bluesky: bluesky?.trim() ? [{ url: bluesky.trim(), visible: true }] : [],
+        linkedin: linkedin?.trim() ? [{ url: linkedin.trim(), visible: true }] : [],
+        reddit: reddit?.trim() ? [{ url: reddit.trim(), visible: true }] : [],
+        soundcloud: soundcloud?.trim() ? [{ url: soundcloud.trim(), visible: true }] : [],
+        lttforum: lttforum?.trim() ? [{ url: lttforum.trim(), visible: true }] : [],
+        website: website?.trim() ? [{ url: website.trim(), visible: true }] : []
+      },
+      Notes: notes?.trim() || "",
+      submissionDate: new Date().toISOString(),
+      status: "pending"
+    };
+
+    // Read existing suggested edits file or create empty array
+    let suggestedEdits = [];
+    const suggestedEditsPath = "data/suggestedEdits.json";
+    
+    if (fs.existsSync(suggestedEditsPath)) {
+      try {
+        const data = fs.readFileSync(suggestedEditsPath, 'utf8');
+        suggestedEdits = JSON.parse(data);
+      } catch (parseErr) {
+        console.error("Error parsing existing suggested edits file:", parseErr);
+        suggestedEdits = [];
+      }
+    }
+
+    // Add new edit suggestion
+    suggestedEdits.push(editSuggestion);
+
+    // Write back to file
+    fs.writeFileSync(suggestedEditsPath, JSON.stringify(suggestedEdits, null, 2));
+    
+    console.log(`Edit suggestion added for creator: ${originalCreatorName} -> ${name}`);
+    res.json({ success: true, message: "Edit suggestion submitted successfully!" });
+    
+  } catch (err) {
+    console.error("Error handling edit suggestion submission:", err);
+    res.status(500).json({ error: "Failed to submit edit suggestion" });
   }
 });
 
