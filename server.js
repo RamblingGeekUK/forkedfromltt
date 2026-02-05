@@ -1,5 +1,8 @@
 require("dotenv").config();
 const express = require("express");
+const session = require("express-session");
+const passport = require("passport");
+const GitHubStrategy = require("passport-github2").Strategy;
 const nodemailer = require('nodemailer');
 const fs = require("fs");
 
@@ -9,8 +12,111 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key-change-in-production',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport serialization
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+
+// GitHub OAuth Strategy
+passport.use(new GitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: process.env.GITHUB_CALLBACK_URL || "http://localhost:3000/auth/github/callback"
+  },
+  (accessToken, refreshToken, profile, done) => {
+    // Check if user is an admin
+    const adminUsernames = (process.env.ADMIN_GITHUB_USERNAMES || '').split(',').map(u => u.trim());
+    const isAdmin = adminUsernames.includes(profile.username);
+    
+    const user = {
+      id: profile.id,
+      username: profile.username,
+      displayName: profile.displayName,
+      profileUrl: profile.profileUrl,
+      avatarUrl: profile.photos?.[0]?.value,
+      isAdmin: isAdmin
+    };
+    
+    return done(null, user);
+  }
+));
+
+// Middleware to check if user is authenticated
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ error: 'Not authenticated' });
+}
+
+// Middleware to check if user is admin
+function isAdmin(req, res, next) {
+  if (req.isAuthenticated() && req.user.isAdmin) {
+    return next();
+  }
+  res.status(403).json({ error: 'Access denied. Admin privileges required.' });
+}
+
 // API routes must be defined before static file serving
 // (API routes will be added below)
+
+// GitHub OAuth routes
+app.get('/auth/github',
+  passport.authenticate('github', { scope: ['user:email'] })
+);
+
+app.get('/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/login.html' }),
+  (req, res) => {
+    // Successful authentication
+    if (req.user.isAdmin) {
+      res.redirect('/admin.html');
+    } else {
+      res.redirect('/?logged_in=true');
+    }
+  }
+);
+
+// Logout route
+app.get('/auth/logout', (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return res.status(500).json({ error: 'Logout failed' });
+    }
+    res.redirect('/');
+  });
+});
+
+// Get current user info
+app.get('/api/auth/user', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({
+      authenticated: true,
+      user: req.user
+    });
+  } else {
+    res.json({ authenticated: false });
+  }
+});
 
 // Static file serving
 app.use(express.static("public"));
@@ -350,6 +456,205 @@ app.post("/api/verify-token", async (req, res) => {
   } catch (err) {
     console.error("Error verifying token:", err);
     res.status(500).json({ error: "Token verification failed" });
+  }
+});
+
+// Admin API routes (protected)
+app.get("/api/admin/suggestions", isAdmin, (req, res) => {
+  try {
+    const suggestions = JSON.parse(fs.readFileSync("data/suggestions.json"));
+    res.json(suggestions);
+  } catch (err) {
+    console.error("Error loading suggestions:", err);
+    res.status(500).json({ error: "Failed to load suggestions" });
+  }
+});
+
+app.get("/api/admin/suggested-edits", isAdmin, (req, res) => {
+  try {
+    const suggestedEdits = JSON.parse(fs.readFileSync("data/suggestedEdits.json"));
+    res.json(suggestedEdits);
+  } catch (err) {
+    console.error("Error loading suggested edits:", err);
+    res.status(500).json({ error: "Failed to load suggested edits" });
+  }
+});
+
+app.post("/api/admin/creators", isAdmin, (req, res) => {
+  try {
+    const newCreator = req.body;
+    const creators = JSON.parse(fs.readFileSync("data/creators.json"));
+    creators.push(newCreator);
+    fs.writeFileSync("data/creators.json", JSON.stringify(creators, null, 2));
+    res.json({ success: true, message: "Creator added successfully" });
+  } catch (err) {
+    console.error("Error adding creator:", err);
+    res.status(500).json({ error: "Failed to add creator" });
+  }
+});
+
+app.put("/api/admin/creators/:index", isAdmin, (req, res) => {
+  try {
+    const index = parseInt(req.params.index);
+    const updatedCreator = req.body;
+    const creators = JSON.parse(fs.readFileSync("data/creators.json"));
+    
+    if (index >= 0 && index < creators.length) {
+      creators[index] = updatedCreator;
+      fs.writeFileSync("data/creators.json", JSON.stringify(creators, null, 2));
+      res.json({ success: true, message: "Creator updated successfully" });
+    } else {
+      res.status(404).json({ error: "Creator not found" });
+    }
+  } catch (err) {
+    console.error("Error updating creator:", err);
+    res.status(500).json({ error: "Failed to update creator" });
+  }
+});
+
+app.delete("/api/admin/creators/:index", isAdmin, (req, res) => {
+  try {
+    const index = parseInt(req.params.index);
+    const creators = JSON.parse(fs.readFileSync("data/creators.json"));
+    
+    if (index >= 0 && index < creators.length) {
+      creators.splice(index, 1);
+      fs.writeFileSync("data/creators.json", JSON.stringify(creators, null, 2));
+      res.json({ success: true, message: "Creator deleted successfully" });
+    } else {
+      res.status(404).json({ error: "Creator not found" });
+    }
+  } catch (err) {
+    console.error("Error deleting creator:", err);
+    res.status(500).json({ error: "Failed to delete creator" });
+  }
+});
+
+app.delete("/api/admin/suggestions/:index", isAdmin, (req, res) => {
+  try {
+    const index = parseInt(req.params.index);
+    const suggestions = JSON.parse(fs.readFileSync("data/suggestions.json"));
+    
+    if (index >= 0 && index < suggestions.length) {
+      suggestions.splice(index, 1);
+      fs.writeFileSync("data/suggestions.json", JSON.stringify(suggestions, null, 2));
+      res.json({ success: true, message: "Suggestion deleted successfully" });
+    } else {
+      res.status(404).json({ error: "Suggestion not found" });
+    }
+  } catch (err) {
+    console.error("Error deleting suggestion:", err);
+    res.status(500).json({ error: "Failed to delete suggestion" });
+  }
+});
+
+app.put("/api/admin/suggestions/:index", isAdmin, (req, res) => {
+  try {
+    const index = parseInt(req.params.index);
+    const updatedSuggestion = req.body;
+    const suggestions = JSON.parse(fs.readFileSync("data/suggestions.json"));
+    
+    if (index >= 0 && index < suggestions.length) {
+      // Preserve submission date
+      const submissionDate = suggestions[index].submissionDate;
+      suggestions[index] = {
+        ...updatedSuggestion,
+        submissionDate: submissionDate
+      };
+      
+      fs.writeFileSync("data/suggestions.json", JSON.stringify(suggestions, null, 2));
+      res.json({ success: true, message: "Suggestion updated successfully" });
+    } else {
+      res.status(404).json({ error: "Suggestion not found" });
+    }
+  } catch (err) {
+    console.error("Error updating suggestion:", err);
+    res.status(500).json({ error: "Failed to update suggestion" });
+  }
+});
+
+app.post("/api/admin/suggestions/:index/approve", isAdmin, (req, res) => {
+  try {
+    const index = parseInt(req.params.index);
+    const suggestions = JSON.parse(fs.readFileSync("data/suggestions.json"));
+    const creators = JSON.parse(fs.readFileSync("data/creators.json"));
+    
+    if (index >= 0 && index < suggestions.length) {
+      const suggestion = suggestions[index];
+      const { status, submissionDate, ...creatorData } = suggestion;
+      creators.push(creatorData);
+      
+      fs.writeFileSync("data/creators.json", JSON.stringify(creators, null, 2));
+      
+      suggestions.splice(index, 1);
+      fs.writeFileSync("data/suggestions.json", JSON.stringify(suggestions, null, 2));
+      
+      res.json({ success: true, message: "Suggestion approved and added to creators" });
+    } else {
+      res.status(404).json({ error: "Suggestion not found" });
+    }
+  } catch (err) {
+    console.error("Error approving suggestion:", err);
+    res.status(500).json({ error: "Failed to approve suggestion" });
+  }
+});
+
+// Apply a suggested edit (update the creator with the edit's data)
+app.post("/api/admin/suggested-edits/:index/apply", isAdmin, (req, res) => {
+  try {
+    const index = parseInt(req.params.index);
+    const suggestedEdits = JSON.parse(fs.readFileSync("data/suggestedEdits.json"));
+    const creators = JSON.parse(fs.readFileSync("data/creators.json"));
+    
+    if (index >= 0 && index < suggestedEdits.length) {
+      const edit = suggestedEdits[index];
+      
+      // Find the original creator by name
+      const creatorIndex = creators.findIndex(c => c.name === edit.originalCreatorName);
+      
+      if (creatorIndex === -1) {
+        return res.status(404).json({ error: "Original creator not found" });
+      }
+      
+      // Update the creator with the edit's data (excluding metadata)
+      const { originalCreatorName, submissionDate, ...updatedData } = edit;
+      creators[creatorIndex] = {
+        ...creators[creatorIndex],
+        ...updatedData
+      };
+      
+      fs.writeFileSync("data/creators.json", JSON.stringify(creators, null, 2));
+      
+      // Remove the suggested edit
+      suggestedEdits.splice(index, 1);
+      fs.writeFileSync("data/suggestedEdits.json", JSON.stringify(suggestedEdits, null, 2));
+      
+      res.json({ success: true, message: "Edit applied successfully" });
+    } else {
+      res.status(404).json({ error: "Suggested edit not found" });
+    }
+  } catch (err) {
+    console.error("Error applying suggested edit:", err);
+    res.status(500).json({ error: "Failed to apply suggested edit" });
+  }
+});
+
+// Delete a suggested edit
+app.delete("/api/admin/suggested-edits/:index", isAdmin, (req, res) => {
+  try {
+    const index = parseInt(req.params.index);
+    const suggestedEdits = JSON.parse(fs.readFileSync("data/suggestedEdits.json"));
+    
+    if (index >= 0 && index < suggestedEdits.length) {
+      suggestedEdits.splice(index, 1);
+      fs.writeFileSync("data/suggestedEdits.json", JSON.stringify(suggestedEdits, null, 2));
+      res.json({ success: true, message: "Suggested edit deleted successfully" });
+    } else {
+      res.status(404).json({ error: "Suggested edit not found" });
+    }
+  } catch (err) {
+    console.error("Error deleting suggested edit:", err);
+    res.status(500).json({ error: "Failed to delete suggested edit" });
   }
 });
 

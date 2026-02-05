@@ -4,6 +4,30 @@ const allCreatorsGrid = document.getElementById("allCreatorsGrid");
 // Hide grid initially
 if (allCreatorsGrid) allCreatorsGrid.style.display = "none";
 
+// Check authentication status and update navbar
+async function checkAuthStatus() {
+  try {
+    const response = await fetch('/api/auth/user');
+    const data = await response.json();
+    
+    const adminNavItem = document.getElementById('adminNavItem');
+    if (data.authenticated) {
+      if (data.user.isAdmin) {
+        adminNavItem.innerHTML = '<a class="nav-link btn btn-outline-light" href="/admin.html">Admin Dashboard</a>';
+      } else {
+        adminNavItem.innerHTML = `<span class="nav-link">Hi, ${data.user.username}!</span> <a class="nav-link" href="/auth/logout">Logout</a>`;
+      }
+    } else {
+      adminNavItem.innerHTML = '<a class="nav-link" href="/login.html">Admin Login</a>';
+    }
+  } catch (error) {
+    console.error('Error checking auth status:', error);
+  }
+}
+
+// Call on page load
+checkAuthStatus();
+
 // Function to create creator card HTML
 function createCreatorCard(channel) {
   const col = document.createElement("div");

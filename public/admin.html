@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Forked From LTT</title>
+  <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    :root {
+      --primary-color: #667eea;
+      --primary-dark: #5568d3;
+      --secondary-color: #764ba2;
+      --success-color: #10b981;
+      --danger-color: #ef4444;
+      --warning-color: #f59e0b;
+      --bg-dark: #0f172a;
+      --bg-darker: #020617;
+      --bg-card: #1e293b;
+      --bg-hover: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --border-color: #475569;
+    }
+    
+    * {
+      color-scheme: dark;
+    }
+    
+    html, body {
+      background-color: var(--bg-darker);
+      color: var(--text-primary);
+      scrollbar-gutter: stable;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    .admin-header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      padding: 2.5rem 0;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+    }
+    
+    .admin-header h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.2);
+      object-fit: cover;
+    }
+    
+    .user-info > div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    
+    .user-info div:last-child {
+      font-weight: 500;
+    }
+    
+    .user-info a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+    
+    .user-info a:hover {
+      color: white;
+    }
+    
+    .admin-nav {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 0.75rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      border: 1px solid var(--border-color);
+    }
+    
+    .admin-nav .nav-link {
+      color: var(--text-secondary);
+      padding: 0.875rem 1.5rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    
+    .admin-nav .nav-link:hover {
+      background-color: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    
+    .admin-nav .nav-link.active {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+    }
+    
+    .card {
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background-color: var(--bg-card);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    
+    .card-header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      border-radius: 11px 11px 0 0 !important;
+      padding: 1.5rem;
+      border: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .card-header h5 {
+      margin: 0;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    
+    .card-body {
+      padding: 1.5rem;
+      background-color: var(--bg-card);
+    }
+    
+    .table {
+      color: var(--text-primary);
+      margin-bottom: 0;
+    }
+    
+    .table thead th {
+      border-color: var(--border-color);
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 1rem 0.75rem;
+      background-color: rgba(0,0,0,0.2);
+    }
+    
+    .table tbody td {
+      border-color: var(--border-color);
+      padding: 1rem 0.75rem;
+      vertical-align: middle;
+      background-color: var(--bg-card);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    
+    .table tbody tr {
+      border-color: var(--border-color);
+      height: auto;
+    }
+    
+    .table tbody tr:hover {
+      background-color: var(--bg-card);
+    }
+    
+    .table tbody td, .table tbody tr {
+      color: var(--text-primary);
+    }
+    
+    .table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+      overflow-y: scroll;
+      max-height: calc(100vh - 300px);
+    }
+    
+    /* Scrollbar styling to reduce layout shift */
+    .table-container::-webkit-scrollbar {
+      width: 12px;
+    }
+    
+    .table-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .table-container::-webkit-scrollbar-thumb {
+      background: rgba(102, 126, 234, 0.3);
+      border-radius: 6px;
+    }
+    
+    .table-container::-webkit-scrollbar-thumb:hover {
+      background: rgba(102, 126, 234, 0.5);
+    }
+    
+    /* Action Buttons Group */
+    .btn-group-compact {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+    }
+    
+    .btn-group-compact .btn {
+      white-space: nowrap;
+      font-size: 0.75rem;
+      padding: 0.35rem 0.6rem;
+      flex: 0 1 auto;
+    }
+    
+    @media (max-width: 768px) {
+      .btn-group-compact {
+        flex-direction: column;
+      }
+      
+      .btn-group-compact .btn {
+        min-width: auto;
+        width: 100%;
+      }
+    }
+    
+    .btn {
+      font-weight: 500;
+      border-radius: 8px;
+      padding: 0.625rem 1rem;
+      transition: all 0.2s;
+      border: none;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background-color: #059669;
+      color: white;
+    }
+    
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background-color: #dc2626;
+      color: white;
+    }
+    
+    .btn-secondary {
+      background-color: var(--bg-hover);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+    
+    .btn-secondary:hover {
+      background-color: #475569;
+      color: var(--text-primary);
+    }
+    
+    .btn-action {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      margin: 0 0.25rem;
+    }
+    
+    .badge {
+      padding: 0.5rem 0.875rem;
+      font-weight: 500;
+      font-size: 0.8rem;
+      border-radius: 6px;
+    }
+    
+    .badge.bg-success {
+      background-color: var(--success-color) !important;
+    }
+    
+    .badge.bg-secondary {
+      background-color: #64748b !important;
+    }
+    
+    .badge.bg-warning {
+      background-color: var(--warning-color) !important;
+      color: #000;
+    }
+    
+    .stats-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      margin-bottom: 1.5rem;
+    }
+    
+    .stats-card h3 {
+      font-size: 2.5rem;
+      margin: 0 0 0.5rem 0;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+    }
+    
+    .stats-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+    
+    .loading.active {
+      display: block;
+    }
+    
+    .spinner-border {
+      border-color: rgba(102, 126, 234, 0.2) !important;
+      border-right-color: var(--primary-color) !important;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .form-control {
+      background-color: rgba(0,0,0,0.2);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    
+    .form-control:focus {
+      background-color: rgba(0,0,0,0.3);
+      border-color: var(--primary-color);
+      color: var(--text-primary);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .form-label {
+      color: var(--text-primary);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+    
+    .form-text {
+      color: var(--text-secondary) !important;
+      font-size: 0.85rem;
+    }
+    
+    .form-check {
+      padding-left: 0;
+    }
+    
+    .form-check-input {
+      width: 1.25rem;
+      height: 1.25rem;
+      margin-top: 0.15rem;
+      margin-right: 0.75rem;
+      background-color: rgba(0,0,0,0.2);
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+    }
+    
+    .form-check-input:checked {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .form-check-input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .form-check-label {
+      color: var(--text-primary);
+      margin-left: 0.5rem;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .form-select {
+      background-color: rgba(0,0,0,0.2);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+    }
+    
+    .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    /* Modal Styles */
+    .modal-content {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+    }
+    
+    .modal-header {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      border-radius: 11px 11px 0 0;
+      border: none;
+      padding: 1.5rem;
+    }
+    
+    .modal-header .modal-title {
+      font-weight: 600;
+      font-size: 1.25rem;
+    }
+    
+    .modal-header .btn-close {
+      filter: brightness(0) invert(1);
+      opacity: 0.8;
+    }
+    
+    .modal-header .btn-close:hover {
+      opacity: 1;
+    }
+    
+    .modal-footer {
+      background-color: rgba(0,0,0,0.1);
+      border-color: var(--border-color);
+      padding: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+    
+    .modal-body {
+      padding: 2rem;
+    }
+    
+    .modal-body h6 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+    }
+    
+    .modal-body h6:first-of-type {
+      margin-top: 0;
+    }
+    
+    .social-links {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-color);
+    }
+    
+    /* Utilities */
+    .container {
+      max-width: 1400px;
+    }
+    
+    h6 {
+      color: var(--text-primary);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Detail View Styling */
+    .details-container {
+      color: var(--text-primary);
+    }
+    
+    .detail-section {
+      margin-bottom: 2rem;
+    }
+    
+    .detail-section h6 {
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 0.75rem;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      color: var(--text-secondary);
+      min-width: 120px;
+    }
+    
+    .detail-value {
+      color: var(--text-primary);
+      flex: 1;
+      word-break: break-word;
+    }
+    
+    .detail-image {
+      margin-top: 0.5rem;
+    }
+    
+    .detail-image img {
+      max-width: 200px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+    
+    .row > [class*="col-"] {
+      margin-bottom: 0.5rem;
+    }
+    
+    .mb-3 {
+      margin-bottom: 1.25rem;
+    }
+    
+    /* Improved spacing for rows in forms */
+    .row {
+      row-gap: 1.5rem;
+    }
+    
+    /* Section divider */
+    .section-divider {
+      margin: 2rem 0 1rem 0;
+      padding: 1rem 0 0 0;
+      border-top: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+  <!-- Admin Header -->
+  <div class="admin-header">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <h1>Admin Dashboard</h1>
+        <div class="user-info">
+          <img src="" alt="User" class="user-avatar" id="userAvatar">
+          <div>
+            <div id="userName">Loading...</div>
+            <small><a href="/auth/logout" class="text-white">Logout</a></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Stats Overview -->
+    <div class="row" id="statsRow" style="margin-bottom: 3rem;">
+      <div class="col-lg-3 col-md-6">
+        <div class="stats-card">
+          <h3 id="totalCreators">0</h3>
+          <p>Total Creators</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="stats-card">
+          <h3 id="pendingSuggestions">0</h3>
+          <p>Pending Suggestions</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="stats-card">
+          <h3 id="pendingEdits">0</h3>
+          <p>Pending Edits</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="stats-card">
+          <h3 id="fullyForked">0</h3>
+          <p>Fully Forked</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="admin-nav">
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a class="nav-link active" href="#" data-tab="suggestions">Suggestions</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-tab="edits">Suggested Edits</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-tab="creators">All Creators</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loading" id="loading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Suggestions Tab -->
+    <div class="tab-content active" id="tab-suggestions">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Creator Suggestions</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Fully Forked</th>
+                  <th>Submission Date</th>
+                  <th>Socials</th>
+                  <th>Notes</th>
+                  <th style="width: 200px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="suggestionsTable">
+                <!-- Populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggested Edits Tab -->
+    <div class="tab-content" id="tab-edits">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Suggested Edits</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Original</th>
+                  <th>New Name</th>
+                  <th>Fully Forked</th>
+                  <th>Submission Date</th>
+                  <th>Changes</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="editsTable">
+                <!-- Populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- All Creators Tab -->
+    <div class="tab-content" id="tab-creators">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">All Creators</h5>
+          <button class="btn btn-light btn-sm" onclick="location.reload()">
+            <i class="bi bi-arrow-clockwise"></i> Refresh
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="table-container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Image</th>
+                  <th>Fully Forked</th>
+                  <th>Socials</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="creatorsTable">
+                <!-- Populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Edit Details Modal -->
+  <div class="modal fade" id="viewEditModal" tabindex="-1" aria-labelledby="viewEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content suggestion-modal">
+        <div class="modal-header suggestion-header">
+          <h5 class="modal-title" id="viewEditModalLabel">Proposed Changes</h5>
+          <button type="button" class="btn-close btn-close-white suggestion-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body suggestion-body p-4">
+          <div id="editDetailsContent">
+            <!-- Details will be populated here -->
+          </div>
+        </div>
+        <div class="modal-footer compact-footer">
+          <button type="button" class="btn compact-btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="editSuggestionModal" tabindex="-1" aria-labelledby="editSuggestionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content suggestion-modal">
+        <div class="modal-header suggestion-header">
+          <h5 class="modal-title" id="editSuggestionModalLabel">Edit Suggestion</h5>
+          <button type="button" class="btn-close btn-close-white suggestion-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body suggestion-body p-4">
+          <form id="editSuggestionForm">
+            <input type="hidden" id="editSuggestionIndex">
+            
+            <div class="row g-3 mb-3">
+              <div class="col-8">
+                <label for="editName" class="form-label fw-bold text-light">Creator Name *</label>
+                <input type="text" class="form-control compact-input" id="editName" required>
+              </div>
+              <div class="col-4">
+                <label for="editFullyForked" class="form-label fw-bold text-light">Status</label>
+                <select class="form-select compact-input" id="editFullyForked">
+                  <option value="false">Branching Out</option>
+                  <option value="true">Fully Forked</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="editImage" class="form-label fw-bold text-light">Profile Image</label>
+              <input type="url" class="form-control compact-input" id="editImage" placeholder="https://example.com/image.jpg">
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label for="editCreatedDate" class="form-label fw-bold text-light">Created Date</label>
+                <input type="date" class="form-control compact-input" id="editCreatedDate">
+              </div>
+              <div class="col-md-6">
+                <label for="editExitDate" class="form-label fw-bold text-light">Exit Date</label>
+                <input type="date" class="form-control compact-input" id="editExitDate">
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="editNicknames" class="form-label fw-bold text-light">Nicknames</label>
+              <input type="text" class="form-control compact-input" id="editNicknames" placeholder="Nickname1, Nickname2">
+              <small class="form-text text-muted d-block mt-1">Separate multiple nicknames with commas</small>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold text-info mb-2">Social Links</label>
+              <div class="social-compact-grid">
+                <div class="social-field">
+                  <div class="social-icon">
+                    <svg width="18" height="18" fill="#FF0000" viewBox="0 0 24 24">
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                  </div>
+                  <input type="url" class="form-control compact-input social-input" id="editYoutube" placeholder="YouTube">
+                </div>
+                <div class="social-field">
+                  <div class="social-icon">
+                    <svg width="18" height="18" fill="#1DA1F2" viewBox="0 0 24 24">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                  </div>
+                  <input type="url" class="form-control compact-input social-input" id="editTwitter" placeholder="Twitter/X">
+                </div>
+                <div class="social-field">
+                  <div class="social-icon">
+                    <svg width="18" height="18" fill="#E4405F" viewBox="0 0 24 24">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                  </div>
+                  <input type="url" class="form-control compact-input social-input" id="editInstagram" placeholder="Instagram">
+                </div>
+                <div class="social-field">
+                  <div class="social-icon">
+                    <svg width="18" height="18" fill="#9146FF" viewBox="0 0 24 24">
+                      <path d="M2.089 0L.525 4.175v16.694h5.736V24h3.132l3.127-3.132h4.695l6.26-6.258V0H2.089zm2.086 2.085H21.39v11.479l-3.652 3.652H12l-3.127 3.132v-3.132H4.175V2.085z"/><path d="M9.915 12.522h2.086V6.26H9.915v6.262zm5.736 0h2.086V6.26h-2.086v6.262z"/>
+                    </svg>
+                  </div>
+                  <input type="url" class="form-control compact-input social-input" id="editTwitch" placeholder="Twitch">
+                </div>
+                <div class="social-field">
+                  <div class="social-icon">
+                    <svg width="18" height="18" fill="#0085ff" viewBox="0 0 24 24">
+                      <path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.17-.195-.101-.149-.943-.157-1.184-.907-.297-.904-.624-1.708-.624-3.50 0 0 1.493 1.499 2.631 1.65 1.138.151 1.368-.103 1.368-.103s.23.254 1.368.103C11.507 10.507 13 9.008 13 9.008c0 1.792-.327 2.596-.624 3.5-.241.75-1.083.758-1.184.907-.105.156.034.175.17.195 2.67.296 5.568-.628 6.383-3.364.246-.829.624-5.789.624-6.479 0-.688-.139-1.86-.902-2.203C16.439 1.266 15.434.944 12.798 2.805 10.046 4.747 7.087 8.686 6 10.8z"/>
+                    </svg>
+                  </div>
+                  <input type="url" class="form-control compact-input social-input" id="editBluesky" placeholder="Bluesky">
+                </div>
+                <div class="social-field">
+                  <div class="social-icon">
+                    <svg width="18" height="18" fill="#0A66C2" viewBox="0 0 24 24">
+                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                  </div>
+                  <input type="url" class="form-control compact-input social-input" id="editLinkedin" placeholder="LinkedIn">
+                </div>
+                <div class="social-field">
+                  <div class="social-icon">
+                    <svg width="18" height="18" fill="#FF4500" viewBox="0 0 24 24">
+                      <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/>
+                    </svg>
+                  </div>
+                  <input type="url" class="form-control compact-input social-input" id="editReddit" placeholder="Reddit">
+                </div>
+                <div class="social-field">
+                  <div class="social-icon">
+                    <svg width="18" height="18" fill="#FF8C00" viewBox="0 0 24 24">
+                      <path d="M7 17.939h-1v-8.068c.308-.231.639-.429 1-.566v8.634zm3 0h1v-9.224c-.229.265-.443.548-.621.857l-.379-.184v8.551zm-2 0h1v-8.848c-.508-.079-.623-.05-1-.01v8.858zm-4 0h1v-7.02c-.312.458-.555.971-.692 1.535l-.308-.182v5.667zm-3-5.25c-.606.547-1 1.354-1 2.268 0 .914.394 1.721 1 2.268v-4.536zm18.879-.671c-.204-2.837-2.404-5.079-5.117-5.079-1.022 0-1.964.328-2.762.877v10.123h9.089c1.607 0 2.911-1.393 2.911-3.106 0-2.233-2.168-3.772-4.121-2.815zm-16.879-.027c-.302-.024-.526-.03-.879-.06v-2.931h-2v-1.495c0-2.654 2.161-4.805 4.815-4.805h.185c1.788 0 3.362.974 4.206 2.415.518-.323 1.125-.527 1.779-.527 2.097 0 3.794 1.697 3.794 3.794 0 .453-.082.884-.226 1.289.668.032 1.286.25 1.778.595.705-1.213 1.109-2.621 1.109-4.122 0-4.411-3.589-8-8-8-4.411 0-8 3.589-8 8v5.847zm16.879 3.878c.606.547 1 1.354 1 2.268 0 .914-.394 1.721-1 2.268v-4.536z"/>
+                    </svg>
+                  </div>
+                  <input type="url" class="form-control compact-input social-input" id="editSoundcloud" placeholder="SoundCloud">
+                </div>
+                <div class="social-field">
+                  <div class="social-icon">
+                    <svg width="18" height="18" fill="#8f94fb" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                  </div>
+                  <input type="url" class="form-control compact-input social-input" id="editLttforum" placeholder="LTT Forum">
+                </div>
+                <div class="social-field">
+                  <div class="social-icon">
+                    <svg width="18" height="18" fill="#b0b3b8" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                  </div>
+                  <input type="url" class="form-control compact-input social-input" id="editWebsite" placeholder="Website">
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="editNotes" class="form-label fw-bold text-light">Notes</label>
+              <textarea class="form-control compact-input" id="editNotes" rows="3" placeholder="Additional notes..."></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer compact-footer">
+          <button type="button" class="btn compact-btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn compact-btn-primary" onclick="saveEditedSuggestion()">Save Changes</button>
+          <button type="button" class="btn compact-btn-success" onclick="approveEditedSuggestion()">
+            <span>✓ Save & Approve</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/vendor/bootstrap.bundle.min.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
