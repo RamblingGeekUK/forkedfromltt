@@ -60,6 +60,8 @@ async function loadAllData() {
       loadSuggestions(),
       loadSuggestedEdits(),
       loadCreators(),
+      loadAds(),
+      loadFaq(),
       updateStats()
     ]);
   } catch (error) {
@@ -103,9 +105,9 @@ async function loadSuggestions() {
         <td>${escapeHtml(suggestion.Notes || '-')}</td>
         <td>
           <div class="btn-group-compact">
-            <button class="btn btn-primary btn-sm" onclick="editSuggestion(${index})">Edit</button>
-            <button class="btn btn-success btn-sm" onclick="approveSuggestion(${index})">Approve</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteSuggestion(${index})">Delete</button>
+            <button class="btn btn-primary btn-sm" onclick="editSuggestion('${suggestion.id}')">Edit</button>
+            <button class="btn btn-success btn-sm" onclick="approveSuggestion('${suggestion.id}')">Approve</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteSuggestion('${suggestion.id}')">Delete</button>
           </div>
         </td>
       `;
@@ -139,11 +141,11 @@ async function loadSuggestedEdits() {
         <td><strong>${escapeHtml(edit.name)}</strong></td>
         <td><span class="badge ${edit.FullyForked ? 'bg-success' : 'bg-secondary'}">${edit.FullyForked ? 'Yes' : 'No'}</span></td>
         <td>${formatDate(edit.submissionDate)}</td>
-        <td><button class="btn btn-sm btn-outline-primary" onclick="viewDetails(${index}, 'edit')">View Changes</button></td>
+        <td><button class="btn btn-sm btn-outline-primary" onclick="viewDetails('${edit.id}', 'edit')">View Changes</button></td>
         <td>
           <div class="btn-group-compact">
-            <button class="btn btn-success btn-sm" onclick="applyEdit(${index})">Apply</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteEdit(${index})">Delete</button>
+            <button class="btn btn-success btn-sm" onclick="applyEdit('${edit.id}')">Apply</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteEdit('${edit.id}')">Delete</button>
           </div>
         </td>
       `;
@@ -158,7 +160,7 @@ async function loadSuggestedEdits() {
 // Load creators
 async function loadCreators() {
   try {
-    const response = await fetch('/data/creators.json');
+    const response = await fetch('/api/admin/creators');
     const creators = await response.json();
     
     const tbody = document.getElementById('creatorsTable');
@@ -182,7 +184,7 @@ async function loadCreators() {
         <td class="social-links">${socials.join(', ') || 'None'}</td>
         <td>
           <button class="btn btn-primary btn-sm btn-action" onclick="alert('Edit functionality coming soon')">Edit</button>
-          <button class="btn btn-danger btn-sm btn-action" onclick="deleteCreator(${index}, '${escapeHtml(creator.name)}')">Delete</button>
+          <button class="btn btn-danger btn-sm btn-action" onclick="deleteCreator('${creator.id}', '${escapeHtml(creator.name)}')">Delete</button>
         </td>
       `;
       
@@ -197,7 +199,7 @@ async function loadCreators() {
 async function updateStats() {
   try {
     const [creatorsRes, suggestionsRes, editsRes] = await Promise.all([
-      fetch('/data/creators.json'),
+      fetch('/api/admin/creators'),
       fetch('/api/admin/suggestions'),
       fetch('/api/admin/suggested-edits')
     ]);
@@ -218,13 +220,13 @@ async function updateStats() {
 }
 
 // Approve suggestion
-async function approveSuggestion(index) {
+async function approveSuggestion(id) {
   if (!confirm('Are you sure you want to approve this suggestion and add it to the creators list?')) {
     return;
   }
   
   try {
-    const response = await fetch(`/api/admin/suggestions/${index}/approve`, {
+    const response = await fetch(`/api/admin/suggestions/${id}/approve`, {
       method: 'POST'
     });
     
@@ -243,21 +245,21 @@ async function approveSuggestion(index) {
 }
 
 // Edit suggestion - open modal with form
-async function editSuggestion(index) {
+async function editSuggestion(id) {
   try {
     const response = await fetch('/api/admin/suggestions');
     if (!response.ok) throw new Error('Failed to fetch suggestions');
     
     const suggestions = await response.json();
-    const suggestion = suggestions[index];
+    const suggestion = suggestions.find(s => s.id === id);
     
     if (!suggestion) {
       alert('Suggestion not found');
       return;
     }
     
-    // Store the index for later use
-    document.getElementById('editSuggestionIndex').value = index;
+    // Store the id for later use
+    document.getElementById('editSuggestionIndex').value = id;
     
     // Populate form fields
     document.getElementById('editName').value = suggestion.name || '';
@@ -311,11 +313,11 @@ async function editSuggestion(index) {
 
 // Save edited suggestion (update without approving)
 async function saveEditedSuggestion() {
-  const index = document.getElementById('editSuggestionIndex').value;
+  const id = document.getElementById('editSuggestionIndex').value;
   const updatedData = getFormData();
   
   try {
-    const response = await fetch(`/api/admin/suggestions/${index}`, {
+    const response = await fetch(`/api/admin/suggestions/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -349,12 +351,12 @@ async function approveEditedSuggestion() {
     return;
   }
   
-  const index = document.getElementById('editSuggestionIndex').value;
+  const id = document.getElementById('editSuggestionIndex').value;
   const updatedData = getFormData();
   
   try {
     // First, update the suggestion
-    const updateResponse = await fetch(`/api/admin/suggestions/${index}`, {
+    const updateResponse = await fetch(`/api/admin/suggestions/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -370,7 +372,7 @@ async function approveEditedSuggestion() {
     }
     
     // Then approve it
-    const approveResponse = await fetch(`/api/admin/suggestions/${index}/approve`, {
+    const approveResponse = await fetch(`/api/admin/suggestions/${id}/approve`, {
       method: 'POST'
     });
     
@@ -466,13 +468,13 @@ function getFormData() {
 }
 
 // Delete suggestion
-async function deleteSuggestion(index) {
+async function deleteSuggestion(id) {
   if (!confirm('Are you sure you want to delete this suggestion?')) {
     return;
   }
   
   try {
-    const response = await fetch(`/api/admin/suggestions/${index}`, {
+    const response = await fetch(`/api/admin/suggestions/${id}`, {
       method: 'DELETE'
     });
     
@@ -491,13 +493,13 @@ async function deleteSuggestion(index) {
 }
 
 // Apply suggested edit (update creator with edit data)
-async function applyEdit(index) {
+async function applyEdit(id) {
   if (!confirm('Are you sure you want to apply this edit to the creator?')) {
     return;
   }
   
   try {
-    const response = await fetch(`/api/admin/suggested-edits/${index}/apply`, {
+    const response = await fetch(`/api/admin/suggested-edits/${id}/apply`, {
       method: 'POST'
     });
     
@@ -516,13 +518,13 @@ async function applyEdit(index) {
 }
 
 // Delete suggested edit
-async function deleteEdit(index) {
+async function deleteEdit(id) {
   if (!confirm('Are you sure you want to delete this suggested edit?')) {
     return;
   }
   
   try {
-    const response = await fetch(`/api/admin/suggested-edits/${index}`, {
+    const response = await fetch(`/api/admin/suggested-edits/${id}`, {
       method: 'DELETE'
     });
     
@@ -541,13 +543,13 @@ async function deleteEdit(index) {
 }
 
 // Delete creator
-async function deleteCreator(index, name) {
+async function deleteCreator(id, name) {
   if (!confirm(`Are you sure you want to delete "${name}" from the creators list?`)) {
     return;
   }
   
   try {
-    const response = await fetch(`/api/admin/creators/${index}`, {
+    const response = await fetch(`/api/admin/creators/${id}`, {
       method: 'DELETE'
     });
     
@@ -566,18 +568,18 @@ async function deleteCreator(index, name) {
 }
 
 // View details in modal
-async function viewDetails(index, type) {
+async function viewDetails(id, type) {
   try {
     let data;
     
     if (type === 'suggestion') {
       const response = await fetch('/api/admin/suggestions');
       const suggestions = await response.json();
-      data = suggestions[index];
+      data = suggestions.find(s => s.id === id);
     } else {
       const response = await fetch('/api/admin/suggested-edits');
       const edits = await response.json();
-      data = edits[index];
+      data = edits.find(e => e.id === id);
     }
     
     // Build detailed view HTML
@@ -669,4 +671,258 @@ function formatDate(dateString) {
   if (!dateString) return 'N/A';
   const date = new Date(dateString);
   return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+}
+
+// ==================== ADS FUNCTIONS ====================
+
+// Load ads
+async function loadAds() {
+  try {
+    const response = await fetch('/api/admin/ads');
+    const ads = await response.json();
+    
+    const tbody = document.getElementById('adsTable');
+    tbody.innerHTML = '';
+    
+    if (ads.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No ads found</td></tr>';
+      return;
+    }
+    
+    ads.forEach(ad => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${escapeHtml(ad.name)}</td>
+        <td>${ad.image ? `<img src="${escapeHtml(ad.image)}" alt="${escapeHtml(ad.name)}" style="max-height: 40px; border-radius: 4px;">` : '-'}</td>
+        <td>${ad.website ? `<a href="${escapeHtml(ad.website)}" target="_blank" class="text-info">${escapeHtml(ad.website)}</a>` : '-'}</td>
+        <td>${ad.ad ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-secondary">No</span>'}</td>
+        <td>
+          <button class="btn btn-primary btn-sm" onclick="editAd('${ad.id}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteAd('${ad.id}')">Delete</button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+  } catch (error) {
+    console.error('Error loading ads:', error);
+  }
+}
+
+// Show add ad modal
+function showAddAdModal() {
+  document.getElementById('adModalLabel').textContent = 'Add Ad';
+  document.getElementById('adId').value = '';
+  document.getElementById('adName').value = '';
+  document.getElementById('adImage').value = '';
+  document.getElementById('adWebsite').value = '';
+  document.getElementById('adIsAd').checked = true;
+  
+  const modal = new bootstrap.Modal(document.getElementById('adModal'));
+  modal.show();
+}
+
+// Edit ad
+async function editAd(id) {
+  try {
+    const response = await fetch(`/api/admin/ads/${id}`);
+    const ad = await response.json();
+    
+    document.getElementById('adModalLabel').textContent = 'Edit Ad';
+    document.getElementById('adId').value = ad.id;
+    document.getElementById('adName').value = ad.name;
+    document.getElementById('adImage').value = ad.image || '';
+    document.getElementById('adWebsite').value = ad.website || '';
+    document.getElementById('adIsAd').checked = ad.ad;
+    
+    const modal = new bootstrap.Modal(document.getElementById('adModal'));
+    modal.show();
+  } catch (error) {
+    console.error('Error loading ad:', error);
+    alert('Failed to load ad');
+  }
+}
+
+// Save ad
+async function saveAd() {
+  const id = document.getElementById('adId').value;
+  const ad = {
+    name: document.getElementById('adName').value,
+    image: document.getElementById('adImage').value,
+    website: document.getElementById('adWebsite').value,
+    ad: document.getElementById('adIsAd').checked
+  };
+  
+  if (!ad.name.trim()) {
+    alert('Ad name is required');
+    return;
+  }
+  
+  try {
+    const url = id ? `/api/admin/ads/${id}` : '/api/admin/ads';
+    const method = id ? 'PUT' : 'POST';
+    
+    const response = await fetch(url, {
+      method: method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(ad)
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      bootstrap.Modal.getInstance(document.getElementById('adModal')).hide();
+      await loadAds();
+    } else {
+      alert(result.error || 'Failed to save ad');
+    }
+  } catch (error) {
+    console.error('Error saving ad:', error);
+    alert('Failed to save ad');
+  }
+}
+
+// Delete ad
+async function deleteAd(id) {
+  if (!confirm('Are you sure you want to delete this ad?')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/api/admin/ads/${id}`, { method: 'DELETE' });
+    const result = await response.json();
+    
+    if (result.success) {
+      await loadAds();
+    } else {
+      alert(result.error || 'Failed to delete ad');
+    }
+  } catch (error) {
+    console.error('Error deleting ad:', error);
+    alert('Failed to delete ad');
+  }
+}
+
+// ==================== FAQ FUNCTIONS ====================
+
+// Load FAQ
+async function loadFaq() {
+  try {
+    const response = await fetch('/api/admin/faq');
+    const faqList = await response.json();
+    
+    const tbody = document.getElementById('faqTable');
+    tbody.innerHTML = '';
+    
+    if (faqList.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No FAQ items found</td></tr>';
+      return;
+    }
+    
+    faqList.forEach(faq => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(faq.question)}</td>
+        <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(faq.answer.substring(0, 100))}${faq.answer.length > 100 ? '...' : ''}</td>
+        <td>${faq.expanded ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-secondary">No</span>'}</td>
+        <td>
+          <button class="btn btn-primary btn-sm" onclick="editFaq('${faq.id}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteFaq('${faq.id}')">Delete</button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+  } catch (error) {
+    console.error('Error loading FAQ:', error);
+  }
+}
+
+// Show add FAQ modal
+function showAddFaqModal() {
+  document.getElementById('faqModalLabel').textContent = 'Add FAQ';
+  document.getElementById('faqId').value = '';
+  document.getElementById('faqQuestion').value = '';
+  document.getElementById('faqAnswer').value = '';
+  document.getElementById('faqExpanded').checked = false;
+  
+  const modal = new bootstrap.Modal(document.getElementById('faqModal'));
+  modal.show();
+}
+
+// Edit FAQ
+async function editFaq(id) {
+  try {
+    const response = await fetch(`/api/admin/faq/${id}`);
+    const faq = await response.json();
+    
+    document.getElementById('faqModalLabel').textContent = 'Edit FAQ';
+    document.getElementById('faqId').value = faq.id;
+    document.getElementById('faqQuestion').value = faq.question;
+    document.getElementById('faqAnswer').value = faq.answer;
+    document.getElementById('faqExpanded').checked = faq.expanded;
+    
+    const modal = new bootstrap.Modal(document.getElementById('faqModal'));
+    modal.show();
+  } catch (error) {
+    console.error('Error loading FAQ:', error);
+    alert('Failed to load FAQ');
+  }
+}
+
+// Save FAQ
+async function saveFaq() {
+  const id = document.getElementById('faqId').value;
+  const faq = {
+    question: document.getElementById('faqQuestion').value,
+    answer: document.getElementById('faqAnswer').value,
+    expanded: document.getElementById('faqExpanded').checked
+  };
+  
+  if (!faq.question.trim() || !faq.answer.trim()) {
+    alert('Question and answer are required');
+    return;
+  }
+  
+  try {
+    const url = id ? `/api/admin/faq/${id}` : '/api/admin/faq';
+    const method = id ? 'PUT' : 'POST';
+    
+    const response = await fetch(url, {
+      method: method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(faq)
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      bootstrap.Modal.getInstance(document.getElementById('faqModal')).hide();
+      await loadFaq();
+    } else {
+      alert(result.error || 'Failed to save FAQ');
+    }
+  } catch (error) {
+    console.error('Error saving FAQ:', error);
+    alert('Failed to save FAQ');
+  }
+}
+
+// Delete FAQ
+async function deleteFaq(id) {
+  if (!confirm('Are you sure you want to delete this FAQ?')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/api/admin/faq/${id}`, { method: 'DELETE' });
+    const result = await response.json();
+    
+    if (result.success) {
+      await loadFaq();
+    } else {
+      alert(result.error || 'Failed to delete FAQ');
+    }
+  } catch (error) {
+    console.error('Error deleting FAQ:', error);
+    alert('Failed to delete FAQ');
+  }
 }

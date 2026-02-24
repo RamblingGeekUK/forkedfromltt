@@ -4,7 +4,11 @@ const session = require("express-session");
 const passport = require("passport");
 const GitHubStrategy = require("passport-github2").Strategy;
 const nodemailer = require('nodemailer');
-const fs = require("fs");
+
+// Database
+const db = require('./db/database');
+db.initializeDatabase();
+db.migrateSocialsToNewTable(); // Migrate existing JSON socials to new table
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -137,7 +141,7 @@ app.get('/', (req, res) => {
 app.get("/api/faq", async (req, res) => {
   console.log("API endpoint /api/faq called");
   try {
-    const faqData = JSON.parse(fs.readFileSync("data/faq.json"));
+    const faqData = db.getAllFaq();
     res.json(faqData);
   } catch (err) {
     console.error("Error loading FAQ data:", err);
@@ -148,9 +152,9 @@ app.get("/api/faq", async (req, res) => {
 app.get("/api/creators", async (req, res) => {
   console.log("API endpoint /api/creators called");
   try {
-    // Load creators and ads directly from JSON files
-    const creators = JSON.parse(fs.readFileSync("data/creators.json"));
-    const ads = JSON.parse(fs.readFileSync("data/ads.json"));
+    // Load creators and ads from database
+    const creators = db.getAllCreators();
+    const ads = db.getAllAds();
     console.log(`Loaded ${creators.length} creators and ${ads.length} ads`);
     const results = [];
 
@@ -225,8 +229,8 @@ app.post("/api/suggestions", async (req, res) => {
     // Parse fullyForked value (comes as string from form)
     const isFullyForked = fullyForked === 'true' || fullyForked === true;
 
-    // Create suggestion object in creators.json format
-    const suggestion = {
+    // Create pending creator (live: false until approved)
+    const newCreator = {
       name: name.trim(),
       image: image?.trim() || "",
       CreatedDate: new Date().toISOString(),
@@ -246,31 +250,13 @@ app.post("/api/suggestions", async (req, res) => {
         website: website?.trim() ? [{ url: website.trim(), visible: true }] : []
       },
       Notes: notes?.trim() || "",
-      submissionDate: new Date().toISOString(),
-      status: "pending"
+      live: false  // Pending approval
     };
 
-    // Read existing suggestions file or create empty array
-    let suggestions = [];
-    const suggestionsPath = "data/suggestions.json";
+    // Add new pending creator to database
+    db.addCreator(newCreator);
     
-    if (fs.existsSync(suggestionsPath)) {
-      try {
-        const data = fs.readFileSync(suggestionsPath, 'utf8');
-        suggestions = JSON.parse(data);
-      } catch (parseErr) {
-        console.error("Error parsing existing suggestions file:", parseErr);
-        suggestions = [];
-      }
-    }
-
-    // Add new suggestion
-    suggestions.push(suggestion);
-
-    // Write back to file
-    fs.writeFileSync(suggestionsPath, JSON.stringify(suggestions, null, 2));
-    
-    console.log(`New suggestion added for creator: ${name}`);
+    console.log(`New creator suggestion added: ${name}`);
     res.json({ success: true, message: "Suggestion submitted successfully!" });
     
   } catch (err) {
@@ -306,12 +292,19 @@ app.post("/api/suggested-edits", async (req, res) => {
       return res.status(400).json({ error: "Creator name is required" });
     }
 
+    // Find the original creator by name
+    const allCreators = db.getAllCreators();
+    const originalCreator = allCreators.find(c => c.name === (originalCreatorName || name));
+    
+    if (!originalCreator) {
+      return res.status(404).json({ error: "Original creator not found" });
+    }
+
     // Parse fullyForked status
     const isFullyForked = fullyForked === "true" || fullyForked === true;
 
-    // Create edit suggestion object
-    const editSuggestion = {
-      originalCreatorName: originalCreatorName || name,
+    // Create edit data
+    const editData = {
       name: name.trim(),
       image: image?.trim() || "",
       ExitDate: "",
@@ -329,30 +322,11 @@ app.post("/api/suggested-edits", async (req, res) => {
         lttforum: lttforum?.trim() ? [{ url: lttforum.trim(), visible: true }] : [],
         website: website?.trim() ? [{ url: website.trim(), visible: true }] : []
       },
-      Notes: notes?.trim() || "",
-      submissionDate: new Date().toISOString(),
-      status: "pending"
+      Notes: notes?.trim() || ""
     };
 
-    // Read existing suggested edits file or create empty array
-    let suggestedEdits = [];
-    const suggestedEditsPath = "data/suggestedEdits.json";
-    
-    if (fs.existsSync(suggestedEditsPath)) {
-      try {
-        const data = fs.readFileSync(suggestedEditsPath, 'utf8');
-        suggestedEdits = JSON.parse(data);
-      } catch (parseErr) {
-        console.error("Error parsing existing suggested edits file:", parseErr);
-        suggestedEdits = [];
-      }
-    }
-
-    // Add new edit suggestion
-    suggestedEdits.push(editSuggestion);
-
-    // Write back to file
-    fs.writeFileSync(suggestedEditsPath, JSON.stringify(suggestedEdits, null, 2));
+    // Add pending edit linked to original creator
+    db.addCreatorEdit(originalCreator.id, editData);
     
     console.log(`Edit suggestion added for creator: ${originalCreatorName} -> ${name}`);
     res.json({ success: true, message: "Edit suggestion submitted successfully!" });
@@ -469,7 +443,7 @@ app.post("/api/verify-token", async (req, res) => {
 // Admin API routes (protected)
 app.get("/api/admin/suggestions", isAdmin, (req, res) => {
   try {
-    const suggestions = JSON.parse(fs.readFileSync("data/suggestions.json"));
+    const suggestions = db.getPendingCreators();
     res.json(suggestions);
   } catch (err) {
     console.error("Error loading suggestions:", err);
@@ -479,7 +453,7 @@ app.get("/api/admin/suggestions", isAdmin, (req, res) => {
 
 app.get("/api/admin/suggested-edits", isAdmin, (req, res) => {
   try {
-    const suggestedEdits = JSON.parse(fs.readFileSync("data/suggestedEdits.json"));
+    const suggestedEdits = db.getPendingEdits();
     res.json(suggestedEdits);
   } catch (err) {
     console.error("Error loading suggested edits:", err);
@@ -487,12 +461,20 @@ app.get("/api/admin/suggested-edits", isAdmin, (req, res) => {
   }
 });
 
+app.get("/api/admin/creators", isAdmin, (req, res) => {
+  try {
+    const creators = db.getAllCreators();
+    res.json(creators);
+  } catch (err) {
+    console.error("Error loading creators:", err);
+    res.status(500).json({ error: "Failed to load creators" });
+  }
+});
+
 app.post("/api/admin/creators", isAdmin, (req, res) => {
   try {
     const newCreator = req.body;
-    const creators = JSON.parse(fs.readFileSync("data/creators.json"));
-    creators.push(newCreator);
-    fs.writeFileSync("data/creators.json", JSON.stringify(creators, null, 2));
+    db.addCreator(newCreator);
     res.json({ success: true, message: "Creator added successfully" });
   } catch (err) {
     console.error("Error adding creator:", err);
@@ -500,15 +482,13 @@ app.post("/api/admin/creators", isAdmin, (req, res) => {
   }
 });
 
-app.put("/api/admin/creators/:index", isAdmin, (req, res) => {
+app.put("/api/admin/creators/:id", isAdmin, (req, res) => {
   try {
-    const index = parseInt(req.params.index);
+    const id = req.params.id;
     const updatedCreator = req.body;
-    const creators = JSON.parse(fs.readFileSync("data/creators.json"));
     
-    if (index >= 0 && index < creators.length) {
-      creators[index] = updatedCreator;
-      fs.writeFileSync("data/creators.json", JSON.stringify(creators, null, 2));
+    const success = db.updateCreator(id, updatedCreator);
+    if (success) {
       res.json({ success: true, message: "Creator updated successfully" });
     } else {
       res.status(404).json({ error: "Creator not found" });
@@ -519,14 +499,12 @@ app.put("/api/admin/creators/:index", isAdmin, (req, res) => {
   }
 });
 
-app.delete("/api/admin/creators/:index", isAdmin, (req, res) => {
+app.delete("/api/admin/creators/:id", isAdmin, (req, res) => {
   try {
-    const index = parseInt(req.params.index);
-    const creators = JSON.parse(fs.readFileSync("data/creators.json"));
+    const id = req.params.id;
     
-    if (index >= 0 && index < creators.length) {
-      creators.splice(index, 1);
-      fs.writeFileSync("data/creators.json", JSON.stringify(creators, null, 2));
+    const success = db.deleteCreator(id);
+    if (success) {
       res.json({ success: true, message: "Creator deleted successfully" });
     } else {
       res.status(404).json({ error: "Creator not found" });
@@ -537,14 +515,12 @@ app.delete("/api/admin/creators/:index", isAdmin, (req, res) => {
   }
 });
 
-app.delete("/api/admin/suggestions/:index", isAdmin, (req, res) => {
+app.delete("/api/admin/suggestions/:id", isAdmin, (req, res) => {
   try {
-    const index = parseInt(req.params.index);
-    const suggestions = JSON.parse(fs.readFileSync("data/suggestions.json"));
+    const id = req.params.id;
     
-    if (index >= 0 && index < suggestions.length) {
-      suggestions.splice(index, 1);
-      fs.writeFileSync("data/suggestions.json", JSON.stringify(suggestions, null, 2));
+    const success = db.deleteCreator(id);
+    if (success) {
       res.json({ success: true, message: "Suggestion deleted successfully" });
     } else {
       res.status(404).json({ error: "Suggestion not found" });
@@ -555,21 +531,13 @@ app.delete("/api/admin/suggestions/:index", isAdmin, (req, res) => {
   }
 });
 
-app.put("/api/admin/suggestions/:index", isAdmin, (req, res) => {
+app.put("/api/admin/suggestions/:id", isAdmin, (req, res) => {
   try {
-    const index = parseInt(req.params.index);
+    const id = req.params.id;
     const updatedSuggestion = req.body;
-    const suggestions = JSON.parse(fs.readFileSync("data/suggestions.json"));
     
-    if (index >= 0 && index < suggestions.length) {
-      // Preserve submission date
-      const submissionDate = suggestions[index].submissionDate;
-      suggestions[index] = {
-        ...updatedSuggestion,
-        submissionDate: submissionDate
-      };
-      
-      fs.writeFileSync("data/suggestions.json", JSON.stringify(suggestions, null, 2));
+    const success = db.updateCreator(id, updatedSuggestion);
+    if (success) {
       res.json({ success: true, message: "Suggestion updated successfully" });
     } else {
       res.status(404).json({ error: "Suggestion not found" });
@@ -580,23 +548,13 @@ app.put("/api/admin/suggestions/:index", isAdmin, (req, res) => {
   }
 });
 
-app.post("/api/admin/suggestions/:index/approve", isAdmin, (req, res) => {
+app.post("/api/admin/suggestions/:id/approve", isAdmin, (req, res) => {
   try {
-    const index = parseInt(req.params.index);
-    const suggestions = JSON.parse(fs.readFileSync("data/suggestions.json"));
-    const creators = JSON.parse(fs.readFileSync("data/creators.json"));
+    const id = req.params.id;
     
-    if (index >= 0 && index < suggestions.length) {
-      const suggestion = suggestions[index];
-      const { status, submissionDate, ...creatorData } = suggestion;
-      creators.push(creatorData);
-      
-      fs.writeFileSync("data/creators.json", JSON.stringify(creators, null, 2));
-      
-      suggestions.splice(index, 1);
-      fs.writeFileSync("data/suggestions.json", JSON.stringify(suggestions, null, 2));
-      
-      res.json({ success: true, message: "Suggestion approved and added to creators" });
+    const success = db.setCreatorLive(id, true);
+    if (success) {
+      res.json({ success: true, message: "Suggestion approved and creator is now live" });
     } else {
       res.status(404).json({ error: "Suggestion not found" });
     }
@@ -607,35 +565,12 @@ app.post("/api/admin/suggestions/:index/approve", isAdmin, (req, res) => {
 });
 
 // Apply a suggested edit (update the creator with the edit's data)
-app.post("/api/admin/suggested-edits/:index/apply", isAdmin, (req, res) => {
+app.post("/api/admin/suggested-edits/:id/apply", isAdmin, (req, res) => {
   try {
-    const index = parseInt(req.params.index);
-    const suggestedEdits = JSON.parse(fs.readFileSync("data/suggestedEdits.json"));
-    const creators = JSON.parse(fs.readFileSync("data/creators.json"));
+    const id = req.params.id;
     
-    if (index >= 0 && index < suggestedEdits.length) {
-      const edit = suggestedEdits[index];
-      
-      // Find the original creator by name
-      const creatorIndex = creators.findIndex(c => c.name === edit.originalCreatorName);
-      
-      if (creatorIndex === -1) {
-        return res.status(404).json({ error: "Original creator not found" });
-      }
-      
-      // Update the creator with the edit's data (excluding metadata)
-      const { originalCreatorName, submissionDate, ...updatedData } = edit;
-      creators[creatorIndex] = {
-        ...creators[creatorIndex],
-        ...updatedData
-      };
-      
-      fs.writeFileSync("data/creators.json", JSON.stringify(creators, null, 2));
-      
-      // Remove the suggested edit
-      suggestedEdits.splice(index, 1);
-      fs.writeFileSync("data/suggestedEdits.json", JSON.stringify(suggestedEdits, null, 2));
-      
+    const success = db.approveCreatorEdit(id);
+    if (success) {
       res.json({ success: true, message: "Edit applied successfully" });
     } else {
       res.status(404).json({ error: "Suggested edit not found" });
@@ -647,14 +582,12 @@ app.post("/api/admin/suggested-edits/:index/apply", isAdmin, (req, res) => {
 });
 
 // Delete a suggested edit
-app.delete("/api/admin/suggested-edits/:index", isAdmin, (req, res) => {
+app.delete("/api/admin/suggested-edits/:id", isAdmin, (req, res) => {
   try {
-    const index = parseInt(req.params.index);
-    const suggestedEdits = JSON.parse(fs.readFileSync("data/suggestedEdits.json"));
+    const id = req.params.id;
     
-    if (index >= 0 && index < suggestedEdits.length) {
-      suggestedEdits.splice(index, 1);
-      fs.writeFileSync("data/suggestedEdits.json", JSON.stringify(suggestedEdits, null, 2));
+    const success = db.rejectCreatorEdit(id);
+    if (success) {
       res.json({ success: true, message: "Suggested edit deleted successfully" });
     } else {
       res.status(404).json({ error: "Suggested edit not found" });
@@ -662,6 +595,134 @@ app.delete("/api/admin/suggested-edits/:index", isAdmin, (req, res) => {
   } catch (err) {
     console.error("Error deleting suggested edit:", err);
     res.status(500).json({ error: "Failed to delete suggested edit" });
+  }
+});
+
+// ==================== ADS ADMIN ROUTES ====================
+
+app.get("/api/admin/ads", isAdmin, (req, res) => {
+  try {
+    const ads = db.getAllAds();
+    res.json(ads);
+  } catch (err) {
+    console.error("Error loading ads:", err);
+    res.status(500).json({ error: "Failed to load ads" });
+  }
+});
+
+app.get("/api/admin/ads/:id", isAdmin, (req, res) => {
+  try {
+    const ad = db.getAdById(req.params.id);
+    if (ad) {
+      res.json(ad);
+    } else {
+      res.status(404).json({ error: "Ad not found" });
+    }
+  } catch (err) {
+    console.error("Error loading ad:", err);
+    res.status(500).json({ error: "Failed to load ad" });
+  }
+});
+
+app.post("/api/admin/ads", isAdmin, (req, res) => {
+  try {
+    const adId = db.addAd(req.body);
+    res.json({ success: true, id: adId, message: "Ad created successfully" });
+  } catch (err) {
+    console.error("Error creating ad:", err);
+    res.status(500).json({ error: "Failed to create ad" });
+  }
+});
+
+app.put("/api/admin/ads/:id", isAdmin, (req, res) => {
+  try {
+    const success = db.updateAd(req.params.id, req.body);
+    if (success) {
+      res.json({ success: true, message: "Ad updated successfully" });
+    } else {
+      res.status(404).json({ error: "Ad not found" });
+    }
+  } catch (err) {
+    console.error("Error updating ad:", err);
+    res.status(500).json({ error: "Failed to update ad" });
+  }
+});
+
+app.delete("/api/admin/ads/:id", isAdmin, (req, res) => {
+  try {
+    const success = db.deleteAd(req.params.id);
+    if (success) {
+      res.json({ success: true, message: "Ad deleted successfully" });
+    } else {
+      res.status(404).json({ error: "Ad not found" });
+    }
+  } catch (err) {
+    console.error("Error deleting ad:", err);
+    res.status(500).json({ error: "Failed to delete ad" });
+  }
+});
+
+// ==================== FAQ ADMIN ROUTES ====================
+
+app.get("/api/admin/faq", isAdmin, (req, res) => {
+  try {
+    const faq = db.getAllFaq();
+    res.json(faq);
+  } catch (err) {
+    console.error("Error loading FAQ:", err);
+    res.status(500).json({ error: "Failed to load FAQ" });
+  }
+});
+
+app.get("/api/admin/faq/:id", isAdmin, (req, res) => {
+  try {
+    const faq = db.getFaqById(req.params.id);
+    if (faq) {
+      res.json(faq);
+    } else {
+      res.status(404).json({ error: "FAQ not found" });
+    }
+  } catch (err) {
+    console.error("Error loading FAQ:", err);
+    res.status(500).json({ error: "Failed to load FAQ" });
+  }
+});
+
+app.post("/api/admin/faq", isAdmin, (req, res) => {
+  try {
+    const faqId = db.addFaq(req.body);
+    res.json({ success: true, id: faqId, message: "FAQ created successfully" });
+  } catch (err) {
+    console.error("Error creating FAQ:", err);
+    res.status(500).json({ error: "Failed to create FAQ" });
+  }
+});
+
+app.put("/api/admin/faq/:id", isAdmin, (req, res) => {
+  try {
+    const success = db.updateFaq(req.params.id, req.body);
+    if (success) {
+      res.json({ success: true, message: "FAQ updated successfully" });
+    } else {
+      res.status(404).json({ error: "FAQ not found" });
+    }
+  } catch (err) {
+    console.error("Error updating FAQ:", err);
+    res.status(500).json({ error: "Failed to update FAQ" });
+  }
+});
+
+app.delete("/api/admin/faq/:id", isAdmin, (req, res) => {
+  try {
+    const success = db.deleteFaq(req.params.id);
+    if (success) {
+      res.json({ success: true, message: "FAQ deleted successfully" });
+    } else {
+      res.status(404).json({ error: "FAQ not found" });
+    }
+  } catch (err) {
+    console.error("Error deleting FAQ:", err);
+    res.status(500).json({ error: "Failed to delete FAQ" });
   }
 });
 
