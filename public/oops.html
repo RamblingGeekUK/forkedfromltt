@@ -17,8 +17,8 @@
       --text-secondary: #a1a1aa;
       --text-muted: #71717a;
       --border: rgba(255,255,255,0.1);
-      --warning: #f59e0b;
-      --warning-light: #fbbf24;
+      --warning: #7c3aed;
+      --warning-light: #a78bfa;
     }
     
     *, *::before, *::after {
@@ -45,7 +45,7 @@
       position: fixed;
       inset: 0;
       background: 
-        radial-gradient(ellipse at top, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at top, rgba(124, 58, 237, 0.14) 0%, transparent 50%),
         radial-gradient(ellipse at bottom right, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
       pointer-events: none;
       z-index: -1;
@@ -65,7 +65,7 @@
     }
     
     .card-header {
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(124, 58, 237, 0.08));
       border-bottom: 1px solid var(--border);
       padding: 2rem;
       text-align: center;
@@ -75,12 +75,12 @@
       width: 80px;
       height: 80px;
       margin: 0 auto 1.5rem;
-      background: linear-gradient(135deg, var(--warning), #d97706);
+      background: linear-gradient(135deg, var(--warning), #5b21b6);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.35);
       animation: wobble 2s ease-in-out infinite;
     }
     
@@ -215,7 +215,7 @@
     
     .date-badge {
       display: inline-block;
-      background: rgba(245, 158, 11, 0.15);
+      background: rgba(124, 58, 237, 0.18);
       color: var(--warning-light);
       padding: 0.25rem 0.75rem;
       border-radius: 100px;
