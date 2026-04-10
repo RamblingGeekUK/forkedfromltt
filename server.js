@@ -279,7 +279,8 @@ app.post("/api/suggested-edits", async (req, res) => {
       name, 
       originalCreatorName,
       fullyForked, 
-      image, 
+      image,
+      exitDate,
       youtube,
       youtube2,
       twitter, 
@@ -319,7 +320,7 @@ app.post("/api/suggested-edits", async (req, res) => {
     const editData = {
       name: name.trim(),
       image: image?.trim() || "",
-      ExitDate: "",
+      ExitDate: exitDate?.trim() || "",
       nicknames: [],
       FullyForked: isFullyForked,
       socials: {

@@ -700,6 +700,14 @@ function openSuggestEdit(creatorData) {
   document.getElementById('creatorImage').value = creatorData.image || '';
   document.getElementById('creatorNotes').value = creatorData.notes || '';
   
+  // Pre-fill exit date
+  if (creatorData.ExitDate) {
+    const exitDate = new Date(creatorData.ExitDate);
+    document.getElementById('exitDate').value = exitDate.toISOString().split('T')[0];
+  } else {
+    document.getElementById('exitDate').value = '';
+  }
+  
   // Pre-fill social media fields
   if (creatorData.socials) {
     // YouTube
