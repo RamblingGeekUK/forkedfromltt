@@ -4,13 +4,27 @@ const allCreatorsGrid = document.getElementById("allCreatorsGrid");
 // Hide grid initially
 if (allCreatorsGrid) allCreatorsGrid.style.display = "none";
 
+// Default placeholder image path
+const DEFAULT_CREATOR_IMAGE = 'images/default-creator.png';
+
+// Handle image load errors - fall back to placeholder
+function handleImageError(img) {
+  if (img.src !== DEFAULT_CREATOR_IMAGE && !img.src.endsWith(DEFAULT_CREATOR_IMAGE)) {
+    img.src = DEFAULT_CREATOR_IMAGE;
+  }
+}
+
 // Check authentication status and update navbar
 async function checkAuthStatus() {
+  const adminNavItem = document.getElementById('adminNavItem');
+  
+  // Preserve current content until we get a response
+  const currentContent = adminNavItem.innerHTML;
+  
   try {
     const response = await fetch('/api/auth/user');
     const data = await response.json();
     
-    const adminNavItem = document.getElementById('adminNavItem');
     if (data.authenticated) {
       if (data.user.isAdmin) {
         adminNavItem.innerHTML = '<a class="nav-link btn btn-outline-light" href="/admin.html">Admin Dashboard</a>';
@@ -22,6 +36,10 @@ async function checkAuthStatus() {
     }
   } catch (error) {
     console.error('Error checking auth status:', error);
+    // Keep current content on error, or show login link if empty
+    if (!currentContent.trim()) {
+      adminNavItem.innerHTML = '<a class="nav-link" href="/login.html">Admin Login</a>';
+    }
   }
 }
 
@@ -38,7 +56,7 @@ function createCreatorCard(channel) {
     const notAdLabel = channel.ad === false ? `<span style="font-size:0.8em;" class="badge bg-warning text-dark ms-2">NOT AN AD</span>` : '';
     col.innerHTML = `
       <div class="card h-100 shadow-lg border-0 border-warning" style="border-width: 2px !important;">
-        <img src="${channel.thumbnail || channel.image || ''}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;">
+        <img src="${channel.thumbnail || channel.image || DEFAULT_CREATOR_IMAGE}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;" onerror="handleImageError(this)">
         <div class="card-body d-flex flex-column justify-content-between">
           <h5 class="card-title fw-semibold text-warning">${channel.channel} ${notAdLabel}</h5>
           <a href="${channel.website}" target="_blank" class="btn btn-warning w-100 mt-auto">Visit Website</a>
@@ -49,8 +67,7 @@ function createCreatorCard(channel) {
     // Render normal creator card with flip functionality
     const hasVideoData = channel.videoId && channel.thumbnail;
     const creatorImageSrc = channel.image || channel.thumbnail || '';
-    const defaultImage = 'images/default-creator.png';
-    const finalImageSrc = creatorImageSrc && creatorImageSrc.trim() !== '' ? creatorImageSrc : defaultImage;
+    const finalImageSrc = creatorImageSrc && creatorImageSrc.trim() !== '' ? creatorImageSrc : DEFAULT_CREATOR_IMAGE;
     
     // Build social media icons dynamically
     let socialIcons = '';
@@ -159,9 +176,9 @@ function createCreatorCard(channel) {
               <div class="position-relative">
                 ${hasVideoData ? 
                   `<a href="https://youtube.com/watch?v=${channel.videoId}" target="_blank" onclick="event.stopPropagation();">
-                    <img src="${channel.thumbnail}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;">
+                    <img src="${channel.thumbnail}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;" onerror="handleImageError(this)">
                   </a>` :
-                  `<img src="${finalImageSrc}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;">`
+                  `<img src="${finalImageSrc}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;" onerror="handleImageError(this)">`
                 }
                 <!-- Status Label -->
                 <div class="status-label ${channel.FullyForked ? 'fully-forked' : 'branching-out'}">
