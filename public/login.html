@@ -76,21 +76,16 @@
     }
     
     .login-header .logo {
-      width: 64px;
-      height: 64px;
-      background: linear-gradient(135deg, var(--primary), #8b5cf6);
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 80px;
+      height: 80px;
       margin: 0 auto 1.5rem;
-      box-shadow: 0 8px 24px var(--glow);
+      filter: drop-shadow(0 8px 24px var(--glow));
     }
     
-    .login-header .logo svg {
-      width: 32px;
-      height: 32px;
-      fill: white;
+    .login-header .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
     
     .login-header h1 {
@@ -212,11 +207,7 @@
   <div class="login-container">
     <div class="login-header">
       <div class="logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-          <path d="M2 17l10 5 10-5"/>
-          <path d="M2 12l10 5 10-5"/>
-        </svg>
+        <img src="images/logo.png" alt="Forked From LTT">
       </div>
       <h1>Welcome Back</h1>
       <p>Sign in to access the admin dashboard</p>
