@@ -5,64 +5,166 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Forked From LTT</title>
   <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
-  <link rel="stylesheet" href="css/style.css">
   <style>
+    :root {
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --bg-base: #09090b;
+      --bg-elevated: #18181b;
+      --bg-surface: #27272a;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --border: rgba(255,255,255,0.1);
+      --glow: rgba(99, 102, 241, 0.15);
+    }
+    
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    
+    html {
+      color-scheme: dark;
+    }
+    
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--bg-base);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 1.5rem;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at top, rgba(99, 102, 241, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    
     .login-container {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
       padding: 3rem;
-      max-width: 400px;
+      max-width: 420px;
       width: 100%;
+      position: relative;
+      overflow: hidden;
     }
+    
+    .login-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), #8b5cf6);
+    }
+    
     .login-header {
       text-align: center;
       margin-bottom: 2rem;
     }
+    
+    .login-header .logo {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 8px 24px var(--glow);
+    }
+    
+    .login-header .logo svg {
+      width: 32px;
+      height: 32px;
+      fill: white;
+    }
+    
     .login-header h1 {
-      color: #333;
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+      letter-spacing: -0.5px;
     }
+    
     .login-header p {
-      color: #666;
+      color: var(--text-muted);
       font-size: 0.9rem;
+      margin: 0;
     }
+    
+    .admin-notice {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    
+    .admin-notice svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--primary-light);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    
     .github-btn {
-      background-color: #24292e;
-      color: white;
+      background: var(--text-primary);
+      color: var(--bg-base);
       border: none;
-      padding: 1rem;
-      border-radius: 8px;
-      font-size: 1.1rem;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 500;
       width: 100%;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
+      text-decoration: none;
     }
+    
     .github-btn:hover {
-      background-color: #2f363d;
+      background: var(--text-secondary);
+      color: var(--bg-base);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
     }
+    
     .github-btn svg {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       fill: currentColor;
     }
+    
     .divider {
       text-align: center;
       margin: 2rem 0;
       position: relative;
     }
+    
     .divider::before {
       content: '';
       position: absolute;
@@ -70,52 +172,70 @@
       left: 0;
       right: 0;
       height: 1px;
-      background: #ddd;
+      background: var(--border);
     }
+    
     .divider span {
-      background: white;
+      background: var(--bg-elevated);
       padding: 0 1rem;
       position: relative;
-      color: #666;
+      color: var(--text-muted);
+      font-size: 0.85rem;
     }
+    
     .back-home {
       text-align: center;
-      margin-top: 1.5rem;
     }
+    
     .back-home a {
-      color: #667eea;
+      color: var(--text-muted);
       text-decoration: none;
-    }
-    .back-home a:hover {
-      text-decoration: underline;
-    }
-    .admin-notice {
-      background-color: #fff3cd;
-      border: 1px solid #ffc107;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
       font-size: 0.9rem;
-      color: #856404;
+      transition: color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .back-home a:hover {
+      color: var(--primary-light);
+    }
+    
+    .back-home a svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
     }
   </style>
 </head>
 <body>
   <div class="login-container">
     <div class="login-header">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
       <h1>Welcome Back</h1>
-      <p>Sign in to access the admin area</p>
+      <p>Sign in to access the admin dashboard</p>
     </div>
 
     <div class="admin-notice">
-      <strong>Admin Access:</strong> Only authorized GitHub accounts can access the admin panel.
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
+      </svg>
+      <span>Only authorized GitHub accounts can access the admin panel.</span>
     </div>
 
-    <a href="/auth/github" class="github-btn" style="text-decoration: none;">
+    <a href="/auth/github" class="github-btn">
       <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
         <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
       </svg>
-      <span>Sign in with GitHub</span>
+      <span>Continue with GitHub</span>
     </a>
 
     <div class="divider">
@@ -123,7 +243,13 @@
     </div>
 
     <div class="back-home">
-      <a href="/">← Back to Home</a>
+      <a href="/">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Back to Home
+      </a>
     </div>
   </div>
 

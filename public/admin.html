@@ -266,6 +266,7 @@
       max-height: calc(100vh - 380px);
       scrollbar-width: thin;
       scrollbar-color: var(--bg-hover) transparent;
+      background: var(--bg-elevated);
     }
     
     .table {
@@ -274,6 +275,7 @@
       border-spacing: 0;
       color: var(--text-primary);
       margin: 0;
+      background: var(--bg-elevated);
     }
     
     .table thead {
@@ -294,8 +296,13 @@
       white-space: nowrap;
     }
     
+    .table tbody {
+      background: var(--bg-elevated);
+    }
+    
     .table tbody tr {
       transition: background 0.15s ease;
+      background: var(--bg-elevated);
     }
     
     .table tbody tr:hover {
@@ -308,10 +315,17 @@
       vertical-align: middle;
       font-size: 0.875rem;
       color: var(--text-secondary);
+      background: transparent;
     }
     
     .table tbody tr:last-child td {
       border-bottom: none;
+    }
+    
+    /* Override Bootstrap table styles */
+    .table > :not(caption) > * > * {
+      background-color: transparent;
+      box-shadow: none;
     }
 
     /* ===== BUTTONS ===== */
