@@ -471,6 +471,19 @@ app.get("/api/admin/creators", isAdmin, (req, res) => {
   }
 });
 
+app.get("/api/admin/creators/:id", isAdmin, (req, res) => {
+  try {
+    const creator = db.getCreatorById(req.params.id);
+    if (!creator) {
+      return res.status(404).json({ error: "Creator not found" });
+    }
+    res.json(creator);
+  } catch (err) {
+    console.error("Error loading creator:", err);
+    res.status(500).json({ error: "Failed to load creator" });
+  }
+});
+
 app.post("/api/admin/creators", isAdmin, (req, res) => {
   try {
     const newCreator = req.body;

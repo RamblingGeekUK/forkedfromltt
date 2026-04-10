@@ -571,6 +571,7 @@ async function deleteCreator(id, name) {
 async function viewDetails(id, type) {
   try {
     let data;
+    let originalData = null;
     
     if (type === 'suggestion') {
       const response = await fetch('/api/admin/suggestions');
@@ -580,63 +581,25 @@ async function viewDetails(id, type) {
       const response = await fetch('/api/admin/suggested-edits');
       const edits = await response.json();
       data = edits.find(e => e.id === id);
-    }
-    
-    // Build detailed view HTML
-    let details = `
-      <div class="details-container">
-        <div class="detail-section">
-          <h6>Basic Information</h6>
-          <div class="detail-row">
-            <span class="detail-label">Name:</span>
-            <span class="detail-value">${escapeHtml(data.name)}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Fully Forked:</span>
-            <span class="detail-value"><span class="badge ${data.FullyForked ? 'bg-success' : 'bg-secondary'}">${data.FullyForked ? 'Yes' : 'No'}</span></span>
-          </div>
-          ${data.image ? `
-            <div class="detail-row">
-              <span class="detail-label">Image:</span>
-              <div class="detail-image"><img src="${data.image}" alt="${escapeHtml(data.name)}"></div>
-            </div>
-          ` : ''}
-          ${data.Notes ? `
-            <div class="detail-row">
-              <span class="detail-label">Notes:</span>
-              <span class="detail-value">${escapeHtml(data.Notes)}</span>
-            </div>
-          ` : ''}
-        </div>
-        
-        <div class="detail-section">
-          <h6>Social Media</h6>
-    `;
-    
-    let hasSocials = false;
-    Object.entries(data.socials || {}).forEach(([platform, links]) => {
-      if (links && links.length > 0) {
-        hasSocials = true;
-        links.forEach(link => {
-          const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
-          details += `
-            <div class="detail-row">
-              <span class="detail-label">${platformName}:</span>
-              <span class="detail-value"><a href="${link.url}" target="_blank" class="text-info">${escapeHtml(link.url)}</a></span>
-            </div>
-          `;
-        });
+      
+      // Fetch the original creator for comparison
+      if (data && data.parentId) {
+        const originalResponse = await fetch(`/api/admin/creators/${data.parentId}`);
+        if (originalResponse.ok) {
+          originalData = await originalResponse.json();
+        }
       }
-    });
-    
-    if (!hasSocials) {
-      details += '<p class="text-muted">No social media links provided</p>';
     }
     
-    details += `
-        </div>
-      </div>
-    `;
+    let details = '';
+    
+    if (type === 'edit' && originalData) {
+      // Show comparison view for edits
+      details = buildComparisonView(originalData, data);
+    } else {
+      // Show simple view for new suggestions
+      details = buildSimpleView(data);
+    }
     
     document.getElementById('editDetailsContent').innerHTML = details;
     const modal = new bootstrap.Modal(document.getElementById('viewEditModal'));
@@ -646,6 +609,244 @@ async function viewDetails(id, type) {
     console.error('Error viewing details:', error);
     alert('Failed to load details');
   }
+}
+
+// Build comparison view showing original vs proposed changes
+function buildComparisonView(original, proposed) {
+  let html = `
+    <div class="comparison-container">
+      <style>
+        .comparison-container { color: var(--text-primary, #fafafa); }
+        .comparison-header {
+          display: grid;
+          grid-template-columns: 140px 1fr 1fr;
+          gap: 1rem;
+          padding: 0.75rem 1rem;
+          background: var(--bg-surface, #27272a);
+          border-radius: 8px;
+          margin-bottom: 1rem;
+          font-weight: 600;
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          color: var(--text-muted, #71717a);
+        }
+        .comparison-row {
+          display: grid;
+          grid-template-columns: 140px 1fr 1fr;
+          gap: 1rem;
+          padding: 0.75rem 1rem;
+          border-bottom: 1px solid var(--border, rgba(255,255,255,0.1));
+          align-items: start;
+        }
+        .comparison-row:last-child { border-bottom: none; }
+        .comparison-label {
+          font-weight: 500;
+          color: var(--text-muted, #71717a);
+          font-size: 0.875rem;
+        }
+        .comparison-value {
+          font-size: 0.875rem;
+          word-break: break-word;
+        }
+        .comparison-value.original {
+          color: var(--text-secondary, #a1a1aa);
+        }
+        .comparison-value.proposed {
+          color: var(--text-primary, #fafafa);
+        }
+        .comparison-value.changed {
+          background: rgba(34, 197, 94, 0.1);
+          border: 1px solid rgba(34, 197, 94, 0.3);
+          padding: 0.5rem 0.75rem;
+          border-radius: 6px;
+          color: #4ade80;
+        }
+        .comparison-value.unchanged {
+          color: var(--text-muted, #71717a);
+          font-style: italic;
+        }
+        .comparison-section {
+          margin-bottom: 1.5rem;
+        }
+        .comparison-section h6 {
+          margin-bottom: 0.75rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 1px solid var(--border, rgba(255,255,255,0.1));
+          font-size: 0.875rem;
+          font-weight: 600;
+        }
+        .comparison-image {
+          max-width: 120px;
+          border-radius: 6px;
+          border: 1px solid var(--border, rgba(255,255,255,0.1));
+        }
+        .no-change { opacity: 0.5; }
+        .badge-changed {
+          display: inline-block;
+          padding: 0.125rem 0.5rem;
+          background: rgba(34, 197, 94, 0.15);
+          color: #4ade80;
+          border-radius: 100px;
+          font-size: 0.7rem;
+          font-weight: 500;
+          margin-left: 0.5rem;
+        }
+      </style>
+      
+      <div class="comparison-section">
+        <h6>Basic Information</h6>
+        <div class="comparison-header">
+          <span>Field</span>
+          <span>Current Value</span>
+          <span>Proposed Change</span>
+        </div>
+  `;
+  
+  // Compare basic fields
+  html += buildComparisonRow('Name', original.name, proposed.name);
+  html += buildComparisonRow('Fully Forked', 
+    original.FullyForked ? 'Yes' : 'No', 
+    proposed.FullyForked ? 'Yes' : 'No',
+    'badge'
+  );
+  html += buildComparisonRow('Exit Date', original.ExitDate || 'Not set', proposed.ExitDate || 'Not set');
+  html += buildComparisonRow('Notes', original.Notes || 'None', proposed.Notes || 'None');
+  html += buildComparisonRow('Nicknames', 
+    (original.nicknames || []).join(', ') || 'None', 
+    (proposed.nicknames || []).join(', ') || 'None'
+  );
+  
+  // Compare images
+  const originalImg = original.image ? `<img src="${original.image}" class="comparison-image" onerror="this.src='images/default-creator.png'">` : '<span class="text-muted">No image</span>';
+  const proposedImg = proposed.image ? `<img src="${proposed.image}" class="comparison-image" onerror="this.src='images/default-creator.png'">` : '<span class="text-muted">No image</span>';
+  const imageChanged = original.image !== proposed.image;
+  
+  html += `
+    <div class="comparison-row">
+      <span class="comparison-label">Image${imageChanged ? '<span class="badge-changed">Changed</span>' : ''}</span>
+      <div class="comparison-value original">${originalImg}</div>
+      <div class="comparison-value proposed ${imageChanged ? 'changed' : 'unchanged'}">${proposedImg}</div>
+    </div>
+  `;
+  
+  html += `</div>`;
+  
+  // Compare social media
+  html += `
+    <div class="comparison-section">
+      <h6>Social Media</h6>
+      <div class="comparison-header">
+        <span>Platform</span>
+        <span>Current</span>
+        <span>Proposed</span>
+      </div>
+  `;
+  
+  // Get all platforms from both original and proposed
+  const allPlatforms = new Set([
+    ...Object.keys(original.socials || {}),
+    ...Object.keys(proposed.socials || {})
+  ]);
+  
+  allPlatforms.forEach(platform => {
+    const originalLinks = (original.socials?.[platform] || []).map(l => l.url).join(', ') || 'None';
+    const proposedLinks = (proposed.socials?.[platform] || []).map(l => l.url).join(', ') || 'None';
+    const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
+    html += buildComparisonRow(platformName, originalLinks, proposedLinks);
+  });
+  
+  if (allPlatforms.size === 0) {
+    html += '<p class="text-muted" style="padding: 1rem;">No social media links</p>';
+  }
+  
+  html += `</div></div>`;
+  
+  return html;
+}
+
+// Build a single comparison row
+function buildComparisonRow(label, originalValue, proposedValue, type = 'text') {
+  const hasChanged = originalValue !== proposedValue;
+  const changedBadge = hasChanged ? '<span class="badge-changed">Changed</span>' : '';
+  
+  let originalDisplay = escapeHtml(originalValue);
+  let proposedDisplay = escapeHtml(proposedValue);
+  
+  if (type === 'badge') {
+    const origClass = originalValue === 'Yes' ? 'bg-success' : 'bg-secondary';
+    const propClass = proposedValue === 'Yes' ? 'bg-success' : 'bg-secondary';
+    originalDisplay = `<span class="badge ${origClass}">${originalValue}</span>`;
+    proposedDisplay = `<span class="badge ${propClass}">${proposedValue}</span>`;
+  }
+  
+  return `
+    <div class="comparison-row ${hasChanged ? '' : 'no-change'}">
+      <span class="comparison-label">${label}${changedBadge}</span>
+      <div class="comparison-value original">${originalDisplay}</div>
+      <div class="comparison-value proposed ${hasChanged ? 'changed' : 'unchanged'}">${proposedDisplay}</div>
+    </div>
+  `;
+}
+
+// Build simple view for new suggestions
+function buildSimpleView(data) {
+  let details = `
+    <div class="details-container">
+      <div class="detail-section">
+        <h6>Basic Information</h6>
+        <div class="detail-row">
+          <span class="detail-label">Name:</span>
+          <span class="detail-value">${escapeHtml(data.name)}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Fully Forked:</span>
+          <span class="detail-value"><span class="badge ${data.FullyForked ? 'bg-success' : 'bg-secondary'}">${data.FullyForked ? 'Yes' : 'No'}</span></span>
+        </div>
+        ${data.image ? `
+          <div class="detail-row">
+            <span class="detail-label">Image:</span>
+            <div class="detail-image"><img src="${data.image}" alt="${escapeHtml(data.name)}" onerror="this.src='images/default-creator.png'"></div>
+          </div>
+        ` : ''}
+        ${data.Notes ? `
+          <div class="detail-row">
+            <span class="detail-label">Notes:</span>
+            <span class="detail-value">${escapeHtml(data.Notes)}</span>
+          </div>
+        ` : ''}
+      </div>
+      
+      <div class="detail-section">
+        <h6>Social Media</h6>
+  `;
+  
+  let hasSocials = false;
+  Object.entries(data.socials || {}).forEach(([platform, links]) => {
+    if (links && links.length > 0) {
+      hasSocials = true;
+      links.forEach(link => {
+        const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
+        details += `
+          <div class="detail-row">
+            <span class="detail-label">${platformName}:</span>
+            <span class="detail-value"><a href="${link.url}" target="_blank" class="text-info">${escapeHtml(link.url)}</a></span>
+          </div>
+        `;
+      });
+    }
+  });
+  
+  if (!hasSocials) {
+    details += '<p class="text-muted">No social media links provided</p>';
+  }
+  
+  details += `
+      </div>
+    </div>
+  `;
+  
+  return details;
 }
 
 // Show/hide loading indicator
