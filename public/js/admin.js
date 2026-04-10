@@ -404,7 +404,7 @@ function getFormData() {
   const notes = document.getElementById('editNotes').value.trim();
   const createdDate = document.getElementById('editCreatedDate').value;
   const exitDate = document.getElementById('editExitDate').value;
-  const fullyForked = document.getElementById('editFullyForkedYes').checked;
+  const fullyForked = document.getElementById('editFullyForked').value === 'true';
   const nicknamesStr = document.getElementById('editNicknames').value.trim();
   
   // Parse nicknames
@@ -629,12 +629,8 @@ async function editCreator(id) {
       document.getElementById('editExitDate').value = '';
     }
     
-    // Set Fully Forked status via radio buttons
-    if (creator.FullyForked === true) {
-      document.getElementById('editFullyForkedYes').checked = true;
-    } else {
-      document.getElementById('editFullyForkedNo').checked = true;
-    }
+    // Set Fully Forked status via select
+    document.getElementById('editFullyForked').value = creator.FullyForked === true ? 'true' : 'false';
     
     // Set nicknames
     if (creator.nicknames && creator.nicknames.length > 0) {
