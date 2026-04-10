@@ -11,6 +11,15 @@
 <body>
   <div id="shared-navbar"></div>
   <div class="container py-4 site-content">
+    <div class="incident-banner" id="incidentBanner" role="alert">
+      <div class="incident-banner-content">
+        <span class="incident-badge">Temporary Notice</span>
+        <p>
+          We had a data incident between 8th and 9th April 2026. Read the full update here:
+          <a href="/oops.html">Status Statement</a>
+        </p>
+      </div>
+    </div>
     <!-- Single grid for all creators -->
     <div id="allCreatorsGrid" class="row g-4" style="display:none;"></div>
   </div>
@@ -21,6 +30,18 @@
   <script src="js/faq.js"></script>
   <script src="js/suggestions.js"></script>
   <script>
+    // Hide temporary incident banner after 7 days from 10 Apr 2026
+    (function () {
+      const banner = document.getElementById('incidentBanner');
+      if (!banner) return;
+
+      // Expires at start of 18 Apr 2026 local time (7 full days from 10 Apr)
+      const expiresAt = new Date('2026-04-18T00:00:00');
+      if (new Date() >= expiresAt) {
+        banner.style.display = 'none';
+      }
+    })();
+
     // Dynamically load shared navbar
     fetch('navbar.html')
       .then(res => res.text())

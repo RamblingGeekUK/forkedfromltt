@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oops! We Dropped Something - Forked From LTT</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link href="css/vendor/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --bg-base: #09090b;
+      --bg-elevated: #18181b;
+      --bg-surface: #27272a;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --border: rgba(255,255,255,0.1);
+      --warning: #f59e0b;
+      --warning-light: #fbbf24;
+    }
+    
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    
+    html {
+      color-scheme: dark;
+    }
+    
+    body {
+      background: var(--bg-base);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-primary);
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at top, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .container {
+      max-width: 700px;
+      width: 100%;
+    }
+    
+    .card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+    }
+    
+    .card-header {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+      border-bottom: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    .drop-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(135deg, var(--warning), #d97706);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+      animation: wobble 2s ease-in-out infinite;
+    }
+    
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+    
+    .drop-icon svg {
+      width: 40px;
+      height: 40px;
+      fill: white;
+    }
+    
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+    
+    .subtitle {
+      color: var(--warning-light);
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .card-body {
+      padding: 2rem;
+    }
+    
+    .intro {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .intro strong {
+      color: var(--text-primary);
+    }
+    
+    .details {
+      background: var(--bg-surface);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .details h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 0 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .details h2 svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--warning);
+    }
+    
+    .details ul {
+      margin: 0;
+      padding-left: 1.25rem;
+      color: var(--text-secondary);
+    }
+    
+    .details li {
+      margin-bottom: 0.75rem;
+      line-height: 1.6;
+    }
+    
+    .details li:last-child {
+      margin-bottom: 0;
+    }
+    
+    .apology {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+      padding: 1.25rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .apology strong {
+      color: var(--primary-light);
+    }
+    
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+    
+    .home-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+      color: white;
+    }
+    
+    .home-link svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+    
+    .footer-note {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+    
+    .date-badge {
+      display: inline-block;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning-light);
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <div class="drop-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <h1>Oops! We Dropped Something...</h1>
+        <p class="subtitle">And no, it wasn't a GPU this time.</p>
+      </div>
+      
+      <div class="card-body">
+        <p class="intro">
+          Look, we've all seen Linus drop things — CPUs, GPUs, servers, the occasional dignity. 
+          Well, it turns out <strong>we're no different</strong>. Except instead of expensive hardware, 
+          we managed to drop some of our database. Classic move, really.
+        </p>
+        
+        <span class="date-badge">8th - 9th April 2026</span>
+        
+        <div class="details">
+          <h2>
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            What Happened?
+          </h2>
+          <ul>
+            <li><strong>When:</strong> Between 8th and 9th April 2026</li>
+            <li><strong>Why:</strong> This was our first rodeo with the hosting platform, and let's just say we learned a few things the hard way about how their system handles data persistence.</li>
+            <li><strong>The good news:</strong> We've recovered the data and we believe everything is back to normal.</li>
+            <li><strong>The honest bit:</strong> It's difficult to be 100% certain nothing slipped through the cracks.</li>
+          </ul>
+        </div>
+        
+        <div class="apology">
+          <strong>We sincerely apologise for any inconvenience.</strong> If you notice anything missing or incorrect, 
+          please don't hesitate to submit a suggestion or edit through the site. We appreciate your patience 
+          and understanding while we figure out how not to drop things.
+        </div>
+        
+        <a href="/" class="home-link">
+          <svg viewBox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+          </svg>
+          Back to Home
+        </a>
+        
+        <p class="footer-note">
+          At least we didn't drop a $10,000 server rack. Yet.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
