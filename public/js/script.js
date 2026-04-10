@@ -21,6 +21,8 @@ async function checkAuthStatus() {
   // Preserve current content until we get a response
   const currentContent = adminNavItem.innerHTML;
   
+  const loginIcon = '<a class="nav-link" href="/login.html" title="Admin Login"><svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg></a>';
+  
   try {
     const response = await fetch('/api/auth/user');
     const data = await response.json();
@@ -32,13 +34,13 @@ async function checkAuthStatus() {
         adminNavItem.innerHTML = `<span class="nav-link">Hi, ${data.user.username}!</span> <a class="nav-link" href="/auth/logout">Logout</a>`;
       }
     } else {
-      adminNavItem.innerHTML = '<a class="nav-link" href="/login.html">Admin Login</a>';
+      adminNavItem.innerHTML = loginIcon;
     }
   } catch (error) {
     console.error('Error checking auth status:', error);
-    // Keep current content on error, or show login link if empty
+    // Keep current content on error, or show login icon if empty
     if (!currentContent.trim()) {
-      adminNavItem.innerHTML = '<a class="nav-link" href="/login.html">Admin Login</a>';
+      adminNavItem.innerHTML = loginIcon;
     }
   }
 }
@@ -297,24 +299,148 @@ function showPage(event, pageIndex) {
   }
 }
 
-// Function to populate a grid with creators
+// Function to populate a grid with creators (with pagination)
 function populateGrid(gridElement, creators, showNoResultsMessage = true) {
+  // Store current displayed creators for pagination
+  currentDisplayedCreators = creators;
+  
+  const totalPages = Math.ceil(creators.length / creatorsPerPage);
+  
+  // Ensure current page is valid
+  if (currentPage > totalPages) currentPage = totalPages;
+  if (currentPage < 1) currentPage = 1;
+  
+  // Get creators for current page
+  const startIndex = (currentPage - 1) * creatorsPerPage;
+  const endIndex = startIndex + creatorsPerPage;
+  const pageCreators = creators.slice(startIndex, endIndex);
+  
   gridElement.innerHTML = "";
   if (creators.length === 0 && showNoResultsMessage) {
     gridElement.innerHTML = '<div class="text-center text-info w-100 py-5">No creators found.</div>';
   } else {
-    creators.forEach(creator => {
+    pageCreators.forEach(creator => {
       const col = createCreatorCard(creator);
       gridElement.appendChild(col);
     });
   }
   gridElement.style.display = "";
+  
+  // Render pagination controls
+  renderPagination(creators.length, totalPages);
+}
+
+// Render pagination controls
+function renderPagination(totalCreators, totalPages) {
+  let paginationContainer = document.getElementById('paginationContainer');
+  
+  // Create the pagination container if it doesn't exist
+  if (!paginationContainer) {
+    paginationContainer = document.createElement('div');
+    paginationContainer.id = 'paginationContainer';
+    paginationContainer.className = 'pagination-container';
+    const gridElement = document.getElementById('allCreatorsGrid');
+    if (gridElement) {
+      gridElement.parentNode.insertBefore(paginationContainer, gridElement.nextSibling);
+    }
+  }
+  
+  // Don't show pagination if there's only one page
+  if (totalPages <= 1) {
+    paginationContainer.innerHTML = '';
+    return;
+  }
+  
+  // Build pagination HTML
+  let html = '<nav aria-label="Creator pagination"><ul class="pagination">';
+  
+  // Previous button
+  html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+    <a class="page-link" href="#" onclick="goToPage(${currentPage - 1}); return false;" aria-label="Previous">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  </li>`;
+  
+  // Page numbers with smart truncation
+  const maxVisiblePages = 7;
+  let startPage = 1;
+  let endPage = totalPages;
+  
+  if (totalPages > maxVisiblePages) {
+    const halfVisible = Math.floor(maxVisiblePages / 2);
+    startPage = Math.max(1, currentPage - halfVisible);
+    endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage < maxVisiblePages - 1) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+  }
+  
+  // First page and ellipsis if needed
+  if (startPage > 1) {
+    html += `<li class="page-item"><a class="page-link" href="#" onclick="goToPage(1); return false;">1</a></li>`;
+    if (startPage > 2) {
+      html += '<li class="page-item disabled"><span class="page-link">…</span></li>';
+    }
+  }
+  
+  // Page numbers
+  for (let i = startPage; i <= endPage; i++) {
+    html += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+      <a class="page-link" href="#" onclick="goToPage(${i}); return false;">${i}</a>
+    </li>`;
+  }
+  
+  // Last page and ellipsis if needed
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      html += '<li class="page-item disabled"><span class="page-link">…</span></li>';
+    }
+    html += `<li class="page-item"><a class="page-link" href="#" onclick="goToPage(${totalPages}); return false;">${totalPages}</a></li>`;
+  }
+  
+  // Next button
+  html += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+    <a class="page-link" href="#" onclick="goToPage(${currentPage + 1}); return false;" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  </li>`;
+  
+  html += '</ul></nav>';
+  
+  // Add page info
+  const startItem = (currentPage - 1) * creatorsPerPage + 1;
+  const endItem = Math.min(currentPage * creatorsPerPage, totalCreators);
+  html += `<div class="pagination-info">Showing ${startItem}-${endItem} of ${totalCreators} creators</div>`;
+  
+  paginationContainer.innerHTML = html;
+}
+
+// Go to specific page
+function goToPage(page) {
+  const totalPages = Math.ceil(currentDisplayedCreators.length / creatorsPerPage);
+  if (page < 1 || page > totalPages) return;
+  
+  currentPage = page;
+  
+  // Scroll to top of grid
+  const gridElement = document.getElementById('allCreatorsGrid');
+  if (gridElement) {
+    gridElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  
+  populateGrid(allCreatorsGrid, currentDisplayedCreators);
 }
 
 // Global variables for search functionality
 let allCreatorsData = [];
 let originalAllCreators = [];
 let currentFilter = 'all';
+
+// Pagination variables
+let currentPage = 1;
+const creatorsPerPage = 24;
+let currentDisplayedCreators = [];
 
 // Fetch creators and populate both tabs
 fetch("/api/creators")
@@ -512,6 +638,9 @@ function selectCreator(index) {
 }
 
 function filterMainGrids(filteredCreators) {
+  // Reset to page 1 when search results change
+  currentPage = 1;
+  
   // Update single grid with filtered creators
   if (allCreatorsGrid) {
     populateGrid(allCreatorsGrid, filteredCreators, false);
@@ -530,6 +659,9 @@ function applyStatusFilter(creators) {
 }
 
 function applyFilters() {
+  // Reset to page 1 when filters change
+  currentPage = 1;
+  
   // Apply current filter to original data
   const filteredCreators = applyStatusFilter(originalAllCreators);
   

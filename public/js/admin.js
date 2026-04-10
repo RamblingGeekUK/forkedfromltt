@@ -291,6 +291,7 @@ async function editSuggestion(id) {
     // Set social media fields
     const socials = suggestion.socials || {};
     document.getElementById('editYoutube').value = socials.youtube?.[0]?.url || '';
+    document.getElementById('editYoutube2').value = socials.youtube?.[1]?.url || '';
     document.getElementById('editTwitter').value = socials.twitter?.[0]?.url || '';
     document.getElementById('editInstagram').value = socials.instagram?.[0]?.url || '';
     document.getElementById('editTwitch').value = socials.twitch?.[0]?.url || '';
@@ -426,6 +427,9 @@ function getFormData() {
   // Add social URLs if provided
   const youtubeUrl = document.getElementById('editYoutube').value.trim();
   if (youtubeUrl) socials.youtube.push({ channelId: "", url: youtubeUrl, visible: true });
+  
+  const youtubeUrl2 = document.getElementById('editYoutube2').value.trim();
+  if (youtubeUrl2) socials.youtube.push({ channelId: "", url: youtubeUrl2, visible: true });
   
   const twitterUrl = document.getElementById('editTwitter').value.trim();
   if (twitterUrl) socials.twitter.push({ url: twitterUrl, visible: true });
