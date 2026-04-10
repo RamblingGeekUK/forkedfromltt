@@ -18,6 +18,31 @@ const {
 
 const dataDir = path.join(__dirname, '..', 'data');
 
+// Duplicate checking helper functions
+function creatorExistsByName(name) {
+  const stmt = db.prepare('SELECT COUNT(*) as count FROM creators WHERE name = ? AND live = 1');
+  const result = stmt.get(name);
+  return result.count > 0;
+}
+
+function adExistsByName(name) {
+  const stmt = db.prepare('SELECT COUNT(*) as count FROM ads WHERE name = ?');
+  const result = stmt.get(name);
+  return result.count > 0;
+}
+
+function faqExistsByQuestion(question) {
+  const stmt = db.prepare('SELECT COUNT(*) as count FROM faq WHERE question = ?');
+  const result = stmt.get(question);
+  return result.count > 0;
+}
+
+function pendingCreatorExistsByName(name) {
+  const stmt = db.prepare('SELECT COUNT(*) as count FROM creators WHERE name = ? AND live = 0 AND parent_id IS NULL');
+  const result = stmt.get(name);
+  return result.count > 0;
+}
+
 function loadJsonFile(filename) {
   const filepath = path.join(dataDir, filename);
   if (!fs.existsSync(filepath)) {
@@ -37,9 +62,17 @@ function migrateCreators() {
   console.log('\n--- Migrating Creators ---');
   const creators = loadJsonFile('creators.json');
   let count = 0;
+  let skipped = 0;
   
   for (const creator of creators) {
     try {
+      // Check for duplicate by name
+      if (creatorExistsByName(creator.name)) {
+        console.log(`  Skipping duplicate creator: ${creator.name}`);
+        skipped++;
+        continue;
+      }
+      
       addCreator({
         name: creator.name,
         image: creator.image,
@@ -56,16 +89,24 @@ function migrateCreators() {
     }
   }
   
-  console.log(`Migrated ${count} creators`);
+  console.log(`Migrated ${count} creators (${skipped} duplicates skipped)`);
 }
 
 function migrateAds() {
   console.log('\n--- Migrating Ads ---');
   const ads = loadJsonFile('ads.json');
   let count = 0;
+  let skipped = 0;
   
   for (const ad of ads) {
     try {
+      // Check for duplicate by name
+      if (adExistsByName(ad.name)) {
+        console.log(`  Skipping duplicate ad: ${ad.name}`);
+        skipped++;
+        continue;
+      }
+      
       addAd({
         name: ad.name,
         image: ad.image,
@@ -78,16 +119,24 @@ function migrateAds() {
     }
   }
   
-  console.log(`Migrated ${count} ads`);
+  console.log(`Migrated ${count} ads (${skipped} duplicates skipped)`);
 }
 
 function migrateSuggestions() {
   console.log('\n--- Migrating Suggestions (as pending creators) ---');
   const suggestions = loadJsonFile('suggestions.json');
   let count = 0;
+  let skipped = 0;
   
   for (const suggestion of suggestions) {
     try {
+      // Check for duplicate (already exists as live creator or pending suggestion)
+      if (creatorExistsByName(suggestion.name) || pendingCreatorExistsByName(suggestion.name)) {
+        console.log(`  Skipping duplicate suggestion: ${suggestion.name}`);
+        skipped++;
+        continue;
+      }
+      
       // Add as pending creator (live: false)
       addCreator({
         name: suggestion.name,
@@ -106,7 +155,7 @@ function migrateSuggestions() {
     }
   }
   
-  console.log(`Migrated ${count} suggestions as pending creators`);
+  console.log(`Migrated ${count} suggestions as pending creators (${skipped} duplicates skipped)`);
 }
 
 function migrateSuggestedEdits() {
@@ -152,9 +201,17 @@ function migrateFaq() {
   console.log('\n--- Migrating FAQ ---');
   const faqItems = loadJsonFile('faq.json');
   let count = 0;
+  let skipped = 0;
   
   for (const faq of faqItems) {
     try {
+      // Check for duplicate by question
+      if (faqExistsByQuestion(faq.question)) {
+        console.log(`  Skipping duplicate FAQ: ${faq.question.substring(0, 50)}...`);
+        skipped++;
+        continue;
+      }
+      
       addFaq({
         id: faq.id,
         question: faq.question,
@@ -167,7 +224,7 @@ function migrateFaq() {
     }
   }
   
-  console.log(`Migrated ${count} FAQ items`);
+  console.log(`Migrated ${count} FAQ items (${skipped} duplicates skipped)`);
 }
 
 function runMigration() {
@@ -178,15 +235,12 @@ function runMigration() {
   // Initialize database schema
   initializeDatabase();
   
-  // Check if we already have data
+  // Check if we already have data (informational only)
   const existingCreators = db.prepare('SELECT COUNT(*) as count FROM creators').get();
   if (existingCreators.count > 0) {
-    console.log('\nWarning: Database already contains data!');
+    console.log('\nNote: Database already contains data.');
     console.log(`Found ${existingCreators.count} existing creators.`);
-    console.log('To re-migrate, delete the database file first: data/forkedfromltt.db');
-    console.log('\nAborting migration to prevent duplicates.');
-    closeDatabase();
-    return;
+    console.log('Duplicate entries will be skipped automatically.\n');
   }
   
   // Run migrations in a transaction for atomicity
