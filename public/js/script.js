@@ -705,6 +705,9 @@ function openSuggestEdit(creatorData) {
     // YouTube
     if (creatorData.socials.youtube && creatorData.socials.youtube.length > 0) {
       document.getElementById('youtubeUrl').value = creatorData.socials.youtube[0].url || '';
+      if (creatorData.socials.youtube.length > 1) {
+        document.getElementById('youtubeUrl2').value = creatorData.socials.youtube[1].url || '';
+      }
     }
     // Twitter
     if (creatorData.socials.twitter && creatorData.socials.twitter.length > 0) {

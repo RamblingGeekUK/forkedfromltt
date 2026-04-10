@@ -208,7 +208,8 @@ app.post("/api/suggestions", async (req, res) => {
       name, 
       image, 
       fullyForked, 
-      youtube, 
+      youtube,
+      youtube2,
       twitter, 
       instagram, 
       twitch,
@@ -229,6 +230,11 @@ app.post("/api/suggestions", async (req, res) => {
     // Parse fullyForked value (comes as string from form)
     const isFullyForked = fullyForked === 'true' || fullyForked === true;
 
+    // Build YouTube array
+    const youtubeLinks = [];
+    if (youtube?.trim()) youtubeLinks.push({ channelId: "", url: youtube.trim(), visible: true });
+    if (youtube2?.trim()) youtubeLinks.push({ channelId: "", url: youtube2.trim(), visible: true });
+
     // Create pending creator (live: false until approved)
     const newCreator = {
       name: name.trim(),
@@ -238,7 +244,7 @@ app.post("/api/suggestions", async (req, res) => {
       nicknames: [],
       FullyForked: isFullyForked,
       socials: {
-        youtube: youtube?.trim() ? [{ channelId: "", url: youtube.trim(), visible: true }] : [],
+        youtube: youtubeLinks,
         twitter: twitter?.trim() ? [{ url: twitter.trim(), visible: true }] : [],
         instagram: instagram?.trim() ? [{ url: instagram.trim(), visible: true }] : [],
         twitch: twitch?.trim() ? [{ url: twitch.trim(), visible: true }] : [],
@@ -274,7 +280,8 @@ app.post("/api/suggested-edits", async (req, res) => {
       originalCreatorName,
       fullyForked, 
       image, 
-      youtube, 
+      youtube,
+      youtube2,
       twitter, 
       instagram, 
       twitch,
@@ -303,6 +310,11 @@ app.post("/api/suggested-edits", async (req, res) => {
     // Parse fullyForked status
     const isFullyForked = fullyForked === "true" || fullyForked === true;
 
+    // Build YouTube array
+    const youtubeLinks = [];
+    if (youtube?.trim()) youtubeLinks.push({ channelId: "", url: youtube.trim(), visible: true });
+    if (youtube2?.trim()) youtubeLinks.push({ channelId: "", url: youtube2.trim(), visible: true });
+
     // Create edit data
     const editData = {
       name: name.trim(),
@@ -311,7 +323,7 @@ app.post("/api/suggested-edits", async (req, res) => {
       nicknames: [],
       FullyForked: isFullyForked,
       socials: {
-        youtube: youtube?.trim() ? [{ channelId: "", url: youtube.trim(), visible: true }] : [],
+        youtube: youtubeLinks,
         twitter: twitter?.trim() ? [{ url: twitter.trim(), visible: true }] : [],
         instagram: instagram?.trim() ? [{ url: instagram.trim(), visible: true }] : [],
         twitch: twitch?.trim() ? [{ url: twitch.trim(), visible: true }] : [],

@@ -183,7 +183,7 @@ async function loadCreators() {
         <td><span class="badge ${creator.FullyForked ? 'bg-success' : 'bg-secondary'}">${creator.FullyForked ? 'Yes' : 'No'}</span></td>
         <td class="social-links">${socials.join(', ') || 'None'}</td>
         <td>
-          <button class="btn btn-primary btn-sm btn-action" onclick="alert('Edit functionality coming soon')">Edit</button>
+          <button class="btn btn-primary btn-sm btn-action" onclick="editCreator('${creator.id}')">Edit</button>
           <button class="btn btn-danger btn-sm btn-action" onclick="deleteCreator('${creator.id}', '${escapeHtml(creator.name)}')">Delete</button>
         </td>
       `;
@@ -568,6 +568,158 @@ async function deleteCreator(id, name) {
   } catch (error) {
     console.error('Error deleting creator:', error);
     alert('Failed to delete creator');
+  }
+}
+
+// Track what we're editing
+let editingCreatorId = null;
+let editingType = 'suggestion'; // 'suggestion' or 'creator'
+
+// Edit existing creator
+async function editCreator(id) {
+  try {
+    const response = await fetch(`/api/admin/creators/${id}`);
+    if (!response.ok) throw new Error('Failed to fetch creator');
+    
+    const creator = await response.json();
+    
+    if (!creator) {
+      alert('Creator not found');
+      return;
+    }
+    
+    // Set edit mode to creator
+    editingCreatorId = id;
+    editingType = 'creator';
+    
+    // Update modal title
+    const modalTitle = document.querySelector('#editSuggestionModal .modal-title');
+    if (modalTitle) {
+      modalTitle.textContent = 'Edit Creator';
+    }
+    
+    // Hide the "Save Changes" button (it's for suggestions), show only "Save Creator" 
+    const saveBtn = document.querySelector('#editSuggestionModal .btn-info');
+    const approveBtn = document.querySelector('#editSuggestionModal .btn-success');
+    if (saveBtn) saveBtn.style.display = 'none';
+    if (approveBtn) {
+      approveBtn.textContent = 'Save Creator';
+      approveBtn.onclick = saveCreatorEdit;
+    }
+    
+    // Store the id
+    document.getElementById('editSuggestionIndex').value = id;
+    
+    // Populate form fields
+    document.getElementById('editName').value = creator.name || '';
+    document.getElementById('editImage').value = creator.image || '';
+    document.getElementById('editNotes').value = creator.Notes || '';
+    
+    // Set dates
+    if (creator.CreatedDate) {
+      const createdDate = new Date(creator.CreatedDate);
+      document.getElementById('editCreatedDate').value = createdDate.toISOString().split('T')[0];
+    } else {
+      document.getElementById('editCreatedDate').value = '';
+    }
+    if (creator.ExitDate) {
+      const exitDate = new Date(creator.ExitDate);
+      document.getElementById('editExitDate').value = exitDate.toISOString().split('T')[0];
+    } else {
+      document.getElementById('editExitDate').value = '';
+    }
+    
+    // Set Fully Forked status via radio buttons
+    if (creator.FullyForked === true) {
+      document.getElementById('editFullyForkedYes').checked = true;
+    } else {
+      document.getElementById('editFullyForkedNo').checked = true;
+    }
+    
+    // Set nicknames
+    if (creator.nicknames && creator.nicknames.length > 0) {
+      document.getElementById('editNicknames').value = creator.nicknames.join(', ');
+    } else {
+      document.getElementById('editNicknames').value = '';
+    }
+    
+    // Set social media fields
+    const socials = creator.socials || {};
+    document.getElementById('editYoutube').value = socials.youtube?.[0]?.url || '';
+    document.getElementById('editYoutube2').value = socials.youtube?.[1]?.url || '';
+    document.getElementById('editTwitter').value = socials.twitter?.[0]?.url || '';
+    document.getElementById('editInstagram').value = socials.instagram?.[0]?.url || '';
+    document.getElementById('editTwitch').value = socials.twitch?.[0]?.url || '';
+    document.getElementById('editBluesky').value = socials.bluesky?.[0]?.url || '';
+    document.getElementById('editLinkedin').value = socials.linkedin?.[0]?.url || '';
+    document.getElementById('editReddit').value = socials.reddit?.[0]?.url || '';
+    document.getElementById('editSoundcloud').value = socials.soundcloud?.[0]?.url || '';
+    document.getElementById('editLttforum').value = socials.lttforum?.[0]?.url || '';
+    document.getElementById('editWebsite').value = socials.website?.[0]?.url || '';
+    
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById('editSuggestionModal'));
+    modal.show();
+    
+    // Reset modal when closed
+    document.getElementById('editSuggestionModal').addEventListener('hidden.bs.modal', resetEditModal, { once: true });
+    
+  } catch (error) {
+    console.error('Error loading creator for edit:', error);
+    alert('Failed to load creator details: ' + error.message);
+  }
+}
+
+// Save creator edit
+async function saveCreatorEdit() {
+  const id = editingCreatorId;
+  const updatedData = getFormData();
+  
+  try {
+    const response = await fetch(`/api/admin/creators/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedData)
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      alert('Creator updated successfully!');
+      
+      // Close modal
+      const modal = bootstrap.Modal.getInstance(document.getElementById('editSuggestionModal'));
+      modal.hide();
+      
+      // Reload data
+      await loadAllData();
+    } else {
+      alert('Failed to update creator: ' + (data.error || 'Unknown error'));
+    }
+  } catch (error) {
+    console.error('Error saving creator:', error);
+    alert('Failed to save creator');
+  }
+}
+
+// Reset modal to default state (for suggestions)
+function resetEditModal() {
+  editingCreatorId = null;
+  editingType = 'suggestion';
+  
+  const modalTitle = document.querySelector('#editSuggestionModal .modal-title');
+  if (modalTitle) {
+    modalTitle.textContent = 'Edit Suggestion';
+  }
+  
+  const saveBtn = document.querySelector('#editSuggestionModal .btn-info');
+  const approveBtn = document.querySelector('#editSuggestionModal .btn-success');
+  if (saveBtn) saveBtn.style.display = '';
+  if (approveBtn) {
+    approveBtn.textContent = 'Save & Approve';
+    approveBtn.onclick = approveEditedSuggestion;
   }
 }
 
