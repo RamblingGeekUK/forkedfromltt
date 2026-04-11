@@ -1,0 +1,61 @@
+{
+  "generatedAt": "2026-04-11T13:29:21.582Z",
+  "entries": [
+    {
+      "id": "e9935edd-5d7c-40b2-8661-ddce867766e3",
+      "name": "Alex Potvin",
+      "remoteImage": "https://pbs.twimg.com/profile_images/1876210623882670080/Q9-f1rdy_400x400.jpg",
+      "localPath": "images/creators/alex-potvin.jpg",
+      "fileName": "alex-potvin.jpg"
+    },
+    {
+      "id": "1d71c01f-4a13-43e2-aafe-474bf220f052",
+      "name": "Dylan Hurley",
+      "remoteImage": "https://pbs.twimg.com/profile_images/1806393764447141888/aPfVaEgl_400x400.jpg",
+      "localPath": "images/creators/dylan-hurley.jpg",
+      "fileName": "dylan-hurley.jpg"
+    },
+    {
+      "id": "241fadbc-cb78-49cc-97fb-a57e581b8e4b",
+      "name": "Jake Daynes",
+      "remoteImage": "https://pbs.twimg.com/profile_images/1891686729964453892/4mqR4JQ9_400x400.jpg",
+      "localPath": "images/creators/jake-daynes.jpg",
+      "fileName": "jake-daynes.jpg"
+    },
+    {
+      "id": "df82bada-7f03-493f-8904-2bc17f8a14e0",
+      "name": "Jonathan Horst",
+      "remoteImage": "https://cdn.bsky.app/img/avatar/plain/did:plc:uliqrxxdjrjvhdx3ffnqqilc/bafkreibhssapstzvrrtzi55zx5vpkub2ogt7rv75easlqlicht4mbvqzje@jpeg",
+      "localPath": "images/creators/jonathan-horst.jpg",
+      "fileName": "jonathan-horst.jpg"
+    },
+    {
+      "id": "d96b243d-f870-474f-84b6-a6920863816e",
+      "name": "Nick Callanan",
+      "remoteImage": "https://pbs.twimg.com/profile_images/1200881338481434624/ixqBQORO_400x400.jpg",
+      "localPath": "images/creators/nick-callanan.jpg",
+      "fileName": "nick-callanan.jpg"
+    },
+    {
+      "id": "b5db4b57-35a6-46fa-a0a9-3cb74dc9ad56",
+      "name": "Reece Murray",
+      "remoteImage": "https://images.squarespace-cdn.com/content/v1/5213f93be4b08fcef374a832/c94e6f62-0c47-48e9-88a4-2ae3995329dc/DSC02574.jpg",
+      "localPath": "images/creators/reece-murray.webp",
+      "fileName": "reece-murray.webp"
+    },
+    {
+      "id": "2309ecd8-80aa-4545-89e3-fe65ef6ca3cb",
+      "name": "Sarah Butt",
+      "remoteImage": "https://pbs.twimg.com/profile_images/1515119627436638209/5_DP6Iyb_400x400.jpg",
+      "localPath": "images/creators/sarah-butt.jpg",
+      "fileName": "sarah-butt.jpg"
+    },
+    {
+      "id": "fc2b2fcf-b1df-4866-85fa-2a10855126d8",
+      "name": "Sean Weatherly",
+      "remoteImage": "https://pbs.twimg.com/profile_images/1453023260459765760/OlzEBs3e_400x400.jpg",
+      "localPath": "images/creators/sean-weatherly.jpg",
+      "fileName": "sean-weatherly.jpg"
+    }
+  ]
+}
