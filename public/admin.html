@@ -784,6 +784,9 @@
         <li class="nav-item">
           <a class="nav-link" href="#" data-tab="faq">FAQ</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-tab="feedback">Feedback</a>
+        </li>
       </ul>
     </div>
 
@@ -931,6 +934,36 @@
                 </tr>
               </thead>
               <tbody id="faqTable">
+                <!-- Populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback Tab -->
+    <div class="tab-content" id="tab-feedback">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Site Feedback</h5>
+          <button class="btn btn-secondary btn-sm" onclick="loadFeedback()">
+            ↻ Refresh
+          </button>
+        </div>
+        <div class="card-body">
+          <div class="table-container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Message</th>
+                </tr>
+              </thead>
+              <tbody id="feedbackTable">
                 <!-- Populated by JavaScript -->
               </tbody>
             </table>

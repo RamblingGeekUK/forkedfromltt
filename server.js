@@ -512,6 +512,16 @@ app.get("/api/admin/suggested-edits", isAdmin, (req, res) => {
   }
 });
 
+app.get("/api/admin/feedback", isAdmin, (req, res) => {
+  try {
+    const feedback = db.getSiteFeedback();
+    res.json(feedback);
+  } catch (err) {
+    console.error("Error loading feedback:", err);
+    res.status(500).json({ error: "Failed to load feedback" });
+  }
+});
+
 app.get("/api/admin/creators", isAdmin, (req, res) => {
   try {
     const creators = db.getAllCreators();

@@ -62,6 +62,7 @@ async function loadAllData() {
       loadCreators(),
       loadAds(),
       loadFaq(),
+      loadFeedback(),
       updateStats()
     ]);
   } catch (error) {
@@ -1186,6 +1187,38 @@ async function loadFaq() {
     });
   } catch (error) {
     console.error('Error loading FAQ:', error);
+  }
+}
+
+// ==================== FEEDBACK FUNCTIONS ====================
+
+async function loadFeedback() {
+  try {
+    const response = await fetch('/api/admin/feedback');
+    const feedbackList = await response.json();
+
+    const tbody = document.getElementById('feedbackTable');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (!Array.isArray(feedbackList) || feedbackList.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No feedback submitted yet</td></tr>';
+      return;
+    }
+
+    feedbackList.forEach(feedback => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${formatDate(feedback.createdAt)}</td>
+        <td><span class="badge bg-info text-dark">${escapeHtml((feedback.type || 'other').toUpperCase())}</span></td>
+        <td>${escapeHtml(feedback.name || '-')}</td>
+        <td>${feedback.email ? `<a href="mailto:${escapeHtml(feedback.email)}" class="text-info">${escapeHtml(feedback.email)}</a>` : '-'}</td>
+        <td style="max-width: 520px; white-space: normal; word-break: break-word;">${escapeHtml(feedback.message || '')}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  } catch (error) {
+    console.error('Error loading feedback:', error);
   }
 }
 
