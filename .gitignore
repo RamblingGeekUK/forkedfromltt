@@ -58,6 +58,8 @@ Thumbs.db
 
 # Data files (cache, generated)
 data/latestVideos.json
+data/*.db-wal
+data/*.db-shm
 
 # Misc
 *.tgz

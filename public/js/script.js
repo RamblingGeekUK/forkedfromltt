@@ -6,6 +6,7 @@ if (allCreatorsGrid) allCreatorsGrid.style.display = "none";
 
 // Default placeholder image path
 const DEFAULT_CREATOR_IMAGE = 'images/default-creator.png';
+const DEFERRED_IMAGE_ATTRIBUTES = 'loading="lazy" decoding="async"';
 
 // Handle image load errors - fall back to placeholder
 function handleImageError(img) {
@@ -58,7 +59,7 @@ function createCreatorCard(channel) {
     const notAdLabel = channel.ad === false ? `<span style="font-size:0.8em;" class="badge bg-warning text-dark ms-2">NOT AN AD</span>` : '';
     col.innerHTML = `
       <div class="card h-100 shadow-lg border-0 border-warning" style="border-width: 2px !important;">
-        <img src="${channel.thumbnail || channel.image || DEFAULT_CREATOR_IMAGE}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;" onerror="handleImageError(this)">
+        <img src="${channel.thumbnail || channel.image || DEFAULT_CREATOR_IMAGE}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;" ${DEFERRED_IMAGE_ATTRIBUTES} onerror="handleImageError(this)">
         <div class="card-body d-flex flex-column justify-content-between">
           <h5 class="card-title fw-semibold text-warning">${channel.channel} ${notAdLabel}</h5>
           <a href="${channel.website}" target="_blank" class="btn btn-warning w-100 mt-auto">Visit Website</a>
@@ -178,9 +179,9 @@ function createCreatorCard(channel) {
               <div class="position-relative">
                 ${hasVideoData ? 
                   `<a href="https://youtube.com/watch?v=${channel.videoId}" target="_blank" onclick="event.stopPropagation();">
-                    <img src="${channel.thumbnail}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;" onerror="handleImageError(this)">
+                    <img src="${channel.thumbnail}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;" ${DEFERRED_IMAGE_ATTRIBUTES} onerror="handleImageError(this)">
                   </a>` :
-                  `<img src="${finalImageSrc}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;" onerror="handleImageError(this)">`
+                  `<img src="${finalImageSrc}" class="card-img-top" alt="${channel.channel}" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem; object-fit: cover; height: 220px; background: #23272a;" ${DEFERRED_IMAGE_ATTRIBUTES} onerror="handleImageError(this)">`
                 }
                 <!-- Status Label -->
                 <div class="status-label ${channel.FullyForked ? 'fully-forked' : 'branching-out'}">
@@ -599,7 +600,7 @@ function displaySearchResults(creators, query) {
       
       return `
         <div class="search-result-item" onclick="selectCreator(${index})">
-          <img src="${imageSrc}" alt="${creatorName}" class="search-result-avatar" onerror="this.src='images/default-creator.png'">
+          <img src="${imageSrc}" alt="${creatorName}" class="search-result-avatar" loading="lazy" decoding="async" onerror="this.src='images/default-creator.png'">
           <div class="search-result-info">
             <p class="search-result-name">${creatorName}</p>
             ${nickname ? `<p class="search-result-nickname">"${nickname}"</p>` : ''}
@@ -701,8 +702,9 @@ function openSuggestEdit(creatorData) {
   document.getElementById('creatorNotes').value = creatorData.notes || '';
   
   // Pre-fill exit date
-  if (creatorData.ExitDate) {
-    const exitDate = new Date(creatorData.ExitDate);
+  const existingExitDate = creatorData.ExitDate || creatorData.exitDate;
+  if (existingExitDate) {
+    const exitDate = new Date(existingExitDate);
     document.getElementById('exitDate').value = exitDate.toISOString().split('T')[0];
   } else {
     document.getElementById('exitDate').value = '';

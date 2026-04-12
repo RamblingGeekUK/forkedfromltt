@@ -130,6 +130,10 @@ app.get('/api/auth/user', (req, res) => {
 });
 
 // Static file serving
+app.use('/images', express.static('public/images', {
+  maxAge: '30d',
+  immutable: true
+}));
 app.use(express.static("public"));
 app.use('/data', express.static('data'));
 
@@ -183,6 +187,7 @@ app.get("/api/creators", async (req, res) => {
         socials: creator.socials || {},
         website: creator.socials?.website?.[0]?.url || undefined,
         image: creator.image || undefined,
+        ExitDate: creator.ExitDate || null,
         notes: creator.Notes || null,
         nicknames: creator.nicknames || []
       });

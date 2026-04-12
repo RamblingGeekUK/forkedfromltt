@@ -179,7 +179,7 @@ async function loadCreators() {
       
       row.innerHTML = `
         <td><strong>${escapeHtml(creator.name)}</strong></td>
-        <td>${creator.image ? '<img src="' + creator.image + '" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">' : 'No image'}</td>
+        <td>${creator.image ? '<img src="' + creator.image + '" loading="lazy" decoding="async" style="width:40px;height:40px;object-fit:cover;border-radius:4px;">' : 'No image'}</td>
         <td><span class="badge ${creator.FullyForked ? 'bg-success' : 'bg-secondary'}">${creator.FullyForked ? 'Yes' : 'No'}</span></td>
         <td class="social-links">${socials.join(', ') || 'None'}</td>
         <td>
@@ -870,8 +870,8 @@ function buildComparisonView(original, proposed) {
   );
   
   // Compare images
-  const originalImg = original.image ? `<img src="${original.image}" class="comparison-image" onerror="this.src='images/default-creator.png'">` : '<span class="text-muted">No image</span>';
-  const proposedImg = proposed.image ? `<img src="${proposed.image}" class="comparison-image" onerror="this.src='images/default-creator.png'">` : '<span class="text-muted">No image</span>';
+  const originalImg = original.image ? `<img src="${original.image}" class="comparison-image" loading="lazy" decoding="async" onerror="this.src='images/default-creator.png'">` : '<span class="text-muted">No image</span>';
+  const proposedImg = proposed.image ? `<img src="${proposed.image}" class="comparison-image" loading="lazy" decoding="async" onerror="this.src='images/default-creator.png'">` : '<span class="text-muted">No image</span>';
   const imageChanged = original.image !== proposed.image;
   
   html += `
@@ -958,7 +958,7 @@ function buildSimpleView(data) {
         ${data.image ? `
           <div class="detail-row">
             <span class="detail-label">Image:</span>
-            <div class="detail-image"><img src="${data.image}" alt="${escapeHtml(data.name)}" onerror="this.src='images/default-creator.png'"></div>
+            <div class="detail-image"><img src="${data.image}" alt="${escapeHtml(data.name)}" loading="lazy" decoding="async" onerror="this.src='images/default-creator.png'"></div>
           </div>
         ` : ''}
         ${data.Notes ? `
@@ -1046,7 +1046,7 @@ async function loadAds() {
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${escapeHtml(ad.name)}</td>
-        <td>${ad.image ? `<img src="${escapeHtml(ad.image)}" alt="${escapeHtml(ad.name)}" style="max-height: 40px; border-radius: 4px;">` : '-'}</td>
+        <td>${ad.image ? `<img src="${escapeHtml(ad.image)}" alt="${escapeHtml(ad.name)}" loading="lazy" decoding="async" style="max-height: 40px; border-radius: 4px;">` : '-'}</td>
         <td>${ad.website ? `<a href="${escapeHtml(ad.website)}" target="_blank" class="text-info">${escapeHtml(ad.website)}</a>` : '-'}</td>
         <td>${ad.ad ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-secondary">No</span>'}</td>
         <td>

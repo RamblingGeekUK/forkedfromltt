@@ -5,7 +5,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "migrate:guids": "node db/migrate-to-guids.js"
+    "migrate:guids": "node db/migrate-to-guids.js",
+    "images:mirror": "node db/mirror-creator-images.js",
+    "images:mirror:dry-run": "node db/mirror-creator-images.js --dry-run",
+    "images:apply": "node db/mirror-creator-images.js --db-only --from-mapping data/creator-image-mapping.json"
   },
   "keywords": [],
   "author": "",
