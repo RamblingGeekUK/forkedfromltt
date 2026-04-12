@@ -890,6 +890,12 @@ h1, h3 {
   max-width: none;
 }
 
+/* Keep feedback form columns as normal block layout inside modal forms */
+.compact-form .feedback-col {
+  display: block;
+  margin-bottom: 0;
+}
+
 .compact-input {
   background: #2d3748 !important;
   border: 1px solid #4a5568 !important;

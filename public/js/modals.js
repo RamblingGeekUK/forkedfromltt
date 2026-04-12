@@ -47,7 +47,15 @@ document.addEventListener('modalsLoaded', function () {
         body: JSON.stringify(payload)
       });
 
-      const result = await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      let result;
+      if (contentType.includes('application/json')) {
+        result = await response.json();
+      } else {
+        const rawText = await response.text();
+        throw new Error(`Feedback endpoint returned unexpected response (${response.status}).`);
+      }
+
       if (!response.ok) {
         throw new Error(result.error || 'Failed to submit feedback');
       }
