@@ -112,6 +112,18 @@ function initializeDatabase() {
     )
   `);
 
+  // Site feedback table
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS site_feedback (
+      id TEXT PRIMARY KEY,
+      name TEXT,
+      email TEXT,
+      type TEXT,
+      message TEXT NOT NULL,
+      created_at TEXT NOT NULL
+    )
+  `);
+
   console.log('Database schema initialized');
 }
 
@@ -607,6 +619,37 @@ function deleteFaq(id) {
   return result.changes > 0;
 }
 
+// ==================== SITE FEEDBACK ====================
+
+function addSiteFeedback(feedback) {
+  const feedbackId = generateUUID();
+  const stmt = db.prepare(`
+    INSERT INTO site_feedback (id, name, email, type, message, created_at)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `);
+  stmt.run(
+    feedbackId,
+    feedback.name || '',
+    feedback.email || '',
+    feedback.type || 'other',
+    feedback.message,
+    new Date().toISOString()
+  );
+  return feedbackId;
+}
+
+function getSiteFeedback(limit = 200) {
+  const stmt = db.prepare('SELECT * FROM site_feedback ORDER BY created_at DESC LIMIT ?');
+  return stmt.all(limit).map(row => ({
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    type: row.type,
+    message: row.message,
+    createdAt: row.created_at
+  }));
+}
+
 // ==================== CLOSE ====================
 
 function closeDatabase() {
@@ -650,6 +693,9 @@ module.exports = {
   addFaq,
   updateFaq,
   deleteFaq,
+  // Site Feedback
+  addSiteFeedback,
+  getSiteFeedback,
   // Utility
   closeDatabase
 };

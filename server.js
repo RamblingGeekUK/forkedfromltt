@@ -301,6 +301,39 @@ app.post("/api/suggested-edits", async (req, res) => {
     } = req.body;
 
     // Validate required fields
+
+// Handle generic site feedback submissions
+app.post('/api/feedback', async (req, res) => {
+  try {
+    const {
+      name,
+      email,
+      type,
+      message
+    } = req.body;
+
+    const trimmedMessage = message?.trim();
+    if (!trimmedMessage) {
+      return res.status(400).json({ error: 'Feedback message is required' });
+    }
+
+    const normalizedType = (type || 'other').toString().trim().toLowerCase();
+    const allowedTypes = new Set(['idea', 'suggestion', 'bug', 'other']);
+
+    const feedbackData = {
+      name: name?.toString().trim().slice(0, 100) || '',
+      email: email?.toString().trim().slice(0, 255) || '',
+      type: allowedTypes.has(normalizedType) ? normalizedType : 'other',
+      message: trimmedMessage.slice(0, 5000)
+    };
+
+    db.addSiteFeedback(feedbackData);
+    res.json({ success: true, message: 'Thanks for your feedback!' });
+  } catch (err) {
+    console.error('Error handling feedback submission:', err);
+    res.status(500).json({ error: 'Failed to submit feedback' });
+  }
+});
     if (!name?.trim()) {
       return res.status(400).json({ error: "Creator name is required" });
     }
